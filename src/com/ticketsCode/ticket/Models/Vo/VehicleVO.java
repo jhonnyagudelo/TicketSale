@@ -6,12 +6,11 @@ public class VehicleVO {
         private String license;
         private Integer capacity;
         private Integer company;
-        private String active;
+        private Boolean active;
 
 
 
-    public VehicleVO(Integer vehicle_id,Integer internal_number, String license, Integer capacity, Integer company, String active){
-            super();
+    public VehicleVO(Integer vehicle_id,Integer internal_number, String license, Integer capacity, Integer company, Boolean active){
             this.vehicle_id = vehicle_id;
             this.internal_number = internal_number;
             this.license = license;
@@ -56,11 +55,11 @@ public class VehicleVO {
             this.company = company;
         }
 
-        public String getActive() {
+        public boolean getActive() {
             return active;
         }
 
-        public void setActive(String active) {
+        public void setActive(boolean active) {
             this.active = active;
         }
 

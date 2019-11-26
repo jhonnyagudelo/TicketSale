@@ -6,6 +6,7 @@ import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Views.ListVehicle;
 import java.sql.ResultSet;
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -13,7 +14,7 @@ import java.awt.event.MouseListener;
 import java.sql.*;
 import java.util.Vector;
 
-public class VehicleDAO implements ActionListener, MouseListener {
+public class VehicleDAO implements  MouseListener {
     private ListVehicle autoBus;
 
 
@@ -25,7 +26,11 @@ public class VehicleDAO implements ActionListener, MouseListener {
 
     }
 
-
+    /**
+     *Metodo que inserta los vehiculos a la BD
+     * @return retorna si es verdadero o falso
+     * @param autoBusVO son los datos de la DB
+     * */
     public boolean vehiculeRecorder(VehicleVO autoBusVO){
         PreparedStatement st = null;
         DataBaseConnection conn = new DataBaseConnection();
@@ -46,26 +51,10 @@ public class VehicleDAO implements ActionListener, MouseListener {
     }
 
 
-//    public boolean vehiculeRecorder(VehicleVO myVehicle) {
-//        DataBaseConnection conn;
-//        conn = new DataBaseConnection();
-//        try {
-//            Statement statute = conn.getConn().createStatement();
-//            statute.executeUpdate("INSERT INTO vehicles VALUES('"+ myVehicle.getInternal_number()+"','"+ myVehicle.getLicense()+"','"+ myVehicle.getCapacity()+"','"+ myVehicle.getCompany()+"')");
-//            JOptionPane.showMessageDialog(null,"Se ha registrado Correctamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
-//            statute.close();
-//            conn.disconnect();
-//            return true;
-//
-//        }catch(SQLException e) {
-//            System.out.println(e.getMessage());
-//            JOptionPane.showMessageDialog(null, "No se registro");
-//        }
-//
-//        return false;
-//    }
-
-
+    /**
+     * JComboBox de company
+     *
+     * */
 
     public void listCompanies(){
         DataBaseConnection conn = new DataBaseConnection();
@@ -91,7 +80,9 @@ public class VehicleDAO implements ActionListener, MouseListener {
         }
     }
 
-
+    /**
+     * recarga la JTable
+     * */
 
     public void _loadTable(){
 
@@ -126,10 +117,81 @@ public class VehicleDAO implements ActionListener, MouseListener {
     }
 
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
+    public boolean Modifity(VehicleVO autoBusVO){
+        PreparedStatement st = null;
+        DataBaseConnection conn = new DataBaseConnection();
+        Connection connect = conn.getConn();
+        String SQL = "UPDATE vehicles SET internal_number= ?, license = ?, capacity = ?, active = ?";
+        try{
+            st = connect.prepareStatement(SQL);
+            st.setInt(1,autoBusVO.getInternal_number());
+            st.setString(2,autoBusVO.getLicense());
+            st.setInt(3,autoBusVO.getCapacity());
+            st.setBoolean(4,autoBusVO.getActive());
+            st.execute();
+            return  true;
+        } catch (Exception e1){
+            System.out.println("Error Update "+ e1.getMessage());
+        }
+        return false;
     }
+
+//    public void deleteSelect(ListVehicle autoBus){
+//        DataBaseConnection conn = new DataBaseConnection();
+//        Connection  connect = conn.getConn();
+//        Object selectItem = autoBus.table.getSelectedRow();
+//        try{
+//            selectItem.
+//        }catch (Exception ex){
+//
+//        }
+//
+//    }
+
+//    public boolean delete(VehicleVO autoBusVO){
+//        PreparedStatement ps;
+//        DataBaseConnection conn = new DataBaseConnection();
+//        Connection connect = conn.getConn();
+//
+//        String SQL = "DELETE FROM vehicle WHERE vehicle_id = ?";
+//        try{
+//            ps = connect.prepareStatement(SQL);
+//            ps.setInt(1,autoBusVO.getVehicle_id());
+//            ps.execute();
+//            return true;
+//        }catch (SQLException e1){
+//            System.out.println("Error delete " + e1.getMessage());
+//        }
+//        return false;
+//    }
+
+//    public boolean Search(VehicleVO autoBusVO){
+//        CallableStatement cs;
+//        ResultSet rs;
+//        DataBaseConnection conn = new DataBaseConnection();
+//        Connection connect = conn.getConn();
+//        String SQL = "SELECT * FROM getinfo(?)" ;
+//        try{
+//            String query = "SELECT * FROM getinfo(?)";
+//            cs = conn.getConn().prepareCall(SQL);
+//            rs = cs.executeQuery();
+//
+//            while (rs.next()){
+//                autoBusVO = new VehicleVO();
+//                autoBusVO.add(rs.getInt("internal_number"));
+//                autoBusVO.add(rs.getString("license"));
+//                autoBusVO.add(rs.getInt("capacity"));
+//                autoBusVO.add(rs.getString("company"));
+//                autoBusVO.add(rs.getBoolean("active"));
+//                this.autoBus.dtm.addRow(row);
+//
+//            }
+//
+//        }catch (SQLException e1){
+//
+//        }
+//    }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {

@@ -149,17 +149,18 @@ public class ListVehicle extends JFrame  {
         scroll.setBounds(46, 315, 593, 125);
         getContentPane().add(scroll);
         table = new JTable(dtm);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
         scroll.setViewportView(table);
         contentPane.add(scroll);
 
         // botones tabla
         btnUpdate = new JButton("Actualizar");
-        btnUpdate.setBounds(162, 451, 89, 23);
+        btnUpdate.setBounds(162, 451, 100, 23);
         contentPane.add(btnUpdate);
 
         btnDelete = new JButton("Eliminar");
-        btnDelete.setBounds(419, 451, 89, 23);
+        btnDelete.setBounds(419, 451, 100, 23);
         contentPane.add(btnDelete);
 
         setVisible(true);
