@@ -7,7 +7,6 @@ public class CompanyVO {
 
 
     public CompanyVO(Integer company_id, String name, Integer nit){
-        super();
         this.company_id = company_id;
         this.name = name;
         this.nit = nit;
@@ -43,9 +42,6 @@ public class CompanyVO {
 
     @Override
     public String toString() {
-        return "CompanyVO{" +
-                "company_id=" + company_id +
-                ", name='" + name + '\'' +
-                '}';
+        return company_id + " - " + name;
     }
 }

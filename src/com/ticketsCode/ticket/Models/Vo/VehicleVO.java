@@ -5,12 +5,12 @@ public class VehicleVO {
         private Integer internal_number;
         private String license;
         private Integer capacity;
-        private String company;
+        private Integer company;
         private String active;
 
 
 
-    public VehicleVO(Integer vehicle_id,Integer internal_number, String license, Integer capacity, String company, String active){
+    public VehicleVO(Integer vehicle_id,Integer internal_number, String license, Integer capacity, Integer company, String active){
             super();
             this.vehicle_id = vehicle_id;
             this.internal_number = internal_number;
@@ -20,6 +20,9 @@ public class VehicleVO {
             this.active = active;
         }
 
+    public VehicleVO() {
+
+    }
 
 
     public Integer getVehicle_id() {
@@ -46,10 +49,10 @@ public class VehicleVO {
         public void setCapacity(Integer capacity) {
             this.capacity = capacity;
         }
-        public String getCompany() {
+        public Integer getCompany() {
             return company;
         }
-        public void setCompany(String company) {
+        public void setCompany(Integer company) {
             this.company = company;
         }
 

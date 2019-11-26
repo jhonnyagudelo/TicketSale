@@ -1,11 +1,11 @@
 package com.ticketsCode.ticket.Models.Dao;
 
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
+import com.ticketsCode.ticket.Models.Vo.CompanyVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Views.ListVehicle;
 import java.sql.ResultSet;
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -21,11 +21,11 @@ public class VehicleDAO implements ActionListener, MouseListener {
     public VehicleDAO(ListVehicle autoBus){
         this.autoBus = autoBus;
         _loadTable();
-        ListCompanies();
+        listCompanies();
 
     }
 
-    public void vehiculeRecorder(VehicleVO myVehicle) {
+    public boolean vehiculeRecorder(VehicleVO myVehicle) {
         DataBaseConnection conn;
         conn = new DataBaseConnection();
         try {
@@ -34,45 +34,70 @@ public class VehicleDAO implements ActionListener, MouseListener {
             JOptionPane.showMessageDialog(null,"Se ha registrado Correctamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
             statute.close();
             conn.disconnect();
+            return true;
 
         }catch(SQLException e) {
             System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "No se registro");
         }
 
+        return false;
     }
 
-    private void clear(){
-       this.autoBus.tfInternalNumber.setText("");
-       this.autoBus.tfLicense.setText("");
-       this.autoBus.tfCapacity.setText("");
-    }
 
-    public void ListCompanies(){
+
+    public void listCompanies(){
         DataBaseConnection conn = new DataBaseConnection();
-        CallableStatement cs;
+        Connection connect = conn.getConn();
+        PreparedStatement ps;
         ResultSet rs;
-        Vector<Object>position;
         this.autoBus.dcbm.removeAllElements();
-        try {
-            String SQL = "SELECT name FROM companies";
-
-            this.autoBus.dcbm.addElement("Elige una opción");
-            this.autoBus.selectCompany.setModel(this.autoBus.dcbm);
-            cs = conn.getConn().prepareCall(SQL);
-            rs = cs.executeQuery();
+        try{
+            String SQL = "SELECT company_id, name, nit FROM companies ORDER BY company_id";
+            ps = connect.prepareStatement(SQL);
+            rs = ps.executeQuery();
             while (rs.next()){
-                position = new Vector<Object>();
-                position.add(rs.getString("name"));
-                this.autoBus.dcbm.addElement(position);
+                autoBus.selectCompany.addItem(new CompanyVO(
+                        Integer.parseInt(rs.getString("company_id")),
+                        rs.getString("name"),
+                        rs.getInt("nit")));
             }
 
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            System.out.println("Error");
+        }catch (SQLException e1){
+            System.out.println("Error en la lista company " + e1.getMessage() );
+        }catch (Exception e1){
+            System.out.println(e1.getMessage());
         }
     }
 
+
+//    public void ListCompanies(){
+//        DataBaseConnection conn = new DataBaseConnection();
+//        CallableStatement cs;
+//        ResultSet rs;
+//        Vector<Object>position;
+//        this.autoBus.dcbm.removeAllElements();
+//        try {
+//            String SQL = "SELECT company_id, name, nit FROM companies";
+//
+//            this.autoBus.dcbm.addElement("Elige una opción");
+//            this.autoBus.selectCompany.setModel(this.autoBus.dcbm);
+//            cs = conn.getConn().prepareCall(SQL);
+//            rs = cs.executeQuery();
+//            while (rs.next()){
+//                position = new Vector<Object>();
+//                position.add(rs.getString("company_id"));
+//                position.add(rs.getString("name"));
+//                position.add(rs.getString("nick"));
+//                this.autoBus.dcbm.addElement(position);
+//            }
+//
+//        } catch (SQLException ex) {
+//            System.out.println(ex.getMessage());
+//            System.out.println("Error");
+//        }
+//    }
+//
 
 
 
@@ -87,24 +112,23 @@ public class VehicleDAO implements ActionListener, MouseListener {
         }
         try{
 
-            String SQL = "SELECT internal_number,license,capacity,company,active FROM vehicles";
-            cs = conn.getConn().prepareCall(SQL);
+            String query = "SELECT * FROM getinfot()";
+            cs = conn.getConn().prepareCall(query);
             rs = cs.executeQuery();
 
             while (rs.next()){
                 row = new Vector<Object>();
                 row.add(rs.getInt("internal_number"));
-                row.add(rs.getString("license").toUpperCase().trim());
+                row.add(rs.getString("license"));
                 row.add(rs.getInt("capacity"));
-                row.add(rs.getInt("company"));
+                row.add(rs.getString("company"));
                 row.add(rs.getBoolean("active"));
                 this.autoBus.dtm.addRow(row);
 
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println("Error al cargar los Datos");
+            System.out.println("Error al cargar los Datos" + e.getMessage());
             JOptionPane.showMessageDialog(null,"Error al cargar los DATOS","Informacion",JOptionPane.ERROR_MESSAGE);
         }
     }
