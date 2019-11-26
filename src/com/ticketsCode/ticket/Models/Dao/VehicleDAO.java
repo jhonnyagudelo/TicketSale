@@ -25,24 +25,45 @@ public class VehicleDAO implements ActionListener, MouseListener {
 
     }
 
-    public boolean vehiculeRecorder(VehicleVO myVehicle) {
-        DataBaseConnection conn;
-        conn = new DataBaseConnection();
-        try {
-            Statement statute = conn.getConn().createStatement();
-            statute.executeUpdate("INSERT INTO vehicles VALUES('"+ myVehicle.getInternal_number()+"','"+ myVehicle.getLicense()+"','"+ myVehicle.getCapacity()+"','"+ myVehicle.getCompany()+"')");
-            JOptionPane.showMessageDialog(null,"Se ha registrado Correctamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
-            statute.close();
-            conn.disconnect();
-            return true;
 
-        }catch(SQLException e) {
-            System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(null, "No se registro");
+    public boolean vehiculeRecorder(VehicleVO autoBusVO){
+        PreparedStatement st = null;
+        DataBaseConnection conn = new DataBaseConnection();
+        Connection connect = conn.getConn();
+        String SQL = "INSERT INTO vehicles(internal_number, license, capacity, company) VALUES (?,?,?,?)";
+        try{
+            st = connect.prepareStatement(SQL);
+            st.setInt(1,autoBusVO.getInternal_number());
+            st.setString(2,autoBusVO.getLicense());
+            st.setInt(3,autoBusVO.getCapacity());
+            st.setInt(4,autoBusVO.getCompany());
+            st.execute();
+            return  true;
+        } catch (Exception e1){
+            System.out.println("Error SQL "+ e1.getMessage());
         }
-
         return false;
     }
+
+
+//    public boolean vehiculeRecorder(VehicleVO myVehicle) {
+//        DataBaseConnection conn;
+//        conn = new DataBaseConnection();
+//        try {
+//            Statement statute = conn.getConn().createStatement();
+//            statute.executeUpdate("INSERT INTO vehicles VALUES('"+ myVehicle.getInternal_number()+"','"+ myVehicle.getLicense()+"','"+ myVehicle.getCapacity()+"','"+ myVehicle.getCompany()+"')");
+//            JOptionPane.showMessageDialog(null,"Se ha registrado Correctamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
+//            statute.close();
+//            conn.disconnect();
+//            return true;
+//
+//        }catch(SQLException e) {
+//            System.out.println(e.getMessage());
+//            JOptionPane.showMessageDialog(null, "No se registro");
+//        }
+//
+//        return false;
+//    }
 
 
 
@@ -71,37 +92,8 @@ public class VehicleDAO implements ActionListener, MouseListener {
     }
 
 
-//    public void ListCompanies(){
-//        DataBaseConnection conn = new DataBaseConnection();
-//        CallableStatement cs;
-//        ResultSet rs;
-//        Vector<Object>position;
-//        this.autoBus.dcbm.removeAllElements();
-//        try {
-//            String SQL = "SELECT company_id, name, nit FROM companies";
-//
-//            this.autoBus.dcbm.addElement("Elige una opción");
-//            this.autoBus.selectCompany.setModel(this.autoBus.dcbm);
-//            cs = conn.getConn().prepareCall(SQL);
-//            rs = cs.executeQuery();
-//            while (rs.next()){
-//                position = new Vector<Object>();
-//                position.add(rs.getString("company_id"));
-//                position.add(rs.getString("name"));
-//                position.add(rs.getString("nick"));
-//                this.autoBus.dcbm.addElement(position);
-//            }
-//
-//        } catch (SQLException ex) {
-//            System.out.println(ex.getMessage());
-//            System.out.println("Error");
-//        }
-//    }
-//
 
-
-
-    protected void _loadTable(){
+    public void _loadTable(){
 
         DataBaseConnection conn = new DataBaseConnection();
         CallableStatement cs;
