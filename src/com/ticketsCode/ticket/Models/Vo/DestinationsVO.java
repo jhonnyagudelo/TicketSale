@@ -15,6 +15,11 @@ public class DestinationsVO {
         this.active = active;
     }
 
+    public DestinationsVO(Integer destination_id, String name) {
+        this.destination_id = destination_id;
+        this.name = name;
+    }
+
     public Integer getDestination_id() {
         return destination_id;
     }
@@ -47,5 +52,8 @@ public class DestinationsVO {
         this.active = active;
     }
 
-
+    @Override
+    public String toString() {
+        return  destination_id + " - " + name ;
+    }
 }

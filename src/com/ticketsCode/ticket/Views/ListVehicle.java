@@ -31,7 +31,7 @@ public class ListVehicle extends JFrame  {
     public JButton btnSave, btnClear,btnDelete,btnUpdate;
     private JMenuBar menuBar;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1,liDelete;
     private JScrollPane scroll;
     public  Object[][] data;
     public String[] headBoard;
@@ -75,8 +75,12 @@ public class ListVehicle extends JFrame  {
         liList = new JMenuItem("Consulta");
         ulTickets.add(liList);
             //item menu vehiculos
-        liRegistration = new JMenuItem("Registro vehicular");
+        liRegistration = new JMenuItem("Registro");
         ulVehicles.add(liRegistration);
+
+        liDelete = new JMenuItem("Eliminar");
+        ulVehicles.add(liDelete);
+
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
             //acerca de
@@ -147,6 +151,7 @@ public class ListVehicle extends JFrame  {
         headBoard = new String[] {"Numero interno", "Placa", "Capacidad", "Compañia", "Activo"};
         dtm = new DefaultTableModel(data,headBoard);
         scroll.setBounds(46, 315, 593, 125);
+
         getContentPane().add(scroll);
         table = new JTable(dtm);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

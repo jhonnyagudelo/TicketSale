@@ -63,6 +63,10 @@ public class VehicleVO {
             this.active = active;
         }
 
+    @Override
+    public String toString() {
+        return vehicle_id + " - " + internal_number;
+    }
 }
 
 

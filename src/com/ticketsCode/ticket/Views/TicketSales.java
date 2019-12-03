@@ -29,8 +29,8 @@ public class TicketSales extends JFrame {
     public JComboBox selectDestination, selectVehicle, selectOrigin;
     public JTextField tfCompany, tfPassenger, tfQuantity;
     public JButton btnSale, btnUpdate, btnDelete, btnClear;
-    private DefaultComboBoxModel dcbm;
-    private DefaultTableModel dtm;
+    public DefaultComboBoxModel dcbm, dcbmD, dcbmV;
+    public DefaultTableModel dtm;
     private JScrollPane scroll;
     public  Object[][] data;
     public String[] headBoard;
@@ -38,12 +38,12 @@ public class TicketSales extends JFrame {
     //Menu
     private JMenuBar menuBar;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1, liDelete;
 
-    TicketSales(){
+    public TicketSales(){
         setTitle("Venta de tiquetes");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100,100,700,500);
+        setBounds(200,100,1000,500);
 
         contentPane = new JPanel();
         //getContentPane().add(contentPane);
@@ -75,6 +75,11 @@ public class TicketSales extends JFrame {
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
+
+        liDelete = new JMenuItem("Eliminar");
+        ulVehicles.add(liDelete);
+        ulVehicles.add(liDelete);
+
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
         //acerca de
@@ -121,31 +126,24 @@ public class TicketSales extends JFrame {
         selectOrigin = new JComboBox();
         selectOrigin.setBounds(120,73,150,25);
         registrationPane.add(selectOrigin);
+        dcbm = new DefaultComboBoxModel();
         selectOrigin.addItem("--Seleccionar--");
-        selectOrigin.addItem("Tulua");
-        selectOrigin.addItem("Buga");
-        selectOrigin.addItem("Cali");
+
 
         selectDestination = new JComboBox();
         selectDestination.setBounds(120,113,150,25);
         registrationPane.add(selectDestination);
+        dcbmD = new DefaultComboBoxModel();
         selectDestination.addItem("--Seleccionar--");
-        selectDestination.addItem("Cali");
-        selectDestination.addItem("Tulua");
-        selectDestination.addItem("Palmira");
-        selectDestination.addItem("Buga");
-        selectDestination.addItem("Cerrito");
-        selectDestination.addItem("Cartago");
-        selectDestination.addItem("Obando");
-        selectDestination.addItem("Zarzal");
+
+
 
         selectVehicle = new JComboBox();
         selectVehicle.setBounds(120,153,150,25);
         registrationPane.add(selectVehicle);
+        dcbmV = new DefaultComboBoxModel();
         selectVehicle.addItem("--Seleccionar--");
-        selectVehicle.addItem("9049");
-        selectVehicle.addItem("9086");
-        selectVehicle.addItem("9048");
+
 
         //Button
         btnSale = new JButton("Venta");
@@ -155,6 +153,29 @@ public class TicketSales extends JFrame {
         btnClear = new JButton("Limpiar");
         btnClear.setBounds(180,250,120,25);
         registrationPane.add(btnClear);
+
+        //Tabla
+        scroll = new JScrollPane();
+        headBoard = new String[] {"N.Identidad", "Origen", "Destino", "Vehiculo", "Cantidad", "Dia"};
+        dtm = new DefaultTableModel(data,headBoard);
+        scroll.setBounds(346, 20, 600, 230);
+
+        getContentPane().add(scroll);
+        table = new JTable(dtm);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        scroll.setViewportView(table);
+        contentPane.add(scroll);
+
+        //bonotes tabla
+        btnUpdate = new JButton("Actualizar");
+        btnUpdate.setBounds(500, 269, 120, 25);
+        contentPane.add(btnUpdate);
+
+        btnDelete = new JButton("Eliminar");
+        btnDelete.setBounds(640, 269, 120, 25);
+        contentPane.add(btnDelete);
+
 
     }
 }

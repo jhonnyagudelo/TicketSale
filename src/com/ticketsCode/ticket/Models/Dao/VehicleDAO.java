@@ -16,6 +16,7 @@ import java.util.Vector;
 
 public class VehicleDAO implements  MouseListener {
     private ListVehicle autoBus;
+    int id;
 
 
     //CONSTRUCTOR
@@ -136,34 +137,48 @@ public class VehicleDAO implements  MouseListener {
         return false;
     }
 
-//    public void deleteSelect(ListVehicle autoBus){
-//        DataBaseConnection conn = new DataBaseConnection();
-//        Connection  connect = conn.getConn();
-//        Object selectItem = autoBus.table.getSelectedRow();
-//        try{
-//            selectItem.
-//        }catch (Exception ex){
-//
-//        }
-//
-//    }
 
-//    public boolean delete(VehicleVO autoBusVO){
-//        PreparedStatement ps;
+
+
+
+//    public void deleteSelect(VehicleVO autoBusVO) {
 //        DataBaseConnection conn = new DataBaseConnection();
 //        Connection connect = conn.getConn();
-//
-//        String SQL = "DELETE FROM vehicle WHERE vehicle_id = ?";
-//        try{
+//        String SQL = "DELETE FROM vehicles WHERE internal_number = ? ";
+//        PreparedStatement ps = null;
+//        try {
 //            ps = connect.prepareStatement(SQL);
-//            ps.setInt(1,autoBusVO.getVehicle_id());
 //            ps.execute();
-//            return true;
-//        }catch (SQLException e1){
-//            System.out.println("Error delete " + e1.getMessage());
+//            ps.setInt(1, autoBusVO.getInternal_number());
+//        } catch (SQLException ex) {
+//            System.out.println("Error al SQLtable" + ex.getMessage());
+//        } catch (Exception ex) {
+//            System.out.println("Error al table" + ex.getMessage());
 //        }
-//        return false;
 //    }
+
+    public boolean delete(VehicleVO autoBusVO){
+        PreparedStatement ps;
+        DataBaseConnection conn = new DataBaseConnection();
+        Connection connect = conn.getConn();
+
+        String SQL = "DELETE FROM vehicles WHERE internal_number = ?";
+        try{
+            ps = connect.prepareStatement(SQL);
+            ps.setInt(1,autoBusVO.getInternal_number());
+            ps.execute();
+            return true;
+        }catch (SQLException e1){
+            System.out.println("Error delete " + e1.getMessage());
+        }
+        return false;
+    }
+
+
+
+
+
+
 
 //    public boolean Search(VehicleVO autoBusVO){
 //        CallableStatement cs;
@@ -190,7 +205,7 @@ public class VehicleDAO implements  MouseListener {
 //        }catch (SQLException e1){
 //
 //        }
-//    }
+//   }
 
 
     @Override
@@ -212,9 +227,9 @@ public class VehicleDAO implements  MouseListener {
                         this.autoBus.tfCompany.setText(rs.getString(4));
                     }
                 } catch (SQLException e1){
-                    System.out.println("Error al cargar los CLIENTES");
+                    System.out.println("Error al cargar los vehiculos");
                     System.out.println(e1.getMessage());
-                    JOptionPane.showMessageDialog(null,"Error al cargar los CLIENTES","Informacion",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Error al cargar los vehiculo","Informacion",JOptionPane.INFORMATION_MESSAGE);
                 }
             }
     }

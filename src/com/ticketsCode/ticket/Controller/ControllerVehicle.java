@@ -68,13 +68,33 @@ public class ControllerVehicle implements ActionListener {
             tfClear();
         }
 
+//        if(e.getSource() == autoBus.btnDelete){
+//            int messengerDelete = JOptionPane.showConfirmDialog(null,"Eliminar producto","Si/No",JOptionPane.YES_NO_CANCEL_OPTION);
+//                if( autoBus.table.getSelectedRow() != -1){
+//                    autoBus.dtm.removeRow(autoBus.table.getSelectedRow());
+//                }
+//        }
+
         if(e.getSource() == autoBus.btnDelete){
-            if( autoBus.table.getSelectedRow() != -1){
-                autoBus.dtm.removeRow(autoBus.table.getSelectedRow());
+
+            JOptionPane.showConfirmDialog(null,"¿Eliminar producto?","Si/No",JOptionPane.YES_NO_CANCEL_OPTION);
+            int fila = autoBus.table.getSelectedRow();
+            int  id = Integer.parseInt(autoBus.table.getValueAt(fila,0).toString());
+            autoBusVO.setInternal_number(id);
+            try{
+                if(autoBusDAO.delete(autoBusVO)){
+                    JOptionPane.showMessageDialog(null,"Eliminado exitosamente");
+                } else {
+                    JOptionPane.showConfirmDialog(null,"Error");
+                }
+                autoBusDAO._loadTable();
+                }catch (Exception ex) {
+                System.out.printf("error delete" + ex.getMessage());
             }
-        }
+            }
 
     }
+
 
 
 
@@ -88,4 +108,5 @@ public class ControllerVehicle implements ActionListener {
         this.autoBus.tfLicense.setText("");
         this.autoBus.tfCapacity.setText("");
     }
+
 }
