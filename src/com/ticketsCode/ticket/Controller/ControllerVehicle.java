@@ -1,11 +1,13 @@
 package com.ticketsCode.ticket.Controller;
 
+import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Dao.VehicleDAO;
 import com.ticketsCode.ticket.Models.Vo.CompanyVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Util.QrGenerate;
 import com.ticketsCode.ticket.Views.ListVehicle;
 import com.ticketsCode.ticket.Views.QrView;
+import com.ticketsCode.ticket.Views.SearchVehicle;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -15,16 +17,20 @@ public class ControllerVehicle implements ActionListener {
     ListVehicle autoBus;
     VehicleVO autoBusVO;
     VehicleDAO autoBusDAO;
+    SearchVehicle search;
+    SearchDAO searchDAO;
     QrGenerate qrGenerate;
     QrView qrView;
 
 
 
 
-    public ControllerVehicle(ListVehicle autoBus, VehicleDAO autoBusDAO, VehicleVO autoBusVO){
+    public ControllerVehicle(ListVehicle autoBus, VehicleDAO autoBusDAO, VehicleVO autoBusVO, SearchVehicle search, SearchDAO searchDAO){
         this.autoBus = autoBus;
         this.autoBusVO = autoBusVO;
         this.autoBusDAO = autoBusDAO;
+        this.searchDAO = searchDAO;
+        this.search = search;
 //        this.qrGenerate = qrGenerate;
 //        this.qrView = qrView;
 //        this.qrGenerate.createQR(this);
@@ -33,9 +39,8 @@ public class ControllerVehicle implements ActionListener {
         this.autoBus.btnDelete.addActionListener(this);
         this.autoBus.btnClear.addActionListener(this);
         this.autoBus.selectCompany.addActionListener(this);
+        this.search.btnSearch.addActionListener(this);
     }
-
-
 
 
     @Override
@@ -85,13 +90,27 @@ public class ControllerVehicle implements ActionListener {
                 if(autoBusDAO.delete(autoBusVO)){
                     JOptionPane.showMessageDialog(null,"Eliminado exitosamente");
                 } else {
-                    JOptionPane.showConfirmDialog(null,"Error");
+                    JOptionPane.showMessageDialog(null,"Error");
                 }
                 autoBusDAO._loadTable();
                 }catch (Exception ex) {
                 System.out.printf("error delete" + ex.getMessage());
             }
             }
+
+//        if(e.getSource() == search.btnSearch){
+//            try {
+//                int number = Integer.parseInt(search.tfVehiculo.getText());
+//                autoBusVO.setInternal_number(number);
+//                if(searchDAO.Search(autoBusVO)){
+//                    JOptionPane.showMessageDialog(null,"busqueda correcta");
+//                } else {
+//                    JOptionPane.showMessageDialog(null,"Error muere piu piu");
+//                }
+//            } catch (Exception ex) {
+//                System.out.printf("error: "+ ex.getMessage());
+//            }
+//        }
 
     }
 

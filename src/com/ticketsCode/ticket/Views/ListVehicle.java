@@ -28,7 +28,7 @@ public class ListVehicle extends JFrame  {
     private JLabel lblInternalNumber, lblLicense, lblCapacity,lblCompany,lblTitle;
     public JTextField tfInternalNumber, tfLicense, tfCapacity, tfCompany;
     public JComboBox selectCompany;
-    public JButton btnSave, btnClear,btnDelete,btnUpdate;
+    public JButton btnSave, btnClear,btnDelete,btnUpdate, bntSearch;
     private JMenuBar menuBar;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
     public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1,liDelete;
@@ -105,7 +105,7 @@ public class ListVehicle extends JFrame  {
         registrationPane.add(lblLicense);
 
         lblCapacity = new JLabel("Cap. vehicular");
-        lblCapacity.setBounds(61,135,100,14);
+        lblCapacity.setBounds(61,135,   100,14);
         registrationPane.add(lblCapacity);
 
         lblCompany = new JLabel("Compañia");
@@ -167,6 +167,7 @@ public class ListVehicle extends JFrame  {
         btnDelete = new JButton("Eliminar");
         btnDelete.setBounds(419, 451, 100, 23);
         contentPane.add(btnDelete);
+
 
         setVisible(true);
 

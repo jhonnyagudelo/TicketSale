@@ -23,6 +23,18 @@ public class VehicleVO {
 
     }
 
+    public VehicleVO(Integer vehicle_id, Integer internal_number) {
+        this.vehicle_id = vehicle_id;
+        this.internal_number = internal_number;
+    }
+
+    public VehicleVO(int internal_number, String license, int capacity, int company, boolean active) {
+        this.internal_number = internal_number;
+        this.license = license;
+        this.capacity = capacity;
+        this.company = company;
+    }
+
 
     public Integer getVehicle_id() {
             return vehicle_id;
@@ -65,8 +77,9 @@ public class VehicleVO {
 
     @Override
     public String toString() {
-        return vehicle_id + " - " + internal_number;
+        return "" + internal_number;
     }
+
 }
 
 

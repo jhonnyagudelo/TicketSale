@@ -4,11 +4,11 @@ import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
 import com.ticketsCode.ticket.Models.Vo.CompanyVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Views.ListVehicle;
+import com.ticketsCode.ticket.Views.SearchVehicle;
+
+
 import java.sql.ResultSet;
 import javax.swing.*;
-import javax.xml.crypto.Data;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.*;
@@ -16,7 +16,7 @@ import java.util.Vector;
 
 public class VehicleDAO implements  MouseListener {
     private ListVehicle autoBus;
-    int id;
+
 
 
     //CONSTRUCTOR
@@ -24,8 +24,9 @@ public class VehicleDAO implements  MouseListener {
         this.autoBus = autoBus;
         _loadTable();
         listCompanies();
-
     }
+
+
 
     /**
      *Metodo que inserta los vehiculos a la BD
@@ -138,25 +139,6 @@ public class VehicleDAO implements  MouseListener {
     }
 
 
-
-
-
-//    public void deleteSelect(VehicleVO autoBusVO) {
-//        DataBaseConnection conn = new DataBaseConnection();
-//        Connection connect = conn.getConn();
-//        String SQL = "DELETE FROM vehicles WHERE internal_number = ? ";
-//        PreparedStatement ps = null;
-//        try {
-//            ps = connect.prepareStatement(SQL);
-//            ps.execute();
-//            ps.setInt(1, autoBusVO.getInternal_number());
-//        } catch (SQLException ex) {
-//            System.out.println("Error al SQLtable" + ex.getMessage());
-//        } catch (Exception ex) {
-//            System.out.println("Error al table" + ex.getMessage());
-//        }
-//    }
-
     public boolean delete(VehicleVO autoBusVO){
         PreparedStatement ps;
         DataBaseConnection conn = new DataBaseConnection();
@@ -174,38 +156,6 @@ public class VehicleDAO implements  MouseListener {
         return false;
     }
 
-
-
-
-
-
-
-//    public boolean Search(VehicleVO autoBusVO){
-//        CallableStatement cs;
-//        ResultSet rs;
-//        DataBaseConnection conn = new DataBaseConnection();
-//        Connection connect = conn.getConn();
-//        String SQL = "SELECT * FROM getinfo(?)" ;
-//        try{
-//            String query = "SELECT * FROM getinfo(?)";
-//            cs = conn.getConn().prepareCall(SQL);
-//            rs = cs.executeQuery();
-//
-//            while (rs.next()){
-//                autoBusVO = new VehicleVO();
-//                autoBusVO.add(rs.getInt("internal_number"));
-//                autoBusVO.add(rs.getString("license"));
-//                autoBusVO.add(rs.getInt("capacity"));
-//                autoBusVO.add(rs.getString("company"));
-//                autoBusVO.add(rs.getBoolean("active"));
-//                this.autoBus.dtm.addRow(row);
-//
-//            }
-//
-//        }catch (SQLException e1){
-//
-//        }
-//   }
 
 
     @Override

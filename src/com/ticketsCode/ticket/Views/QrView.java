@@ -10,7 +10,7 @@ public class QrView extends JFrame {
 
     public QrView() throws WriterException {
         QrGenerate qrGenerate = new QrGenerate();
-        BufferedImage image = qrGenerate.createQR("data perraaaaas",300, 300);
+        BufferedImage image = qrGenerate.createQR("",300, 300);
         ImageIcon icon = new ImageIcon(image);
         JLabel label  = new JLabel("");
 

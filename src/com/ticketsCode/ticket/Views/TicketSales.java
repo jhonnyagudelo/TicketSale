@@ -43,7 +43,7 @@ public class TicketSales extends JFrame {
     public TicketSales(){
         setTitle("Venta de tiquetes");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(200,100,1000,500);
+        setBounds(200,100,1000,400);
 
         contentPane = new JPanel();
         //getContentPane().add(contentPane);
