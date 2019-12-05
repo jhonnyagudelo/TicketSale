@@ -43,7 +43,7 @@ public class ListVehicle extends JFrame  {
 
     public ListVehicle(){
         setTitle("Registro de vehiculos");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(200,100,700,600);
 
         contentPane = new JPanel();
@@ -72,10 +72,11 @@ public class ListVehicle extends JFrame  {
             //item menu venta
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
+
         liList = new JMenuItem("Consulta");
         ulTickets.add(liList);
             //item menu vehiculos
-        liRegistration = new JMenuItem("Registro");
+        liRegistration = new JMenuItem("Registro1");
         ulVehicles.add(liRegistration);
 
         liDelete = new JMenuItem("Eliminar");

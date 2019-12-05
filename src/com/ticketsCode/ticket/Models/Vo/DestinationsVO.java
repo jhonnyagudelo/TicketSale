@@ -54,6 +54,6 @@ public class DestinationsVO {
 
     @Override
     public String toString() {
-        return  destination_id + " - " + name ;
+        return  destination_id + " - " + name  ;
     }
 }

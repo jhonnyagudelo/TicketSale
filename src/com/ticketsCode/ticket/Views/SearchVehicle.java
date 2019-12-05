@@ -38,7 +38,7 @@ public class SearchVehicle extends  JFrame{
 
     public SearchVehicle(){
         setTitle("Venta de tiquetes");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(150,100,1100,300);
 
         contentPane = new JPanel();

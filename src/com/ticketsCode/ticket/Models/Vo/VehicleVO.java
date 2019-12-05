@@ -10,14 +10,14 @@ public class VehicleVO {
 
 
 
-    public VehicleVO(Integer vehicle_id,Integer internal_number, String license, Integer capacity, Integer company, Boolean active){
-            this.vehicle_id = vehicle_id;
-            this.internal_number = internal_number;
-            this.license = license;
-            this.capacity = capacity;
-            this.company = company;
-            this.active = active;
-        }
+//    public VehicleVO(Integer vehicle_id,Integer internal_number, String license, Integer capacity, Integer company, Boolean active){
+//            this.vehicle_id = vehicle_id;
+//            this.internal_number = internal_number;
+//            this.license = license;
+//            this.capacity = capacity;
+//            this.company = company;
+//            this.active = active;
+//        }
 
     public VehicleVO() {
 
@@ -28,12 +28,12 @@ public class VehicleVO {
         this.internal_number = internal_number;
     }
 
-    public VehicleVO(int internal_number, String license, int capacity, int company, boolean active) {
-        this.internal_number = internal_number;
-        this.license = license;
-        this.capacity = capacity;
-        this.company = company;
-    }
+//    public VehicleVO(int internal_number, String license, int capacity, int company, boolean active) {
+//        this.internal_number = internal_number;
+//        this.license = license;
+//        this.capacity = capacity;
+//        this.company = company;
+//    }
 
 
     public Integer getVehicle_id() {

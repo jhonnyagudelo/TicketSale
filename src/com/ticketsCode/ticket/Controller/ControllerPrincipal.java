@@ -1,6 +1,7 @@
 package com.ticketsCode.ticket.Controller;
 
 import com.google.zxing.WriterException;
+import com.ticketsCode.ticket.Models.Dao.QrDAO;
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
 import com.ticketsCode.ticket.Models.Dao.VehicleDAO;
@@ -20,10 +21,12 @@ public class ControllerPrincipal {
         ListVehicle autoBus = new ListVehicle();
         VehicleDAO autoBusDAO = new VehicleDAO(autoBus);
         VehicleVO autoBusVO = new VehicleVO();
+        QrView qrView = new QrView();
 
         //QR
-        QrView qrView = new QrView();
-        qrView.setVisible(true);
+//        QrView qrView = new QrView();
+//        QrDAO qrDAO = new QrDAO();
+//        qrView.setVisible(true);
 
         //venta
         TicketSales sale = new TicketSales();
@@ -33,11 +36,12 @@ public class ControllerPrincipal {
         //Busqueda vehicular
         SearchVehicle search = new SearchVehicle();
         SearchDAO searchDAO = new SearchDAO(search);
-        search.setVisible(true);
+//        search.setVisible(true);
 
-        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO);
+        ControllerMenu cm = new ControllerMenu(autoBus,search,sale);
+        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO,qrView );
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
-        autoBus.setVisible(true);
+//        autoBus.setVisible(true);
 
     }
     private void iniciar(){

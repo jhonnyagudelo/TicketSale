@@ -11,6 +11,7 @@ public class TicketVO extends Ticket_detailsVO {
     private Integer company;
     private Integer passenger;
     private Integer origin;
+    private Integer destination;
     private Date date;
     private Timer hour;
     private Integer vehicle;
@@ -75,7 +76,28 @@ public class TicketVO extends Ticket_detailsVO {
         return vehicle;
     }
 
+    @Override
+    public Integer getDestination() {
+        return destination;
+    }
+
+    @Override
+    public void setDestination(Integer destination) {
+        this.destination = destination;
+    }
+
     public void setVehicle(Integer vehicle) {
         this.vehicle = vehicle;
+    }
+
+    @Override
+    public String toString() {
+        return "TicketVO{" +
+                ", passenger=" + passenger +
+                ", company=" + company +
+                ", destination=" + destination +
+                ", vehicle=" + vehicle +
+                ", hour=" + hour +
+                '}';
     }
 }

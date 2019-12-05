@@ -15,6 +15,7 @@ public class QrGenerate {
 
     }
 
+
     public BufferedImage createQR(String data, int height, int width) throws WriterException {
         Writer desktop = new QRCodeWriter();
         BitMatrix matrix = desktop.encode(data, BarcodeFormat.QR_CODE, width, height);
