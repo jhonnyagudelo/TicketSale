@@ -11,11 +11,11 @@ public class DataBaseConnection {
     private final String LOCALHOST = "localhost:5432";
     private final String PASSWORD = "1113645020";
     private  String SERVER = "";
-    private final String URL = "jdbc:postgresql://localhost:5432/tiquetes_trans";
+    private final String URL = "jdbc:postgresql://localhost:5432/tiquetes";
     private static Connection conn = null;
 
-    public DataBaseConnection(String tiquetes_trans){
-        this.SERVER = "jdbc:postgresql://"+this.LOCALHOST+"/"+tiquetes_trans;
+    public DataBaseConnection(String tiquetes){
+        this.SERVER = "jdbc:postgresql://"+this.LOCALHOST+"/"+tiquetes;
         //Registrar el driver
         try {
             Class.forName("org.postgresql.Driver");
@@ -30,7 +30,7 @@ public class DataBaseConnection {
             System.exit(0);
             JOptionPane.showMessageDialog(null,"Error al conectar con el servidor"+ e.getMessage());
         }
-        System.out.println("Conectado a " +tiquetes_trans);
+        System.out.println("Conectado a " +tiquetes);
     }
 
     public DataBaseConnection() {

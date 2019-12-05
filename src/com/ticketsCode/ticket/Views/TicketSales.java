@@ -27,7 +27,7 @@ public class TicketSales extends JFrame {
     private JDesktopPane registrationPane;
     private JLabel lblCompany, lblPassenger, lblOrigin, lblDestination, lblQuantity,lblVehicle;
     public JComboBox selectDestination, selectVehicle, selectOrigin;
-    public JTextField tfCompany, tfPassenger, tfQuantity;
+    public JTextField tfVehicle, tfPassenger, tfQuantity;
     public JButton btnSale, btnUpdate, btnDelete, btnClear;
     public DefaultComboBoxModel dcbm, dcbmD, dcbmV;
     public DefaultTableModel dtm;
@@ -122,6 +122,10 @@ public class TicketSales extends JFrame {
         tfQuantity.setBounds(120,193,150,25);
         registrationPane.add(tfQuantity);
 
+        tfVehicle = new JTextField();
+        tfVehicle.setBounds(120,153,150,25);
+        registrationPane.add(tfVehicle);
+
         //JcomboBox
         selectOrigin = new JComboBox();
         selectOrigin.setBounds(120,73,150,25);
@@ -138,11 +142,11 @@ public class TicketSales extends JFrame {
 
 
 
-        selectVehicle = new JComboBox();
-        selectVehicle.setBounds(120,153,150,25);
-        registrationPane.add(selectVehicle);
-        dcbmV = new DefaultComboBoxModel();
-        selectVehicle.addItem("--Seleccionar--");
+//        selectVehicle = new JComboBox();
+//        selectVehicle.setBounds(120,153,150,25);
+//        registrationPane.add(selectVehicle);
+//        dcbmV = new DefaultComboBoxModel();
+//        selectVehicle.addItem("--Seleccionar--");
 
 
         //Button

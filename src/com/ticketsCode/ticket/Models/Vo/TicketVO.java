@@ -6,7 +6,7 @@ import sun.security.krb5.internal.Ticket;
 import java.util.Date;
 import java.util.Timer;
 
-public class TicketVO extends Ticket_detailsVO {
+public class TicketVO {
     private Integer ticket_id;
     private Integer company;
     private Integer passenger;
@@ -15,14 +15,21 @@ public class TicketVO extends Ticket_detailsVO {
     private Date date;
     private Timer hour;
     private Integer vehicle;
+    private Integer quantiy;
 
+
+    public TicketVO(){
+
+    }
 
     public TicketVO(Integer passenger,Integer origin, Integer destination, Integer vehicle,Integer quantity){
-        super(destination,quantity);
             this.passenger = passenger;
             this.origin = origin;
             this.vehicle = vehicle;
+            this.quantiy = quantity;
+            this.destination = destination;
     }
+
 
     public Integer getTicket_id() {
         return ticket_id;
@@ -76,12 +83,10 @@ public class TicketVO extends Ticket_detailsVO {
         return vehicle;
     }
 
-    @Override
     public Integer getDestination() {
         return destination;
     }
 
-    @Override
     public void setDestination(Integer destination) {
         this.destination = destination;
     }
@@ -90,14 +95,23 @@ public class TicketVO extends Ticket_detailsVO {
         this.vehicle = vehicle;
     }
 
+    public Integer getQuantiy() {
+        return quantiy;
+    }
+
+    public void setQuantiy(Integer quantiy) {
+        this.quantiy = quantiy;
+    }
+
+
     @Override
     public String toString() {
-        return "TicketVO{" +
+        return  "company=" + company +
                 ", passenger=" + passenger +
-                ", company=" + company +
                 ", destination=" + destination +
-                ", vehicle=" + vehicle +
+                ", date=" + date +
                 ", hour=" + hour +
-                '}';
+                ", vehicle=" + vehicle +
+                ", origen = " + origin;
     }
 }

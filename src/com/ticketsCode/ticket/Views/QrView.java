@@ -1,6 +1,8 @@
 package com.ticketsCode.ticket.Views;
 
 import com.google.zxing.WriterException;
+import com.ticketsCode.ticket.Models.Dao.TicketDAO;
+import com.ticketsCode.ticket.Models.Vo.TicketVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Util.QrGenerate;
 
@@ -8,18 +10,18 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 
 public class QrView extends JFrame {
-    private VehicleVO autoBusVO;
+    private TicketVO ticketVO;
 
 
     public QrView() {
 
     }
 
-    public boolean QrView(VehicleVO autoBusVO) throws WriterException {
-        this.autoBusVO = autoBusVO;
+    public boolean QrView(TicketVO ticketVO) throws WriterException {
+        this.ticketVO = ticketVO;
         try {
             QrGenerate qrGenerate = new QrGenerate();
-            BufferedImage image = qrGenerate.createQR(autoBusVO + "", 300, 300);
+            BufferedImage image = qrGenerate.createQR(ticketVO + "", 300, 300);
             ImageIcon icon = new ImageIcon(image);
             JLabel label = new JLabel("");
 

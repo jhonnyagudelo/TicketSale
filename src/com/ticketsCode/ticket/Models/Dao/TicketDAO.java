@@ -14,13 +14,12 @@ import java.util.Vector;
 public class TicketDAO {
 
     private TicketSales tickSale;
-    private TicketVO saleVO;
 
     public TicketDAO(TicketSales tickSale) {
         this.tickSale = tickSale;
         _loadTableSale();
         listDestiny();
-        listVehicle();
+//        listVehicle();
         listOrigin();
     }
 
@@ -46,28 +45,28 @@ public class TicketDAO {
         }
     }
 
-    public void listVehicle() {
-        DataBaseConnection conn = new DataBaseConnection();
-        Connection connect = conn.getConn();
-        PreparedStatement ps;
-        ResultSet rs;
-        this.tickSale.dcbmV.removeAllElements();
-        try {
-            String SQL = "SELECT vehicle_id, internal_number FROM vehicles ORDER BY company";
-            ps = connect.prepareStatement(SQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                tickSale.selectVehicle.addItem(new VehicleVO(
-                        Integer.parseInt(rs.getString("vehicle_id")),
-                        Integer.parseInt(rs.getString("internal_number")
-                        )));
-            }
-        } catch (SQLException e) {
-            System.out.printf("Error SQL vehicle " + e.getMessage());
-        } catch (Exception e) {
-            System.out.printf("Error vehicle " + e.getMessage());
-        }
-    }
+//    public void listVehicle() {
+//        DataBaseConnection conn = new DataBaseConnection();
+//        Connection connect = conn.getConn();
+//        PreparedStatement ps;
+//        ResultSet rs;
+//        this.tickSale.dcbmV.removeAllElements();
+//        try {
+//            String SQL = "SELECT vehicle_id, internal_number FROM vehicles ORDER BY company";
+//            ps = connect.prepareStatement(SQL);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                tickSale.selectVehicle.addItem(new VehicleVO(
+//                        Integer.parseInt(rs.getString("vehicle_id")),
+//                        Integer.parseInt(rs.getString("internal_number")
+//                        )));
+//            }
+//        } catch (SQLException e) {
+//            System.out.printf("Error SQL vehicle " + e.getMessage());
+//        } catch (Exception e) {
+//            System.out.printf("Error vehicle " + e.getMessage());
+//        }
+//    }
 
     public void listOrigin() {
         DataBaseConnection conn = new DataBaseConnection();
@@ -121,34 +120,35 @@ public class TicketDAO {
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al cargar los Datos" + e.getMessage());
-            JOptionPane.showMessageDialog(null, "Error al cargar los DATOS", "Informacion", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error al cargar los Datos venta" + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al cargar los DATOS venta", "Informacion", JOptionPane.ERROR_MESSAGE);
         }
     }
 
 
-    public void save(TicketVO ticketVO) {
+    public boolean save(TicketVO ticketVO) {
         DataBaseConnection conn = new DataBaseConnection();
         Connection connect = conn.getConn();
-        PreparedStatement pstmt, pstmt2;
+        PreparedStatement pstmt;
         ResultSet rs;
-        String SQL = "SELECT ticket(?, ?, ?)";
-        String SQL2 ="SELECT update_details(?, ?, ?) ";
+        String SQL = "SELECT ticket(?, ?, ?, ?, ?)";
         try{
             pstmt = connect.prepareStatement(SQL);
             pstmt.setInt(1, ticketVO.getPassenger());
             pstmt.setInt(2, ticketVO.getVehicle());
             pstmt.setInt(3,ticketVO.getOrigin());
+            pstmt.setInt(4,ticketVO.getQuantiy());
+            pstmt.setInt(5,ticketVO.getDestination());
             rs = pstmt.executeQuery();
             System.out.println("el resultado es: " + pstmt);
-            for (TicketVO ticketVO: ticketVO.
-                 ) {
-
-            }
+            return  true;
         }catch (SQLException e){
-
+            System.out.println("Error SQL al ingresar venta: " + e.getMessage());
+        }catch (Exception e){
+            System.out.println("Error al ingresar venta: " + e.getMessage() );
         }
 
+        return false;
     }
 
 

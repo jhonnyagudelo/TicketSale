@@ -17,15 +17,14 @@ public class ControllerVehicle implements ActionListener {
     ListVehicle autoBus;
     VehicleVO autoBusVO;
     VehicleDAO autoBusDAO;
+
     SearchVehicle search;
     SearchDAO searchDAO;
     QrGenerate qrGenerate;
     QrView qrView;
 
 
-
-
-    public ControllerVehicle(ListVehicle autoBus, VehicleDAO autoBusDAO, VehicleVO autoBusVO, SearchVehicle search, SearchDAO searchDAO){
+    public ControllerVehicle(ListVehicle autoBus, VehicleDAO autoBusDAO, VehicleVO autoBusVO, SearchVehicle search, SearchDAO searchDAO) {
         this.autoBus = autoBus;
         this.autoBusVO = autoBusVO;
         this.autoBusDAO = autoBusDAO;
@@ -45,18 +44,18 @@ public class ControllerVehicle implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-    try{
-        /**
-         * esta funcion es para guardar lo vehiculos
-         * @Param btnSave guarda la informacion
-         * */
+        try {
+            /**
+             * esta funcion es para guardar lo vehiculos
+             * @Param btnSave guarda la informacion
+             * */
 
-            if(e.getSource() == autoBus.btnSave){
+            if (e.getSource() == autoBus.btnSave) {
                 autoBusVO.setInternal_number(Integer.parseInt(autoBus.tfInternalNumber.getText()));
                 autoBusVO.setLicense(autoBus.tfLicense.getText());
                 autoBusVO.setCapacity(Integer.parseInt(autoBus.tfCapacity.getText()));
                 autoBusVO.setCompany(autoBus.selectCompany.getSelectedIndex());
-                if(autoBusDAO.vehiculeRecorder(autoBusVO)){
+                if (autoBusDAO.vehiculeRecorder(autoBusVO)) {
                     JOptionPane.showMessageDialog(null, "Registro Guardado");
                     tfClear();
                     autoBusDAO._loadTable();
@@ -65,11 +64,11 @@ public class ControllerVehicle implements ActionListener {
                     tfClear();
                 }
             }
-        }catch (Exception e1){
-                System.out.println("Error Save" + e1.getMessage());
+        } catch (Exception e1) {
+            System.out.println("Error Save" + e1.getMessage());
         }
-    //Bonton de limpiar
-        if(e.getSource() == autoBus.btnClear){
+        //Bonton de limpiar
+        if (e.getSource() == autoBus.btnClear) {
             tfClear();
         }
 
@@ -80,23 +79,23 @@ public class ControllerVehicle implements ActionListener {
 //                }
 //        }
 
-        if(e.getSource() == autoBus.btnDelete){
+        if (e.getSource() == autoBus.btnDelete) {
 
-            JOptionPane.showConfirmDialog(null,"¿Eliminar producto?","Si/No",JOptionPane.YES_NO_CANCEL_OPTION);
+            JOptionPane.showConfirmDialog(null, "¿Eliminar producto?", "Si/No", JOptionPane.YES_NO_CANCEL_OPTION);
             int fila = autoBus.table.getSelectedRow();
-            int  id = Integer.parseInt(autoBus.table.getValueAt(fila,0).toString());
+            int id = Integer.parseInt(autoBus.table.getValueAt(fila, 0).toString());
             autoBusVO.setInternal_number(id);
-            try{
-                if(autoBusDAO.delete(autoBusVO)){
-                    JOptionPane.showMessageDialog(null,"Eliminado exitosamente");
+            try {
+                if (autoBusDAO.delete(autoBusVO)) {
+                    JOptionPane.showMessageDialog(null, "Eliminado exitosamente");
                 } else {
-                    JOptionPane.showMessageDialog(null,"Error");
+                    JOptionPane.showMessageDialog(null, "Error");
                 }
                 autoBusDAO._loadTable();
-                }catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.printf("error delete" + ex.getMessage());
             }
-            }
+        }
 
 //        if(e.getSource() == search.btnSearch){
 //            try {
@@ -115,14 +114,10 @@ public class ControllerVehicle implements ActionListener {
     }
 
 
-
-
-
-
     /**
      * Metodo de limpiar los TexField
-     * */
-    private void tfClear(){
+     */
+    private void tfClear() {
         this.autoBus.tfInternalNumber.setText("");
         this.autoBus.tfLicense.setText("");
         this.autoBus.tfCapacity.setText("");

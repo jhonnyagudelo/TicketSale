@@ -28,6 +28,7 @@ public class VehicleVO {
         this.internal_number = internal_number;
     }
 
+
 //    public VehicleVO(int internal_number, String license, int capacity, int company, boolean active) {
 //        this.internal_number = internal_number;
 //        this.license = license;
@@ -77,7 +78,7 @@ public class VehicleVO {
 
     @Override
     public String toString() {
-        return "" + internal_number;
+        return  internal_number + "";
     }
 
 }
