@@ -5,11 +5,9 @@ import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.ticketsCode.ticket.Models.Dao.VehicleDAO;
 
 import java.awt.image.BufferedImage;
 public class QrGenerate {
-    VehicleDAO autoBusDAO;
 
     public QrGenerate() {
 
@@ -18,6 +16,7 @@ public class QrGenerate {
 
     public BufferedImage createQR(String data, int height, int width) throws WriterException {
         Writer desktop = new QRCodeWriter();
+//        BitMatrix matrix = desktop.encode(data, BarcodeFormat.QR_CODE, width, height);
         BitMatrix matrix = desktop.encode(data, BarcodeFormat.QR_CODE, width, height);
 
         BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);

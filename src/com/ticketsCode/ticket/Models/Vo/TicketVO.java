@@ -1,8 +1,5 @@
 package com.ticketsCode.ticket.Models.Vo;
 
-import com.ticketsCode.ticket.Views.TicketSales;
-import sun.security.krb5.internal.Ticket;
-
 import java.util.Date;
 import java.util.Timer;
 
@@ -15,7 +12,7 @@ public class TicketVO {
     private Date date;
     private Timer hour;
     private Integer vehicle;
-    private Integer quantiy;
+    private Integer quantity;
 
 
     public TicketVO(){
@@ -26,7 +23,7 @@ public class TicketVO {
             this.passenger = passenger;
             this.origin = origin;
             this.vehicle = vehicle;
-            this.quantiy = quantity;
+            this.quantity = quantity;
             this.destination = destination;
     }
 
@@ -95,23 +92,32 @@ public class TicketVO {
         this.vehicle = vehicle;
     }
 
-    public Integer getQuantiy() {
-        return quantiy;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setQuantiy(Integer quantiy) {
-        this.quantiy = quantiy;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
 
     @Override
     public String toString() {
-        return  "company=" + company +
-                ", passenger=" + passenger +
-                ", destination=" + destination +
-                ", date=" + date +
-                ", hour=" + hour +
-                ", vehicle=" + vehicle +
-                ", origen = " + origin;
+        return
+                "" + passenger +
+                "," + destination +
+                "," + date +
+                "," + hour +
+                "," + vehicle +
+                "," + origin;
+
     }
+//    return  "company=" + company +
+//                ", passenger=" + passenger +
+//                ", destination=" + destination +
+//                ", date=" + date +
+//                ", hour=" + hour +
+//                ", vehicle=" + vehicle +
+//                ", origen = " + origin;
+//    }
 }

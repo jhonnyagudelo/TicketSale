@@ -20,8 +20,6 @@ public class ControllerVehicle implements ActionListener {
 
     SearchVehicle search;
     SearchDAO searchDAO;
-    QrGenerate qrGenerate;
-    QrView qrView;
 
 
     public ControllerVehicle(ListVehicle autoBus, VehicleDAO autoBusDAO, VehicleVO autoBusVO, SearchVehicle search, SearchDAO searchDAO) {
@@ -30,9 +28,6 @@ public class ControllerVehicle implements ActionListener {
         this.autoBusDAO = autoBusDAO;
         this.searchDAO = searchDAO;
         this.search = search;
-//        this.qrGenerate = qrGenerate;
-//        this.qrView = qrView;
-//        this.qrGenerate.createQR(this);
         this.autoBus.btnUpdate.addActionListener(this);
         this.autoBus.btnSave.addActionListener(this);
         this.autoBus.btnDelete.addActionListener(this);
@@ -96,21 +91,6 @@ public class ControllerVehicle implements ActionListener {
                 System.out.printf("error delete" + ex.getMessage());
             }
         }
-
-//        if(e.getSource() == search.btnSearch){
-//            try {
-//                int number = Integer.parseInt(search.tfVehiculo.getText());
-//                autoBusVO.setInternal_number(number);
-//                if(searchDAO.Search(autoBusVO)){
-//                    JOptionPane.showMessageDialog(null,"busqueda correcta");
-//                } else {
-//                    JOptionPane.showMessageDialog(null,"Error muere piu piu");
-//                }
-//            } catch (Exception ex) {
-//                System.out.printf("error: "+ ex.getMessage());
-//            }
-//        }
-
     }
 
 

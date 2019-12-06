@@ -36,10 +36,6 @@ public class ControllerSearch implements  ActionListener {
             try {
                 if (searchDAO.search(autoBusVO)) {
                     JOptionPane.showMessageDialog(null, "busqueda exitosa");
-//                } if (qrDAO.QrView(autoBusVO)){
-//                    JOptionPane.showMessageDialog(null, "busqueda QR exitosa");
-//                    qrDAO.setVisible(true);
-
             }else {
                     JOptionPane.showMessageDialog(null,"Error" );
                 }

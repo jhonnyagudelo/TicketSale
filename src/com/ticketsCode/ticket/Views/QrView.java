@@ -1,9 +1,10 @@
 package com.ticketsCode.ticket.Views;
 
 import com.google.zxing.WriterException;
-import com.ticketsCode.ticket.Models.Dao.TicketDAO;
+import com.ticketsCode.ticket.Controller.ControllerPrincipal;
+import com.ticketsCode.ticket.Models.Dao.QrDAO;
+import com.ticketsCode.ticket.Models.Vo.QrVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
-import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Util.QrGenerate;
 
 import javax.swing.*;
@@ -11,17 +12,18 @@ import java.awt.image.BufferedImage;
 
 public class QrView extends JFrame {
     private TicketVO ticketVO;
-
+    private QrDAO qrDAO;
 
     public QrView() {
 
     }
 
-    public boolean QrView(TicketVO ticketVO) throws WriterException {
-        this.ticketVO = ticketVO;
+    public boolean QrView(QrDAO qrDAO) throws WriterException {
+        this.qrDAO = qrDAO;
         try {
             QrGenerate qrGenerate = new QrGenerate();
-            BufferedImage image = qrGenerate.createQR(ticketVO + "", 300, 300);
+            BufferedImage image = qrGenerate.createQR(qrDAO + "", 300, 300);
+            System.out.println(qrDAO);
             ImageIcon icon = new ImageIcon(image);
             JLabel label = new JLabel("");
 
@@ -37,21 +39,5 @@ public class QrView extends JFrame {
         }
         return false;
     }
-
-
-
-//    public void QrView(String vehicle, String license, String capacity, String company ) throws WriterException {
-//        QrGenerate qrGenerate = new QrGenerate();
-//        BufferedImage image = qrGenerate.createQR( vehicle + " "+ license + " " + capacity + " " + company + " " ,300, 300);
-//        ImageIcon icon = new ImageIcon(image);
-//        JLabel label  = new JLabel("");
-//
-//        label.setIcon(icon);
-//        this.setIconImage(image);
-//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        this.setTitle("QR");
-//        this.getContentPane().add(label);
-//        this.pack();
-//    }
 
 }

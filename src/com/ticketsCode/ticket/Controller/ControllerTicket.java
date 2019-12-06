@@ -1,9 +1,10 @@
 package com.ticketsCode.ticket.Controller;
 
 import com.google.zxing.WriterException;
+import com.ticketsCode.ticket.Models.Dao.QrDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
+import com.ticketsCode.ticket.Models.Vo.QrVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
-import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Views.QrView;
 import com.ticketsCode.ticket.Views.TicketSales;
 
@@ -16,12 +17,16 @@ public class ControllerTicket implements ActionListener {
     TicketVO ticketVO;
     TicketDAO ticketDAO;
     TicketSales ticketSales;
-    QrView qrDAO;
+    QrView qrView;
+    QrVO qrVO;
+    QrDAO qrDAO;
 
-    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO,QrView qrDAO) {
+    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO,QrView qrView, QrVO qrVO, QrDAO qrDAO) {
         this.ticketSales = ticketSales;
         this.ticketDAO = ticketDAO;
         this.ticketVO = ticketVO;
+        this.qrView = qrView;
+        this.qrVO = qrVO;
         this.qrDAO = qrDAO;
 
         this.ticketSales.btnSale.addActionListener(this);
@@ -38,22 +43,17 @@ public class ControllerTicket implements ActionListener {
             ticketVO.setOrigin(ticketSales.selectOrigin.getSelectedIndex());
             ticketVO.setDestination(ticketSales.selectDestination.getSelectedIndex());
             ticketVO.setVehicle(Integer.parseInt(ticketSales.tfVehicle.getText()));
-            ticketVO.setQuantiy(Integer.parseInt(ticketSales.tfQuantity.getText()));
-            if (ticketDAO.save(ticketVO)) {
-                JOptionPane.showMessageDialog(null, "Registro Guardado");
+            ticketVO.setQuantity(Integer.parseInt(ticketSales.tfQuantity.getText()));
+                if (ticketDAO.save(ticketVO)) {
+                JOptionPane.showMessageDialog(null, "Registro G uardado");
                 tfClear();
                 ticketDAO._loadTableSale();
             }
-            try {
-                if (qrDAO.QrView(ticketVO)){
-                        JOptionPane.showMessageDialog(null, "busqueda QR exitosa");
-                        qrDAO.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Registro No Guardado");
-                    tfClear();
-                }
-            } catch (WriterException ex) {
-                System.out.println("Error QR: " + ex.getMessage());
+            if (qrDAO.QR()){
+                qrView.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null, "Registro No Guardado");
+                tfClear();
             }
 
         }

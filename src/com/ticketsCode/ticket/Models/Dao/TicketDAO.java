@@ -4,7 +4,6 @@ import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
 import com.ticketsCode.ticket.Models.Vo.DestinationsVO;
 import com.ticketsCode.ticket.Models.Vo.OriginsVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
-import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Views.TicketSales;
 
 import javax.swing.*;
@@ -137,7 +136,7 @@ public class TicketDAO {
             pstmt.setInt(1, ticketVO.getPassenger());
             pstmt.setInt(2, ticketVO.getVehicle());
             pstmt.setInt(3,ticketVO.getOrigin());
-            pstmt.setInt(4,ticketVO.getQuantiy());
+            pstmt.setInt(4,ticketVO.getQuantity());
             pstmt.setInt(5,ticketVO.getDestination());
             rs = pstmt.executeQuery();
             System.out.println("el resultado es: " + pstmt);
@@ -151,5 +150,10 @@ public class TicketDAO {
         return false;
     }
 
-
+    @Override
+    public String toString() {
+        return "TicketDAO{" +
+                "tickSale=" + tickSale +
+                '}';
+    }
 }
