@@ -1,43 +1,45 @@
 package com.ticketsCode.ticket.Views;
 
 import com.google.zxing.WriterException;
-import com.ticketsCode.ticket.Controller.ControllerPrincipal;
-import com.ticketsCode.ticket.Models.Dao.QrDAO;
-import com.ticketsCode.ticket.Models.Vo.QrVO;
-import com.ticketsCode.ticket.Models.Vo.TicketVO;
 import com.ticketsCode.ticket.Util.QrGenerate;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
-public class QrView extends JFrame {
-    private TicketVO ticketVO;
-    private QrDAO qrDAO;
 
+public class QrView extends JFrame {
+    private JLabel QrLabel;
     public QrView() {
 
     }
 
-    public boolean QrView(QrDAO qrDAO) throws WriterException {
-        this.qrDAO = qrDAO;
+    public void Qr(String qrDAO) {
         try {
+            boolean finished = false;
             QrGenerate qrGenerate = new QrGenerate();
-            BufferedImage image = qrGenerate.createQR(qrDAO + "", 300, 300);
-            System.out.println(qrDAO);
-            ImageIcon icon = new ImageIcon(image);
-            JLabel label = new JLabel("");
+            BufferedImage image = qrGenerate.createQR(qrDAO + "", 200, 200);
+            System.out.println("primer: " + qrDAO);
 
-            label.setIcon(icon);
+            ImageIcon icon = new ImageIcon(image);
+
+            QrLabel = new JLabel("");
+
+
+            QrLabel.setIcon(icon);
             this.setIconImage(image);
-            this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
             this.setTitle("QR");
-            this.getContentPane().add(label);
+            this.getContentPane().add(QrLabel);
             this.pack();
-            return true;
-        }catch (Exception e){
-            System.out.print("error QR" + e.getMessage());
+            System.out.println("QR2: " + QrLabel);
+        }catch (WriterException e){
+            System.out.print("error QR: " + e.getMessage());
+            e.printStackTrace(System.err);
+        } catch (Exception e){
+            System.out.print("error QR: " + e.getMessage());
+            e.printStackTrace(System.err);
         }
-        return false;
+
     }
 
 }

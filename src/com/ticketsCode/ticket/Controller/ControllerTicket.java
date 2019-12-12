@@ -5,6 +5,7 @@ import com.ticketsCode.ticket.Models.Dao.QrDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
 import com.ticketsCode.ticket.Models.Vo.QrVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
+import com.ticketsCode.ticket.Util.PrintEpson;
 import com.ticketsCode.ticket.Views.QrView;
 import com.ticketsCode.ticket.Views.TicketSales;
 
@@ -20,14 +21,16 @@ public class ControllerTicket implements ActionListener {
     QrView qrView;
     QrVO qrVO;
     QrDAO qrDAO;
+    PrintEpson printEpson;
 
-    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO,QrView qrView, QrVO qrVO, QrDAO qrDAO) {
+    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO,QrView qrView, QrVO qrVO, QrDAO qrDAO, PrintEpson printEpson) {
         this.ticketSales = ticketSales;
         this.ticketDAO = ticketDAO;
         this.ticketVO = ticketVO;
         this.qrView = qrView;
         this.qrVO = qrVO;
         this.qrDAO = qrDAO;
+        this.printEpson = printEpson;
 
         this.ticketSales.btnSale.addActionListener(this);
         this.ticketSales.btnClear.addActionListener(this);
@@ -44,21 +47,25 @@ public class ControllerTicket implements ActionListener {
             ticketVO.setDestination(ticketSales.selectDestination.getSelectedIndex());
             ticketVO.setVehicle(Integer.parseInt(ticketSales.tfVehicle.getText()));
             ticketVO.setQuantity(Integer.parseInt(ticketSales.tfQuantity.getText()));
-                if (ticketDAO.save(ticketVO)) {
-                JOptionPane.showMessageDialog(null, "Registro G uardado");
+            if (ticketDAO.save(ticketVO)) {
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
                 tfClear();
                 ticketDAO._loadTableSale();
-            }
-            if (qrDAO.QR()){
+                qrView.Qr(qrDAO.QR());
                 qrView.setVisible(true);
-            }else{
+                printEpson.printTickets(qrDAO.QR());
+
+            }
+
+            } else {
                 JOptionPane.showMessageDialog(null, "Registro No Guardado");
                 tfClear();
             }
 
         }
+//    }
 
-    }
+
 
     /**
      * Metodo de limpiar los TexField
@@ -66,5 +73,6 @@ public class ControllerTicket implements ActionListener {
     private void tfClear(){
         this.ticketSales.tfPassenger.setText("");
         this.ticketSales.tfQuantity.setText("");
+        this.ticketSales.tfVehicle.setText("");
     }
 }

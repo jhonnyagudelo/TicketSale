@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="AutoCompleter">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../AutoCompleter.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../intellij-jasper-report-support-1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../commons-dbutils-1.7.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Util.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

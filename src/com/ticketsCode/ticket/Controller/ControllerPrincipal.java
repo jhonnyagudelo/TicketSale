@@ -9,6 +9,7 @@ import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
 import com.ticketsCode.ticket.Models.Vo.QrVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
+import com.ticketsCode.ticket.Util.PrintEpson;
 import com.ticketsCode.ticket.Views.ListVehicle;
 import com.ticketsCode.ticket.Views.QrView;
 import com.ticketsCode.ticket.Views.SearchVehicle;
@@ -24,8 +25,8 @@ public class ControllerPrincipal {
         VehicleVO autoBusVO = new VehicleVO();
 
         //QR
-        QrView qrView = new QrView();
         QrDAO qrDAO = new QrDAO();
+        QrView qrView = new QrView();
         QrVO qrVO = new QrVO();
 //        qrView.setVisible(true);
 
@@ -39,9 +40,10 @@ public class ControllerPrincipal {
         SearchVehicle search = new SearchVehicle();
         SearchDAO searchDAO = new SearchDAO(search);
 
+        PrintEpson printEpson = new PrintEpson();
 
 
-        ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO,qrView,qrVO,qrDAO);
+        ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO,qrView,qrVO,qrDAO, printEpson);
         ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales);
         ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO );
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);

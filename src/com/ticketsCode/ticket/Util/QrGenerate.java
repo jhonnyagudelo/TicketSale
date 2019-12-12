@@ -8,15 +8,12 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.awt.image.BufferedImage;
 public class QrGenerate {
-
     public QrGenerate() {
 
     }
 
-
     public BufferedImage createQR(String data, int height, int width) throws WriterException {
         Writer desktop = new QRCodeWriter();
-//        BitMatrix matrix = desktop.encode(data, BarcodeFormat.QR_CODE, width, height);
         BitMatrix matrix = desktop.encode(data, BarcodeFormat.QR_CODE, width, height);
 
         BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
@@ -28,5 +25,6 @@ public class QrGenerate {
         }
         return image;
     }
+    
 
 }

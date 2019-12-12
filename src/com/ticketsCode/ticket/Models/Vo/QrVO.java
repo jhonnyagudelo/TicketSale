@@ -1,10 +1,7 @@
 package com.ticketsCode.ticket.Models.Vo;
 
-import com.ticketsCode.ticket.Models.Dao.QrDAO;
-
 import java.sql.Time;
 import java.util.Date;
-import java.util.Timer;
 
 public class QrVO {
     private Integer passenger;
@@ -13,10 +10,6 @@ public class QrVO {
     private String license;
     private Date buy;
     private Time hour;
-
-    public QrVO(){
-
-    }
 
     public QrVO( Integer passenger, Integer company, Integer destination_code, String license, Date buy, Time hour){
         super();
@@ -28,47 +21,51 @@ public class QrVO {
         this.hour = hour;
     }
 
-    public Integer getPassenger() {
-        return passenger;
+    public QrVO() {
+
+    }
+
+    public Integer getPassenger(int passenger) {
+        return this.passenger;
     }
 
     public void setPassenger(Integer passenger) {
         this.passenger = passenger;
     }
 
-    public Integer getCompany() {
-        return company;
+    public Integer getCompany(int company) {
+        return this.company;
     }
 
     public void setCompany(Integer company) {
         this.company = company;
     }
 
-    public Integer getDestination_code() {
-        return destination_code;
+    public Integer getDestination_code(int destination_code) {
+        return this.destination_code;
     }
 
     public void setDestination_code(Integer destination_code) {
         this.destination_code = destination_code;
     }
 
-    public String getLicense() {
-        return license;
+    public String getLicense(String license) {
+        return this.license;
     }
 
     public void setLicense(String license) {
         this.license = license;
     }
 
-    public Date getBuy() {
-        return buy;
+    public Date getBuy(java.sql.Date buy) {
+        return this.buy;
     }
 
     public void setBuy(Date buy) {
         this.buy = buy;
     }
 
-    public Time getHour() {
+    public Time getHour(Time time) {
         return hour;
     }
 

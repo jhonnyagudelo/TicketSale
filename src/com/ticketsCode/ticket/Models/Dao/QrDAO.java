@@ -10,16 +10,16 @@ import java.util.Vector;
 
 public class QrDAO {
 
-
     public QrDAO(){
 
     }
-    public boolean QR() {
+
+    public String QR() {
 
         DataBaseConnection conn = new DataBaseConnection();
         CallableStatement cs;
         ResultSet rs;
-        Vector<Object> row;
+        Vector<String> row = null;
         try {
 
             String SQL = "SELECT * FROM _ticket()";
@@ -27,22 +27,26 @@ public class QrDAO {
             rs = cs.executeQuery();
 
             while (rs.next()) {
-                row = new Vector<Object>();
-                row.add(rs.getInt("passenger"));
-                row.add(rs.getInt("company"));
-                row.add(rs.getInt("destination_code"));
+                row = new Vector<String>();
+                row.add(String.valueOf(rs.getInt("passenger")));
+                row.add(String.valueOf(rs.getInt("company")));
+                row.add(String.valueOf(rs.getInt("destination_code")));
                 row.add(rs.getString("license"));
-                row.add(rs.getDate("buy"));
-                row.add(rs.getTime("hour"));
-                System.out.println(row);
+                row.add(String.valueOf(rs.getDate("buy")));
+                row.add(String.valueOf(rs.getTime("hour")));
+                System.out.println("QR: "+ row);
+
             }
-        return true;
+
         } catch (SQLException e) {
             System.out.println("Error al cargar los Datos QR" + e.getMessage());
+            System.out.println("String" + row.toString());
             JOptionPane.showMessageDialog(null, "Error al cargar los DATOS QR", "Informacion", JOptionPane.ERROR_MESSAGE);
+        }catch (Exception e){
+            System.out.println("Error Datos QR" + e.getMessage());
         }
-        return false;
+        return row.toString();
     }
 
-
-}
+    }
+    
