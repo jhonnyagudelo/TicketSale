@@ -9,9 +9,9 @@ import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
 import com.ticketsCode.ticket.Models.Vo.QrVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
+import com.ticketsCode.ticket.Util.QrImg;
 import com.ticketsCode.ticket.Util.PrintEpson;
 import com.ticketsCode.ticket.Views.ListVehicle;
-import com.ticketsCode.ticket.Views.QrView;
 import com.ticketsCode.ticket.Views.SearchVehicle;
 import com.ticketsCode.ticket.Views.TicketSales;
 
@@ -42,8 +42,10 @@ public class ControllerPrincipal {
 
         PrintEpson printEpson = new PrintEpson();
 
+        QrImg qrImg = new QrImg();
 
-        ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO,qrView,qrVO,qrDAO, printEpson);
+
+        ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO,qrView,qrDAO, printEpson, qrImg);
         ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales);
         ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO );
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);

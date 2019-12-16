@@ -3,6 +3,7 @@ package com.ticketsCode.ticket.Util;
 
 import br.com.adilson.util.Extenso;
 import br.com.adilson.util.PrinterMatrix;
+import com.ticketsCode.ticket.Models.Dao.QrDAO;
 
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -14,10 +15,7 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 
 
-import java.awt.*;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,48 +26,54 @@ import java.util.logging.Logger;
 
 public class PrintEpson {
 
-    public PrintEpson() {
 
+    public PrintEpson() {
     }
 
-    public void printTickets(String qrDAO) {
-        int filas = 21;
+    public void printTickets(File QrImg) {
+        int filas = 17;
         int linea = 0;
 
         PrinterMatrix printer = new PrinterMatrix();
         Extenso extensive = new Extenso();
 
-        extensive.setNumber(10.30);
-        printer.setOutSize(filas, 25);
+        extensive.setNumber(20.30);
+        printer.setOutSize(filas, 32);
 
         java.util.Date date = new java.util.Date();
         DateFormat timeDate = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
         //imprimir = 1° parte 1a 32
 
-        printer.printTextWrap(linea, 1, 0, 31, "===============================");
+        printer.printTextWrap(linea, 1, 0, 60, "==========================================");
         linea++;
-        printer.printTextWrap(linea, 1, 10, 32, "Tiquete de viaje");
+        printer.printTextWrap(linea, 1, 15, 32, "Tiquete de viaje");
         linea++;
-        printer.printTextWrap(linea, 1, 0, 32, "====================================");
+        printer.printTextWrap(linea, 1, 0, 60, "==========================================");
         linea++;
         printer.printTextWrap(linea, 1, 0, 12, "Hora & Fecha");
         printer.printTextWrap(linea, 1, 15, 32, timeDate.format(date).toString());
         linea++;
-        printer.printTextWrap(linea, 1, 0, 60, "QR: " + qrDAO);
+        printer.printTextWrap(linea, 1, 0, 60, "QR: " +   QrImg);
         linea++;
-        printer.printTextWrap(linea, 1, 0, 32, "-------------------------------------");
+//        printer.toImageFile();
+        printer.printTextWrap(linea, 1, 0, 32, "--------------------------------------------------------");
         linea++;
         printer.printTextWrap(linea, 1, 0, 32, " ");
         linea++;
-        printer.printTextWrap(linea, 1, 0, 32, "¡Gracias por su preferencia!");
+        printer.printTextWrap(linea, 1, 8, 50, "¡Gracias por su preferencia!");
         linea++;
+
+
+
+
+
 
         //Crear carpeta temp en C
 
         printer.toFile("impresion.txt");
         FileInputStream inputStream = null;
         try {
-            inputStream = new FileInputStream("impresion.txt");
+            inputStream = new FileInputStream("Qr.png");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("imprimir: " + e.getMessage());

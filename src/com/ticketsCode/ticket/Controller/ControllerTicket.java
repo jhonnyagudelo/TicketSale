@@ -1,12 +1,10 @@
 package com.ticketsCode.ticket.Controller;
 
-import com.google.zxing.WriterException;
 import com.ticketsCode.ticket.Models.Dao.QrDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
-import com.ticketsCode.ticket.Models.Vo.QrVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
+import com.ticketsCode.ticket.Util.QrImg;
 import com.ticketsCode.ticket.Util.PrintEpson;
-import com.ticketsCode.ticket.Views.QrView;
 import com.ticketsCode.ticket.Views.TicketSales;
 
 import javax.swing.*;
@@ -19,18 +17,19 @@ public class ControllerTicket implements ActionListener {
     TicketDAO ticketDAO;
     TicketSales ticketSales;
     QrView qrView;
-    QrVO qrVO;
     QrDAO qrDAO;
     PrintEpson printEpson;
+    QrImg qrImg;
 
-    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO,QrView qrView, QrVO qrVO, QrDAO qrDAO, PrintEpson printEpson) {
+
+    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO, QrView qrView, QrDAO qrDAO, PrintEpson printEpson, QrImg qrImg) {
         this.ticketSales = ticketSales;
         this.ticketDAO = ticketDAO;
         this.ticketVO = ticketVO;
-        this.qrView = qrView;
-        this.qrVO = qrVO;
-        this.qrDAO = qrDAO;
         this.printEpson = printEpson;
+        this.qrView = qrView;
+        this.qrDAO = qrDAO;
+        this.qrImg = qrImg;
 
         this.ticketSales.btnSale.addActionListener(this);
         this.ticketSales.btnClear.addActionListener(this);
@@ -51,10 +50,7 @@ public class ControllerTicket implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Registro Guardado");
                 tfClear();
                 ticketDAO._loadTableSale();
-                qrView.Qr(qrDAO.QR());
-                qrView.setVisible(true);
-                printEpson.printTickets(qrDAO.QR());
-
+                printEpson.printTickets(qrImg.qrImagen(qrDAO.QR()));
             }
 
             } else {
@@ -63,7 +59,6 @@ public class ControllerTicket implements ActionListener {
             }
 
         }
-//    }
 
 
 

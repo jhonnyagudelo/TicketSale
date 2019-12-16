@@ -2,11 +2,8 @@ package com.ticketsCode.ticket.Controller;
 
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Dao.VehicleDAO;
-import com.ticketsCode.ticket.Models.Vo.CompanyVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
-import com.ticketsCode.ticket.Util.QrGenerate;
 import com.ticketsCode.ticket.Views.ListVehicle;
-import com.ticketsCode.ticket.Views.QrView;
 import com.ticketsCode.ticket.Views.SearchVehicle;
 
 import javax.swing.*;
