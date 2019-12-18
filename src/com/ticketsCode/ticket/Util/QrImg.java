@@ -54,6 +54,7 @@ public class QrImg {
                 }
             }
             ImageIO.write(image, fileType, myFile);
+
         } catch (WriterException | IOException e) {
             e.printStackTrace();
         }

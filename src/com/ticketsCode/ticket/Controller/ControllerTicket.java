@@ -3,8 +3,9 @@ package com.ticketsCode.ticket.Controller;
 import com.ticketsCode.ticket.Models.Dao.QrDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
+import com.ticketsCode.ticket.Util.PdfPrint;
 import com.ticketsCode.ticket.Util.QrImg;
-import com.ticketsCode.ticket.Util.PrintEpson;
+//import com.ticketsCode.ticket.Util.PrintEpson;
 import com.ticketsCode.ticket.Views.TicketSales;
 
 import javax.swing.*;
@@ -16,18 +17,19 @@ public class ControllerTicket implements ActionListener {
     TicketVO ticketVO;
     TicketDAO ticketDAO;
     TicketSales ticketSales;
-    QrView qrView;
     QrDAO qrDAO;
-    PrintEpson printEpson;
+//    PrintEpson printEpson;
     QrImg qrImg;
+    PdfPrint pdfPrint;
 
 
-    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO, QrView qrView, QrDAO qrDAO, PrintEpson printEpson, QrImg qrImg) {
+
+
+    public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO, QrDAO qrDAO, PdfPrint pdfPrint, QrImg qrImg) {
         this.ticketSales = ticketSales;
         this.ticketDAO = ticketDAO;
         this.ticketVO = ticketVO;
-        this.printEpson = printEpson;
-        this.qrView = qrView;
+        this.pdfPrint = pdfPrint;
         this.qrDAO = qrDAO;
         this.qrImg = qrImg;
 
@@ -36,6 +38,7 @@ public class ControllerTicket implements ActionListener {
         this.ticketSales.btnDelete.addActionListener(this);
         this.ticketSales.btnUpdate.addActionListener(this);
     }
+
 
 
     @Override
@@ -50,7 +53,13 @@ public class ControllerTicket implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Registro Guardado");
                 tfClear();
                 ticketDAO._loadTableSale();
-                printEpson.printTickets(qrImg.qrImagen(qrDAO.QR()));
+                try {
+                    qrImg.qrImagen(qrDAO.QR());
+                    pdfPrint.printTicket();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
 
             } else {
@@ -69,5 +78,6 @@ public class ControllerTicket implements ActionListener {
         this.ticketSales.tfPassenger.setText("");
         this.ticketSales.tfQuantity.setText("");
         this.ticketSales.tfVehicle.setText("");
+        this.ticketSales.selectDestination.setSelectedItem("");
     }
 }
