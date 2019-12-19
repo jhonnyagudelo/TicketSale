@@ -22,7 +22,7 @@ public class Login extends JFrame {
     private JLabel lblUser,lblPassword;
     private JTextField tfUser;
     private JPasswordField tfPassword;
-    private JButton btnLogin;
+    public JButton btnLogin;
 
     public Login(){
         setTitle("Login");

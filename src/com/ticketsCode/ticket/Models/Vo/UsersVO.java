@@ -13,6 +13,10 @@ public class UsersVO {
     private String status;
     private String username;
 
+    public  UsersVO(){
+
+    }
+
     public UsersVO(Integer user_id, String names, String last_name, String password, Integer company, String status, String username){
         super();
         this.user_id = user_id;

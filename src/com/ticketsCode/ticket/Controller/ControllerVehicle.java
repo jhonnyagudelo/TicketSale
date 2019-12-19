@@ -11,12 +11,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControllerVehicle implements ActionListener {
-    ListVehicle autoBus;
-    VehicleVO autoBusVO;
-    VehicleDAO autoBusDAO;
+     ListVehicle autoBus;
+     VehicleVO autoBusVO;
+     VehicleDAO autoBusDAO;
 
-    SearchVehicle search;
-    SearchDAO searchDAO;
+     SearchVehicle search;
+     SearchDAO searchDAO;
 
 
     public ControllerVehicle(ListVehicle autoBus, VehicleDAO autoBusDAO, VehicleVO autoBusVO, SearchVehicle search, SearchDAO searchDAO) {

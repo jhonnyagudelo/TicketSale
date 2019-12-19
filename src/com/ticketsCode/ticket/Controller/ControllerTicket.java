@@ -2,6 +2,7 @@ package com.ticketsCode.ticket.Controller;
 
 import com.ticketsCode.ticket.Models.Dao.QrDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
+import com.ticketsCode.ticket.Models.Vo.DataQr;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
 import com.ticketsCode.ticket.Util.PdfPrint;
 import com.ticketsCode.ticket.Util.QrImg;
@@ -21,6 +22,7 @@ public class ControllerTicket implements ActionListener {
 //    PrintEpson printEpson;
     QrImg qrImg;
     PdfPrint pdfPrint;
+
 
 
 
@@ -55,6 +57,7 @@ public class ControllerTicket implements ActionListener {
                 ticketDAO._loadTableSale();
                 try {
                     qrImg.qrImagen(qrDAO.QR());
+                    qrDAO.dateTickect();
                     if (ticketVO.getQuantity() > 0) {
                         for (int i = 0; i < ticketVO.getQuantity(); i++) {
                             pdfPrint.printTicket();

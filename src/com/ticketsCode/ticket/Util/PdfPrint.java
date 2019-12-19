@@ -1,20 +1,15 @@
 package com.ticketsCode.ticket.Util;
 
-import com.ticketsCode.ticket.Models.Vo.DestinationsVO;
-import com.ticketsCode.ticket.Models.Vo.TicketVO;
-import com.ticketsCode.ticket.Views.TicketSales;
+import com.ticketsCode.ticket.Models.Dao.QrDAO;
+import com.ticketsCode.ticket.Models.Vo.DataQr;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.apache.pdfbox.pdmodel.font.PDType1CFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.PDType3Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.printing.PDFPageable;
 
-import java.awt.*;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
@@ -26,10 +21,13 @@ import java.util.logging.Level;
 import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 public class PdfPrint {
-    private DestinationsVO destinationsVO;
+//    private DataQr dataQr;
+    private QrDAO qrDAO;
 
-    public PdfPrint() {
 
+    public PdfPrint(QrDAO qrDAO) {
+//        this.dataQr = dataQr;
+        this.qrDAO = qrDAO;
     }
 
     public void printTicket() throws IOException, PrinterException {
@@ -57,10 +55,10 @@ public class PdfPrint {
             contentStream.newLine();
             contentStream.showText(separator);
             contentStream.newLine();
-//            contentStream.showText("Destino: " + destinationsVO.getName().toString());
-//            contentStream.newLine();
-            //            contentStream.showText(":Empresa: " + ticketVO.getCompany().toString());
-            //            contentStream.newLine();
+            contentStream.showText("Compañia: " + qrDAO.dateTickect().getCompany());
+            contentStream.newLine();
+            contentStream.showText("Destino: " + qrDAO.dateTickect().getDestiny());
+            contentStream.newLine();
             contentStream.showText(timeDate.format(date).toString());
             contentStream.newLine();
             contentStream.showText(footer);
@@ -70,7 +68,7 @@ public class PdfPrint {
 
             // Image
             PDImageXObject image = PDImageXObject.createFromFile("Qr.png", document);
-            contentStream.drawImage(image, 50, page.getMediaBox().getHeight() - 200, image.getWidth() / 5, image.getHeight() / 5);
+            contentStream.drawImage(image, 50, page.getMediaBox().getHeight() - 210, image.getWidth() / 5, image.getHeight() / 5);
 
             contentStream.close();
             document.save("document.pdf");
