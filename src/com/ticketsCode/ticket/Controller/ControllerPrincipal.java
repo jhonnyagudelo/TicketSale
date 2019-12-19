@@ -6,6 +6,7 @@ import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
 import com.ticketsCode.ticket.Models.Dao.VehicleDAO;
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
+import com.ticketsCode.ticket.Models.Vo.DestinationsVO;
 import com.ticketsCode.ticket.Models.Vo.QrVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;

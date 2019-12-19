@@ -23,7 +23,7 @@ public class QrImg {
         String fileType = "png";
         String filePath = "Qr.png";
         File myFile = new File(filePath);
-        int size = 300;
+        int size = 550;
 
         try {
 
@@ -61,6 +61,8 @@ public class QrImg {
         System.out.println("\n\nYou have successfully created QR Code.");
         return myFile;
     }
+
+
 }
 
 

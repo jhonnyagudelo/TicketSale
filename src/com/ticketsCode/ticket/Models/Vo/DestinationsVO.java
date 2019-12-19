@@ -20,6 +20,10 @@ public class DestinationsVO {
         this.name = name;
     }
 
+    public DestinationsVO() {
+
+    }
+
     public Integer getDestination_id() {
         return destination_id;
     }

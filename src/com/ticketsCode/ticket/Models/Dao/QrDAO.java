@@ -32,7 +32,7 @@ public class QrDAO {
                 row.add(String.valueOf(rs.getInt("company")));
                 row.add(String.valueOf(rs.getInt("destination_code")));
                 row.add(rs.getString("license"));
-                row.add(String.valueOf(rs.getDate("buy")));
+                row.add(rs.getString("buy"));
                 row.add(String.valueOf(rs.getTime("hour")));
                 System.out.println("QR: "+ row);
 
@@ -41,12 +41,14 @@ public class QrDAO {
         } catch (SQLException e) {
             System.out.println("Error al cargar los Datos QR" + e.getMessage());
             System.out.println("String" + row.toString());
-            JOptionPane.showMessageDialog(null, "Error al cargar los DATOS QR", "Informacion", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al cargar los DATOS QR: ", "Informacion", JOptionPane.ERROR_MESSAGE);
         }catch (Exception e){
             System.out.println("Error Datos QR" + e.getMessage());
         }
-        return row.toString();
+        return String.format(row.toString());
     }
+
+
 
     }
     

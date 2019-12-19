@@ -55,8 +55,11 @@ public class ControllerTicket implements ActionListener {
                 ticketDAO._loadTableSale();
                 try {
                     qrImg.qrImagen(qrDAO.QR());
-                    pdfPrint.printTicket();
-
+                    if (ticketVO.getQuantity() > 0) {
+                        for (int i = 0; i < ticketVO.getQuantity(); i++) {
+                            pdfPrint.printTicket();
+                        }
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

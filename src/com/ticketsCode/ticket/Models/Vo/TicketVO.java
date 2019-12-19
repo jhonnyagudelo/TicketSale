@@ -112,12 +112,5 @@ public class TicketVO {
                 "," + origin;
 
     }
-//    return  "company=" + company +
-//                ", passenger=" + passenger +
-//                ", destination=" + destination +
-//                ", date=" + date +
-//                ", hour=" + hour +
-//                ", vehicle=" + vehicle +
-//                ", origen = " + origin;
-//    }
+
 }
