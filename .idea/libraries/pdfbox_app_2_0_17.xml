@@ -3,7 +3,9 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../pdfbox-app-2.0.17.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../poi-bin-4.1.1-20191023/poi-4.1.1/docs/apidocs/dev" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>

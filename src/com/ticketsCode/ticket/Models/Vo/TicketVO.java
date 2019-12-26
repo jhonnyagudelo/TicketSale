@@ -20,11 +20,16 @@ public class TicketVO {
     }
 
     public TicketVO(Integer passenger,Integer origin, Integer destination, Integer vehicle,Integer quantity){
+            super();
             this.passenger = passenger;
             this.origin = origin;
             this.vehicle = vehicle;
             this.quantity = quantity;
             this.destination = destination;
+    }
+
+    public TicketVO(Integer vehicle) {
+        this.vehicle = vehicle;
     }
 
 

@@ -14,7 +14,7 @@ import java.awt.event.MouseListener;
 import java.sql.*;
 import java.util.Vector;
 
-public class VehicleDAO implements MouseListener {
+public class VehicleDAO {
     private ListVehicle autoBus;
 
 
@@ -36,7 +36,7 @@ public class VehicleDAO implements MouseListener {
         PreparedStatement st = null;
         DataBaseConnection conn = new DataBaseConnection();
         Connection connect = conn.getConn();
-        String SQL = "INSERT INTO vehicles(internal_number, license, capacity, company) VALUES (?,?,?,?)";
+        String SQL = "INSERT INTO vehicles(internal_number, license, capacity, company) VALUES (?,UPPER(REPLACE(?,'',' ')),?,?)";
         try {
             st = connect.prepareStatement(SQL);
             st.setInt(1, autoBusVO.getInternal_number());
@@ -61,7 +61,9 @@ public class VehicleDAO implements MouseListener {
         Connection connect = conn.getConn();
         PreparedStatement ps;
         ResultSet rs;
-        this.autoBus.dcbm.removeAllElements();
+        for (int i = this.autoBus.dtm.getRowCount(); i > 0; i--) {
+            this.autoBus.dtm.removeRow(i - 1);
+        }
         try {
             String SQL = "SELECT company_id, name, nit FROM companies ORDER BY company_id";
             ps = connect.prepareStatement(SQL);
@@ -107,6 +109,7 @@ public class VehicleDAO implements MouseListener {
                 row.add(rs.getString("company"));
                 row.add(rs.getBoolean("active"));
                 this.autoBus.dtm.addRow(row);
+                System.out.println(row.toString());
 
             }
 
@@ -152,53 +155,5 @@ public class VehicleDAO implements MouseListener {
             System.out.println("Error delete " + e1.getMessage());
         }
         return false;
-    }
-
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        DataBaseConnection conn = new DataBaseConnection();
-        CallableStatement cs;
-        ResultSet rs;
-        int pulseRow = this.autoBus.table.getSelectedRow();
-        if (pulseRow > 0) {
-            int identifier = (int) this.autoBus.dtm.getValueAt(pulseRow, 0);
-            try {
-                cs = conn.getConn().prepareCall("{SELECT getinfo}");
-                cs.setInt(1, identifier);
-                rs = cs.executeQuery();
-                if (rs.next()) {
-                    this.autoBus.tfInternalNumber.setText(String.valueOf(rs.getInt(1)));
-                    this.autoBus.tfLicense.setText(String.valueOf(rs.getInt(2)));
-                    this.autoBus.tfCapacity.setText(rs.getString(3));
-                    this.autoBus.tfCompany.setText(rs.getString(4));
-                }
-            } catch (SQLException e1) {
-                System.out.println("Error al cargar los vehiculos");
-                System.out.println(e1.getMessage());
-                JOptionPane.showMessageDialog(null, "Error al cargar los vehiculo", "Informacion", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }
-    }
-
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 }

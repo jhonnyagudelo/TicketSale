@@ -31,7 +31,7 @@ public class ListVehicle extends JFrame  {
     public JButton btnSave, btnClear,btnDelete,btnUpdate, bntSearch;
     private JMenuBar menuBar;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1,liDelete;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1,liDelete,liExport;
     private JScrollPane scroll;
     public  Object[][] data;
     public String[] headBoard;
@@ -39,7 +39,7 @@ public class ListVehicle extends JFrame  {
     public DefaultComboBoxModel dcbm;
     public JTable table;
 
-  
+
 
     public ListVehicle(){
         setTitle("Registro de vehiculos");
@@ -66,16 +66,21 @@ public class ListVehicle extends JFrame  {
         menuBar.add(ulHelp);
 
         //item Menu
-            //item Menu Archivo
+        //item Menu Archivo
         liClose = new JMenuItem("Cerrar");
         ulFile.add(liClose);
-            //item menu venta
+
+        //item menu venta
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
 
         liList = new JMenuItem("Consulta");
         ulTickets.add(liList);
-            //item menu vehiculos
+
+        liExport = new JMenuItem("Historial vehicular");
+        ulTickets.add(liExport);
+
+        //item menu vehiculos
         liRegistration = new JMenuItem("Registro1");
         ulVehicles.add(liRegistration);
 
@@ -84,7 +89,7 @@ public class ListVehicle extends JFrame  {
 
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
-            //acerca de
+        //acerca de
         liAbout = new JMenuItem("Acerca de.");
         ulHelp.add(liAbout);
 

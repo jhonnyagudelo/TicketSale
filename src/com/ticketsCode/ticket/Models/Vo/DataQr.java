@@ -35,13 +35,12 @@ public class DataQr {
     }
 
 //    public static void main(String[] args) {
-//        DataQr dataQr = new DataQr("jhonny");
+//        DataQr dataQr = new DataQr();
 //        dataQr.setCompany("Coodetrans");
 //        dataQr.setDestiny("Palmira");
-//        System.out.println("El destino es: " + dataQr.getDestiny());
+//        System.out.println("El destino es: " + dataQr.toString());
 //
 //
 //    }
-
 
 }

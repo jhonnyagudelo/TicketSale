@@ -2,7 +2,6 @@ package com.ticketsCode.ticket.Controller;
 
 import com.ticketsCode.ticket.Models.Dao.QrDAO;
 import com.ticketsCode.ticket.Models.Dao.TicketDAO;
-import com.ticketsCode.ticket.Models.Vo.DataQr;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
 import com.ticketsCode.ticket.Util.PdfPrint;
 import com.ticketsCode.ticket.Util.QrImg;
@@ -13,7 +12,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ControllerTicket implements ActionListener {
+public class ControllerTicket implements ActionListener, Iuseful {
 
     TicketVO ticketVO;
     TicketDAO ticketDAO;
@@ -51,10 +50,12 @@ public class ControllerTicket implements ActionListener {
             ticketVO.setDestination(ticketSales.selectDestination.getSelectedIndex());
             ticketVO.setVehicle(Integer.parseInt(ticketSales.tfVehicle.getText()));
             ticketVO.setQuantity(Integer.parseInt(ticketSales.tfQuantity.getText()));
+
             if (ticketDAO.save(ticketVO)) {
                 JOptionPane.showMessageDialog(null, "Registro Guardado");
                 tfClear();
                 ticketDAO._loadTableSale();
+
                 try {
                     qrImg.qrImagen(qrDAO.QR());
                     qrDAO.dateTickect();
@@ -80,10 +81,16 @@ public class ControllerTicket implements ActionListener {
     /**
      * Metodo de limpiar los TexField
      * */
-    private void tfClear(){
+    @Override
+    public void tfClear(){
         this.ticketSales.tfPassenger.setText("");
         this.ticketSales.tfQuantity.setText("");
         this.ticketSales.tfVehicle.setText("");
         this.ticketSales.selectDestination.setSelectedItem("");
+    }
+
+    @Override
+    public boolean isStringUpperCase() {
+        return false;
     }
 }

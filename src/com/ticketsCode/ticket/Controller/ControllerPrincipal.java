@@ -9,6 +9,8 @@ import com.ticketsCode.ticket.Util.QrImg;
 //import com.ticketsCode.ticket.Util.PrintEpson;
 import com.ticketsCode.ticket.Views.*;
 
+import javax.xml.crypto.Data;
+
 public class ControllerPrincipal {
     public static void main(String[] args) throws WriterException {
         new DataBaseConnection("tiquetes");
@@ -16,7 +18,7 @@ public class ControllerPrincipal {
         //Login
         Login login = new Login();
         UsersVO usersVO = new UsersVO();
-        UserDAO userDAO = new UserDAO(usersVO);
+//        UserDAO userDAO = new UserDAO();
 
         // Vehiculos
         ListVehicle autoBus = new ListVehicle();
@@ -35,19 +37,23 @@ public class ControllerPrincipal {
         TicketVO ticketVO = new TicketVO();
         ticketSales.setVisible(true);
 
-        //Busqueda vehicular
-        SearchVehicle search = new SearchVehicle();
-        SearchDAO searchDAO = new SearchDAO(search);
+
 
 //        PrintEpson printEpson = new PrintEpson();
         PdfPrint pdfPrint = new PdfPrint(qrDAO);
+        TravelHistory travelHistory = new TravelHistory();
+        DataExport dataExport = new DataExport();
+
+        //Busqueda vehicular
+        SearchVehicle search = new SearchVehicle();
+        SearchDAO searchDAO = new SearchDAO(search, travelHistory);
 
         QrImg qrImg = new QrImg();
 
 
         ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO, qrDAO,pdfPrint , qrImg);
-        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales);
-        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO );
+        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory);
+        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory);
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
 
 

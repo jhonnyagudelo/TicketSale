@@ -150,10 +150,4 @@ public class TicketDAO {
         return false;
     }
 
-    @Override
-    public String toString() {
-        return "TicketDAO{" +
-                "tickSale=" + tickSale +
-                '}';
-    }
 }

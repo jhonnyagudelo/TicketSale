@@ -10,14 +10,14 @@ public class UsersVO {
     private String last_name;
     private String password;
     private Integer company;
-    private String status;
+    private boolean status;
     private String username;
 
     public  UsersVO(){
 
     }
 
-    public UsersVO(Integer user_id, String names, String last_name, String password, Integer company, String status, String username){
+    public UsersVO(Integer user_id, String names, String last_name, String password, Integer company, boolean status, String username){
         super();
         this.user_id = user_id;
         this.names = names;
@@ -26,6 +26,14 @@ public class UsersVO {
         this.company = company;
         this.status = status;
         this.username = username;
+    }
+
+    public UsersVO(String username, String password, boolean status) {
+        super();
+        this.username = username;
+        this.password = password;
+        this. status = status;
+
     }
 
     public Integer getCompany() {
@@ -68,11 +76,11 @@ public class UsersVO {
         this.password = password;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 

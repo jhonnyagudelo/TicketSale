@@ -7,16 +7,17 @@ import com.ticketsCode.ticket.Views.ListVehicle;
 import com.ticketsCode.ticket.Views.SearchVehicle;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ControllerVehicle implements ActionListener {
-     ListVehicle autoBus;
-     VehicleVO autoBusVO;
-     VehicleDAO autoBusDAO;
+public class ControllerVehicle extends Component implements ActionListener, Iuseful {
+    ListVehicle autoBus;
+    VehicleVO autoBusVO;
+    VehicleDAO autoBusDAO;
 
-     SearchVehicle search;
-     SearchDAO searchDAO;
+    SearchVehicle search;
+    SearchDAO searchDAO;
 
 
     public ControllerVehicle(ListVehicle autoBus, VehicleDAO autoBusDAO, VehicleVO autoBusVO, SearchVehicle search, SearchDAO searchDAO) {
@@ -31,6 +32,7 @@ public class ControllerVehicle implements ActionListener {
         this.autoBus.btnClear.addActionListener(this);
         this.autoBus.selectCompany.addActionListener(this);
         this.search.btnSearch.addActionListener(this);
+        this.autoBus.tfInternalNumber.addActionListener(this);
     }
 
 
@@ -42,12 +44,26 @@ public class ControllerVehicle implements ActionListener {
              * @Param btnSave guarda la informacion
              * */
 
+
             if (e.getSource() == autoBus.btnSave) {
                 autoBusVO.setInternal_number(Integer.parseInt(autoBus.tfInternalNumber.getText()));
                 autoBusVO.setLicense(autoBus.tfLicense.getText());
                 autoBusVO.setCapacity(Integer.parseInt(autoBus.tfCapacity.getText()));
                 autoBusVO.setCompany(autoBus.selectCompany.getSelectedIndex());
-                if (autoBusDAO.vehiculeRecorder(autoBusVO)) {
+
+                if(autoBus.tfInternalNumber.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ingrese dato del numero interno");
+                    autoBus.tfInternalNumber.requestFocus();
+
+                    } else if (autoBus.tfLicense.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ingrese dato de la placa");
+                    autoBus.tfLicense.requestFocus();
+
+                }else if (autoBus.tfCapacity.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "ingrese capacidad del vehiculo");
+                    autoBus.tfCapacity.requestFocus();
+
+                } else if (autoBusDAO.vehiculeRecorder(autoBusVO)) {
                     JOptionPane.showMessageDialog(null, "Registro Guardado");
                     tfClear();
                     autoBusDAO._loadTable();
@@ -57,19 +73,12 @@ public class ControllerVehicle implements ActionListener {
                 }
             }
         } catch (Exception e1) {
-            System.out.println("Error Save" + e1.getMessage());
+            System.out.println("Error Save: " + e1.getMessage());
         }
         //Bonton de limpiar
         if (e.getSource() == autoBus.btnClear) {
             tfClear();
         }
-
-//        if(e.getSource() == autoBus.btnDelete){
-//            int messengerDelete = JOptionPane.showConfirmDialog(null,"Eliminar producto","Si/No",JOptionPane.YES_NO_CANCEL_OPTION);
-//                if( autoBus.table.getSelectedRow() != -1){
-//                    autoBus.dtm.removeRow(autoBus.table.getSelectedRow());
-//                }
-//        }
 
         if (e.getSource() == autoBus.btnDelete) {
 
@@ -88,16 +97,39 @@ public class ControllerVehicle implements ActionListener {
                 System.out.printf("error delete" + ex.getMessage());
             }
         }
+
+        if (e.getSource() == autoBus.btnUpdate) {
+            int fila = autoBus.table.getSelectedRow();
+            int id = Integer.parseInt(autoBus.table.getValueAt(fila, 0).toString());
+            autoBusVO.setInternal_number(id);
+        }
     }
 
 
     /**
      * Metodo de limpiar los TexField
      */
-    private void tfClear() {
+    @Override
+    public void tfClear() {
         this.autoBus.tfInternalNumber.setText("");
         this.autoBus.tfLicense.setText("");
         this.autoBus.tfCapacity.setText("");
+    }
+
+    @Override
+    public boolean isStringUpperCase() {
+        return false;
+    }
+
+    public boolean isStringUpperCase(String str) {
+        //Convertir String to char Array
+        char[] charArray = str.toCharArray();
+
+        for (int i = 0; i < charArray.length; i++) {
+            if (!Character.isUpperCase(charArray[i]))
+                return false;
+        }
+        return true;
     }
 
 }
