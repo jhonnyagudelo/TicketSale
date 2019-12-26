@@ -50,20 +50,20 @@ public class ControllerVehicle extends Component implements ActionListener, Iuse
                 autoBusVO.setLicense(autoBus.tfLicense.getText());
                 autoBusVO.setCapacity(Integer.parseInt(autoBus.tfCapacity.getText()));
                 autoBusVO.setCompany(autoBus.selectCompany.getSelectedIndex());
+//
+//                if(autoBus.tfInternalNumber.getText().equals("")) {
+//                    JOptionPane.showMessageDialog(null, "ingrese dato del numero interno");
+//                    autoBus.tfInternalNumber.requestFocus();
+//
+//                    } else if (autoBus.tfLicense.getText().equals("")) {
+//                    JOptionPane.showMessageDialog(null, "ingrese dato de la placa");
+//                    autoBus.tfLicense.requestFocus();
+//
+//                }else if (autoBus.tfCapacity.getText().equals("")) {
+//                    JOptionPane.showMessageDialog(null, "ingrese capacidad del vehiculo");
+//                    autoBus.tfCapacity.requestFocus();
 
-                if(autoBus.tfInternalNumber.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "ingrese dato del numero interno");
-                    autoBus.tfInternalNumber.requestFocus();
-
-                    } else if (autoBus.tfLicense.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "ingrese dato de la placa");
-                    autoBus.tfLicense.requestFocus();
-
-                }else if (autoBus.tfCapacity.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "ingrese capacidad del vehiculo");
-                    autoBus.tfCapacity.requestFocus();
-
-                } else if (autoBusDAO.vehiculeRecorder(autoBusVO)) {
+                 if (autoBusDAO.vehiculeRecorder(autoBusVO)) {
                     JOptionPane.showMessageDialog(null, "Registro Guardado");
                     tfClear();
                     autoBusDAO._loadTable();

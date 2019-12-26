@@ -61,9 +61,7 @@ public class VehicleDAO {
         Connection connect = conn.getConn();
         PreparedStatement ps;
         ResultSet rs;
-        for (int i = this.autoBus.dtm.getRowCount(); i > 0; i--) {
-            this.autoBus.dtm.removeRow(i - 1);
-        }
+        this.autoBus.dcbm.removeAllElements();
         try {
             String SQL = "SELECT company_id, name, nit FROM companies ORDER BY company_id";
             ps = connect.prepareStatement(SQL);
@@ -109,7 +107,6 @@ public class VehicleDAO {
                 row.add(rs.getString("company"));
                 row.add(rs.getBoolean("active"));
                 this.autoBus.dtm.addRow(row);
-                System.out.println(row.toString());
 
             }
 
