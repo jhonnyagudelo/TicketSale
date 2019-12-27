@@ -5,6 +5,7 @@ import com.ticketsCode.ticket.Models.Dao.*;
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
 import com.ticketsCode.ticket.Models.Vo.*;
 import com.ticketsCode.ticket.Util.PdfPrint;
+import com.ticketsCode.ticket.Util.PoiUtils;
 import com.ticketsCode.ticket.Util.QrImg;
 //import com.ticketsCode.ticket.Util.PrintEpson;
 import com.ticketsCode.ticket.Views.*;
@@ -43,6 +44,7 @@ public class ControllerPrincipal {
         PdfPrint pdfPrint = new PdfPrint(qrDAO);
         TravelHistory travelHistory = new TravelHistory();
         DataExport dataExport = new DataExport();
+        PoiUtils poiUtils = new PoiUtils();
 
         //Busqueda vehicular
         SearchVehicle search = new SearchVehicle();
@@ -53,7 +55,7 @@ public class ControllerPrincipal {
 
         ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO, qrDAO,pdfPrint , qrImg);
         ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory);
-        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory);
+        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, poiUtils);
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
 
 

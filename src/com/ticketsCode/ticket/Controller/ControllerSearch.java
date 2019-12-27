@@ -3,6 +3,7 @@ package com.ticketsCode.ticket.Controller;
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Vo.DataExport;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
+import com.ticketsCode.ticket.Util.PoiUtils;
 import com.ticketsCode.ticket.Views.SearchVehicle;
 import com.ticketsCode.ticket.Views.TravelHistory;
 
@@ -21,15 +22,17 @@ public class ControllerSearch implements ActionListener, Iuseful {
     VehicleVO autoBusVO;
     DataExport data;
     TravelHistory travelHistory;
+    PoiUtils poiUtils;
 
     DateFormat timeDate = new SimpleDateFormat("yyyy-MM-dd");
 
-    public ControllerSearch(SearchDAO searchDAO, SearchVehicle search, VehicleVO autoBusVO, DataExport data, TravelHistory travelHistory) {
+    public ControllerSearch(SearchDAO searchDAO, SearchVehicle search, VehicleVO autoBusVO, DataExport data, TravelHistory travelHistory, PoiUtils poiUtils) {
         this.search = search;
         this.searchDAO = searchDAO;
         this.autoBusVO = autoBusVO;
         this.data = data;
         this.travelHistory = travelHistory;
+        this.poiUtils = poiUtils;
 
         this.travelHistory.btnSearch.addActionListener(this);
         this.search.btnSearch.addActionListener(this);
@@ -65,13 +68,14 @@ public class ControllerSearch implements ActionListener, Iuseful {
                 data.setVehicle(Integer.parseInt(travelHistory.tfVehicle.getText()));
                 data.setDateStart(Date.valueOf(timeDate.format(travelHistory.calendarStar.getDate())));
                 data.setDateEnd(Date.valueOf(timeDate.format(travelHistory.calendarEnd.getDate())));
-                if (!searchDAO.travel_history(data)) {
+                 searchDAO.travel_history(data);
+                    poiUtils.createExcel();
                     tfClear();
                     JOptionPane.showMessageDialog(null, "Datos exportados");
-                } else {
-                    tfClear();
-                    JOptionPane.showMessageDialog(null, "No hay datos", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+//                } else {
+//                    tfClear();
+//                    JOptionPane.showMessageDialog(null, "No hay datos", "Error", JOptionPane.ERROR_MESSAGE);
+//                }
             }
 
         } catch (Exception e1) {

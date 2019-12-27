@@ -56,7 +56,7 @@ public class SearchDAO {
         return false;
     }
 
-    public boolean travel_history(DataExport data) {
+    public String travel_history(DataExport data) {
         DataBaseConnection conn = new DataBaseConnection();
         CallableStatement cs;
         ResultSet rs;
@@ -86,7 +86,43 @@ public class SearchDAO {
             System.out.println("travelSQL rs: " + e1.getMessage());
 
         }
-        return false;
+        return list.toString();
     }
+
+
+
+//    public boolean travel_history(DataExport data) {
+//        DataBaseConnection conn = new DataBaseConnection();
+//        CallableStatement cs;
+//        ResultSet rs;
+//        Vector<Object> list = null;
+//        for (int i = this.travelHistory.dtm.getRowCount(); i > 0; i--) {
+//            this.travelHistory.dtm.removeRow(i - 1);
+//        }
+//        try {
+//            String SQL = "SELECT * FROM travel_history(?,?,?)";
+//            cs = conn.getConn().prepareCall(SQL);
+//            cs.setDate(1, (data.getDateStart()));
+//            cs.setDate(2, (data.getDateEnd()));
+//            cs.setInt(3, data.getVehicle());
+//            rs = cs.executeQuery();
+//            while (rs.next()) {
+//                list = new Vector<Object>();
+//                list.add(rs.getInt("internal_number"));
+//                list.add(rs.getString("name"));
+//                list.add((rs.getInt("total_tickets")));
+//                list.add(rs.getDate("buy"));
+//                System.out.println("Vector historia: " + list);
+//                this.travelHistory.dtm.addRow(list);
+//            }
+//        } catch (SQLException e1) {
+//            System.out.println("travel rs: " + e1.getMessage());
+//        } catch (Exception e1) {
+//            System.out.println("travelSQL rs: " + e1.getMessage());
+//
+//        }
+//        return false;
+//    }
+
 
 }
