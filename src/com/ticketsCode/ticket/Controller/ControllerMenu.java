@@ -1,10 +1,7 @@
 package com.ticketsCode.ticket.Controller;
 
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
-import com.ticketsCode.ticket.Views.ListVehicle;
-import com.ticketsCode.ticket.Views.SearchVehicle;
-import com.ticketsCode.ticket.Views.TicketSales;
-import com.ticketsCode.ticket.Views.TravelHistory;
+import com.ticketsCode.ticket.Views.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,13 +13,15 @@ public class ControllerMenu implements ActionListener {
     SearchVehicle search;
     TicketSales sale;
     TravelHistory travelHistory;
+    ExportExcel exportExcel;
 
 
-    public ControllerMenu(ListVehicle autoBus, SearchVehicle search, TicketSales sale, TravelHistory travelHistory) {
+    public ControllerMenu(ListVehicle autoBus, SearchVehicle search, TicketSales sale, TravelHistory travelHistory,ExportExcel exportExcel) {
         this.autoBus = autoBus;
         this.search = search;
         this.sale = sale;
         this.travelHistory = travelHistory;
+        this.exportExcel = exportExcel;
         //registro vehiculo
         this.autoBus.liRegistration.addActionListener(this);
         this.sale.liRegistration.addActionListener(this);
@@ -38,6 +37,7 @@ public class ControllerMenu implements ActionListener {
 
         //Exportar
         this.sale.liExport.addActionListener(this);
+//        this.exportExcel
         //cerrar
         this.autoBus.liClose.addActionListener(this);
         this.sale.liClose.addActionListener(this);
@@ -79,7 +79,7 @@ public class ControllerMenu implements ActionListener {
         }
         if (e.getSource() == sale.liExport){
             try {
-                travelHistory.setVisible(true);
+                exportExcel.setVisible(true);
             }catch (Exception e1){
                 System.out.println("history panel: " + e1.getMessage());
             }

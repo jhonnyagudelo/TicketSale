@@ -18,7 +18,6 @@ public class TicketDAO {
         this.tickSale = tickSale;
         _loadTableSale();
         listDestiny();
-//        listVehicle();
         listOrigin();
     }
 
@@ -44,28 +43,6 @@ public class TicketDAO {
         }
     }
 
-//    public void listVehicle() {
-//        DataBaseConnection conn = new DataBaseConnection();
-//        Connection connect = conn.getConn();
-//        PreparedStatement ps;
-//        ResultSet rs;
-//        this.tickSale.dcbmV.removeAllElements();
-//        try {
-//            String SQL = "SELECT vehicle_id, internal_number FROM vehicles ORDER BY company";
-//            ps = connect.prepareStatement(SQL);
-//            rs = ps.executeQuery();
-//            while (rs.next()) {
-//                tickSale.selectVehicle.addItem(new VehicleVO(
-//                        Integer.parseInt(rs.getString("vehicle_id")),
-//                        Integer.parseInt(rs.getString("internal_number")
-//                        )));
-//            }
-//        } catch (SQLException e) {
-//            System.out.printf("Error SQL vehicle " + e.getMessage());
-//        } catch (Exception e) {
-//            System.out.printf("Error vehicle " + e.getMessage());
-//        }
-//    }
 
     public void listOrigin() {
         DataBaseConnection conn = new DataBaseConnection();

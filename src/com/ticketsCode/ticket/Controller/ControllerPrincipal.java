@@ -5,12 +5,12 @@ import com.ticketsCode.ticket.Models.Dao.*;
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
 import com.ticketsCode.ticket.Models.Vo.*;
 import com.ticketsCode.ticket.Util.PdfPrint;
-import com.ticketsCode.ticket.Util.PoiUtils;
+import com.ticketsCode.ticket.Util.ExcelUtil;
 import com.ticketsCode.ticket.Util.QrImg;
 //import com.ticketsCode.ticket.Util.PrintEpson;
 import com.ticketsCode.ticket.Views.*;
 
-import javax.xml.crypto.Data;
+import java.io.File;
 
 public class ControllerPrincipal {
     public static void main(String[] args) throws WriterException {
@@ -28,9 +28,6 @@ public class ControllerPrincipal {
 
         //QR
         QrDAO qrDAO = new QrDAO();
-        QrVO qrVO = new QrVO();
-        DataQr dataQr = new DataQr();
-
 
         //venta
         TicketSales ticketSales = new TicketSales();
@@ -41,21 +38,27 @@ public class ControllerPrincipal {
 
 
 //        PrintEpson printEpson = new PrintEpson();
+
         PdfPrint pdfPrint = new PdfPrint(qrDAO);
         TravelHistory travelHistory = new TravelHistory();
         DataExport dataExport = new DataExport();
-        PoiUtils poiUtils = new PoiUtils();
+//        DataExcel dataExcel = new DataExcel();
 
+        ExportExcel exportExcel = new ExportExcel();
+
+
+//
         //Busqueda vehicular
         SearchVehicle search = new SearchVehicle();
         SearchDAO searchDAO = new SearchDAO(search, travelHistory);
 
         QrImg qrImg = new QrImg();
 
+        ExcelUtil excelUtil = new ExcelUtil( searchDAO,  dataExport);
 
         ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO, qrDAO,pdfPrint , qrImg);
-        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory);
-        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, poiUtils);
+        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel);
+        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, excelUtil, exportExcel);
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
 
 
@@ -63,7 +66,7 @@ public class ControllerPrincipal {
 
 
 
-    private void iniciar(){
+    private void iniciar(String fileName){
 
 
     }

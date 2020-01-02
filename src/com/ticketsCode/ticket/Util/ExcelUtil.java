@@ -3,53 +3,46 @@ package com.ticketsCode.ticket.Util;
 
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
+//import com.ticketsCode.ticket.Models.Vo.DataExcel;
 import com.ticketsCode.ticket.Models.Vo.DataExport;
-import com.ticketsCode.ticket.Views.TravelHistory;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import sun.nio.ch.IOUtil;
 
 import java.io.*;
+
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static jdk.nashorn.internal.objects.NativeMath.log;
-
-public class PoiUtils {
+public class ExcelUtil {
     private SearchDAO searchDAO;
     private DataExport dataExport;
-    private TravelHistory travelHistory;
+//    private DataExcel dataExcel;
+
+
     private static final Logger LOGGER = Logger.getLogger("mx.com.hash.newexcel.ExcelOOXML");
 
-    public PoiUtils(SearchDAO searchDAO, DataExport dataExport, TravelHistory travelHistory) {
+    public ExcelUtil(SearchDAO searchDAO, DataExport dataExport) {
         this.searchDAO = searchDAO;
         this.dataExport = dataExport;
-        this.travelHistory = travelHistory;
-
+//        this.dataExcel = dataExcel;
     }
 
 
-    public PoiUtils() {
-
-    }
-
-
-    public void createExcel() {
+    public File createExcel(DataExport data) {
         //Crear un Excel
-        java.util.Date date = new java.util.Date();
+        Date date = new Date();
         DateFormat timeDate = new SimpleDateFormat("dd-MM-yyyy");
         File archivo = new File("Reporte.xlsx");
         Workbook book = new XSSFWorkbook();
-        Sheet sheet = book.createSheet("Reporte " + timeDate.format(date).toString());
+        Sheet sheet = book.createSheet("Reporte " + timeDate.format(date));
         try {
 
             //traer imagen y convertirla
@@ -108,11 +101,11 @@ public class PoiUtils {
             fontheader.setFontName("Arial");
             fontheader.setBold(true);
             fontheader.setColor(IndexedColors.WHITE.getIndex());
-            fontheader.setFontHeightInPoints((short)12);
+            fontheader.setFontHeightInPoints((short) 12);
             headerStyle.setFont(fontheader);
 
             Row rowHeader = sheet.createRow(8);
-            for (int i = 0; i < t.length ; i++) {
+            for (int i = 0; i < t.length; i++) {
                 Cell celHeader = rowHeader.createCell(i);
                 celHeader.setCellStyle(headerStyle);
                 celHeader.setCellValue(t[i]);
@@ -127,18 +120,54 @@ public class PoiUtils {
             datosEstilo.setBorderBottom(BorderStyle.THIN);
 
 
+            DataBaseConnection conn = new DataBaseConnection();
+            CallableStatement cs;
+            ResultSet rs;
+            String SQL = "SELECT * FROM travel_history(?,?,?)";
+            cs = conn.getConn().prepareCall(SQL);
+            cs.setDate(1, (data.getDateStart()));
+            cs.setDate(2, (data.getDateEnd()));
+            cs.setInt(3, data.getVehicle());
+            rs = cs.executeQuery();
+            int numCol = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+                Row fileDates = sheet.createRow(numRowData);
+                for (int a = 0; a < numCol; a++) {
+                    Cell cellData = fileDates.createCell(a);
+                    cellData.setCellStyle(datosEstilo);
+
+                    if (a == 0 || a == 2) {
+                        cellData.setCellValue(rs.getInt(a + 1));
+                        System.out.println("int: " + rs.getInt(a + 1));
+                        System.out.println("row: " + cellData);
+                    } else {
+                        cellData.setCellValue(rs.getString(a + 1));
+                        System.out.println("String: " + rs.getString(a + 1));
+                    }
+                }
+                numRowData++;
+            }
+
+            for (int i = 0; i < t.length; i++) {
+                sheet.autoSizeColumn(i);
+                sheet.setZoom(100);
+            }
 
 
-            FileOutputStream fileOut = new FileOutputStream(archivo);
-            book.write(fileOut);
-            fileOut.close();
+//            FileOutputStream fileOut = new FileOutputStream(archivo);
+//            book.write(fileOut);
+//            fileOut.close();
             LOGGER.log(Level.INFO, "Archivo creado existosamente en {0}", archivo.getAbsolutePath());
         } catch (FileNotFoundException e) {
             System.out.println("Error Excel: " + e.getMessage());
-            Logger.getLogger(PoiUtils.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ExcelUtil.class.getName()).log(Level.SEVERE, null, e);
         } catch (IOException e) {
             System.out.println("Error Excel: " + e.getMessage());
-            Logger.getLogger(PoiUtils.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(ExcelUtil.class.getName()).log(Level.SEVERE, null, e);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
+        return archivo;
     }
 }
+

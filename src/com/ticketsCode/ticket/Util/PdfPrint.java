@@ -21,12 +21,11 @@ import java.util.logging.Level;
 import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 public class PdfPrint {
-//    private DataQr dataQr;
+
     private QrDAO qrDAO;
 
 
     public PdfPrint(QrDAO qrDAO) {
-//        this.dataQr = dataQr;
         this.qrDAO = qrDAO;
     }
 
@@ -59,7 +58,7 @@ public class PdfPrint {
             contentStream.newLine();
             contentStream.showText("Destino: " + qrDAO.dateTickect().getDestiny());
             contentStream.newLine();
-            contentStream.showText(timeDate.format(date).toString());
+            contentStream.showText(timeDate.format(date));
             contentStream.newLine();
             contentStream.showText(footer);
             contentStream.newLine();

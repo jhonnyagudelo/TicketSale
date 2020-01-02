@@ -98,6 +98,7 @@ public class ListVehicle extends JFrame  {
         registrationPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
         registrationPane.setBackground(SystemColor.control);
         registrationPane.setBounds(117, 68, 437, 236);
+        registrationPane.setBorder(BorderFactory.createTitledBorder("Registrar vehiculo"));
         contentPane.add(registrationPane);
         registrationPane.setLayout(null);
 
@@ -175,7 +176,7 @@ public class ListVehicle extends JFrame  {
         contentPane.add(btnDelete);
 
 
-        setVisible(true);
+//        setVisible(true);
 
     }
 
