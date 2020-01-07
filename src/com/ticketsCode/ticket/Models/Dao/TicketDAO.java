@@ -4,7 +4,9 @@ import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
 import com.ticketsCode.ticket.Models.Vo.DestinationsVO;
 import com.ticketsCode.ticket.Models.Vo.OriginsVO;
 import com.ticketsCode.ticket.Models.Vo.TicketVO;
+import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Views.TicketSales;
+import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructureTreeRoot;
 
 import javax.swing.*;
 import java.sql.*;
@@ -85,6 +87,7 @@ public class TicketDAO {
 
             while (rs.next()) {
                 row = new Vector<Object>();
+                row.add(rs.getInt("id"));
                 row.add(rs.getInt("passenger"));
                 row.add(rs.getString("origin"));
                 row.add(rs.getString("destiny"));
@@ -106,8 +109,8 @@ public class TicketDAO {
         DataBaseConnection conn = new DataBaseConnection();
         Connection connect = conn.getConn();
         PreparedStatement pstmt;
-        ResultSet rs;
         String SQL = "SELECT ticket(?, ?, ?, ?, ?)";
+        ResultSet rs;
         try{
             pstmt = connect.prepareStatement(SQL);
             pstmt.setInt(1, ticketVO.getPassenger());
@@ -126,5 +129,23 @@ public class TicketDAO {
 
         return false;
     }
+
+
+    public boolean delete(TicketVO ticketVO) {
+        PreparedStatement ps;
+        DataBaseConnection conn = new DataBaseConnection();
+        Connection connect = conn.getConn();
+        String SQL = "DELETE FROM tickets WHERE ticket_id = ?";
+        try {
+            ps = connect.prepareStatement(SQL);
+            ps.setInt(1, ticketVO.getTicket_id());
+            ps.execute();
+            return true;
+        } catch (SQLException e1) {
+            System.out.println("Error delete " + e1.getMessage());
+        }
+        return false;
+    }
+
 
 }

@@ -1,9 +1,11 @@
 package com.ticketsCode.ticket.Models.Dao;
 
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
+import com.ticketsCode.ticket.Models.Vo.CompanyVO;
 import com.ticketsCode.ticket.Models.Vo.DataExport;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
 import com.ticketsCode.ticket.Views.SearchVehicle;
+import com.ticketsCode.ticket.Views.TotalTravel;
 import com.ticketsCode.ticket.Views.TravelHistory;
 
 import javax.swing.*;
@@ -13,15 +15,18 @@ import java.util.Vector;
 public class SearchDAO {
     private SearchVehicle search;
     private TravelHistory travelHistory;
+    private TotalTravel totalTravel;
 
 
     public SearchDAO() {
 
     }
 
-    public SearchDAO(SearchVehicle search, TravelHistory travelHistory) {
+    public SearchDAO(SearchVehicle search, TravelHistory travelHistory, TotalTravel totalTravel) {
         this.search = search;
+        this.totalTravel = totalTravel;
         this.travelHistory = travelHistory;
+        listCompanies();
     }
 
     public boolean search(VehicleVO autoBusVO) {
@@ -56,6 +61,34 @@ public class SearchDAO {
         }
         return false;
     }
+
+
+
+    public void listCompanies() {
+        DataBaseConnection conn = new DataBaseConnection();
+        Connection connect = conn.getConn();
+        PreparedStatement ps;
+        ResultSet rs;
+        this.totalTravel.dcbm.removeAllElements();
+        try {
+            String SQL = "SELECT company_id, name, nit FROM companies ORDER BY company_id";
+            ps = connect.prepareStatement(SQL);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                totalTravel.selectCompany.addItem(new CompanyVO(
+                        Integer.parseInt(rs.getString("company_id")),
+                        rs.getString("name"),
+                        rs.getInt("nit")));
+            }
+
+        } catch (SQLException e1) {
+            System.out.println("Error en la lista company " + e1.getMessage());
+        } catch (Exception e1) {
+            System.out.println(e1.getMessage());
+        }
+    }
+
+
 
 
 
@@ -94,38 +127,6 @@ public class SearchDAO {
 
 
 
-
-//    public boolean travel_historyTotal(DataExport data) {
-//        DataBaseConnection conn = new DataBaseConnection();
-//        CallableStatement cs;
-//        ResultSet rs;
-//        Vector<Object> list;
-//        for (int i = this.travelHistory.dtm.getRowCount(); i > 0; i--) {
-//            this.travelHistory.dtm.removeRow(i - 1);
-//        }
-//        try {
-//            String SQL = "SELECT * FROM travel_historyto(?,?)";
-//            cs = conn.getConn().prepareCall(SQL);
-//            cs.setDate(1, (data.getDateStart()));
-//            cs.setDate(2, (data.getDateEnd()));
-//            rs = cs.executeQuery();
-//            while (rs.next()) {
-//                list = new Vector<>();
-//                list.add(rs.getInt("internal_number"));
-//                list.add(rs.getString("name"));
-//                list.add((rs.getInt("total_tickets")));
-//                list.add(rs.getDate("buy"));
-//                System.out.println("Vector historia: " + list);
-//                this.travelHistory.dtm.addRow(list);
-//            }
-//        } catch (SQLException e1) {
-//            System.out.println("travel rs: " + e1.getMessage());
-//        } catch (Exception e1) {
-//            System.out.println("travelSQL rs: " + e1.getMessage());
-//
-//        }
-//        return false;
-//    }
 
 
 

@@ -2,6 +2,7 @@ package com.ticketsCode.ticket.Views;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
@@ -22,28 +23,27 @@ public class TicketSales extends JFrame {
     }
 
 
-
     private JPanel contentPane;
     private JDesktopPane registrationPane;
-    private JLabel lblCompany, lblPassenger, lblOrigin, lblDestination, lblQuantity,lblVehicle;
-    public JComboBox selectDestination, selectVehicle, selectOrigin;
+    private JLabel  lblPassenger, lblOrigin, lblDestination, lblQuantity, lblVehicle;
+    public JComboBox selectDestination, selectOrigin;
     public JTextField tfVehicle, tfPassenger, tfQuantity;
     public JButton btnSale, btnUpdate, btnDelete, btnClear;
-    public DefaultComboBoxModel dcbm, dcbmD, dcbmV;
+    public DefaultComboBoxModel dcbm, dcbmD;
     public DefaultTableModel dtm;
     private JScrollPane scroll;
-    public  Object[][] data;
+    public Object[][] data;
     public String[] headBoard;
     public JTable table;
     //Menu
     private JMenuBar menuBar;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1, liDelete,liExport;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liList1, liDelete, liExport;
 
-    public TicketSales(){
+    public TicketSales() {
         setTitle("Venta de tiquetes");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(200,100,1000,400);
+        setBounds(200, 100, 1000, 400);
 
         contentPane = new JPanel();
         //getContentPane().add(contentPane);
@@ -71,8 +71,7 @@ public class TicketSales extends JFrame {
 
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
-        liList = new JMenuItem("Consulta");
-        ulTickets.add(liList);
+
         liExport = new JMenuItem("Historial vehicular");
         ulTickets.add(liExport);
 
@@ -81,10 +80,6 @@ public class TicketSales extends JFrame {
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
 
-        liDelete = new JMenuItem("Eliminar");
-        ulVehicles.add(liDelete);
-        ulVehicles.add(liDelete);
-
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
         //acerca de
@@ -92,21 +87,22 @@ public class TicketSales extends JFrame {
         ulHelp.add(liAbout);
 
         registrationPane = new JDesktopPane();
-        registrationPane.setBounds(20,20, 320, 300);
-        registrationPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null ,null));
+        registrationPane.setBounds(20, 20, 320, 300);
+        registrationPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        registrationPane.setBorder(BorderFactory.createTitledBorder("Venta de tiquetes"));
         registrationPane.setBackground(SystemColor.control);
         contentPane.add(registrationPane);
 
         lblPassenger = new JLabel("Pasajero");
-        lblPassenger.setBounds(50, 20, 80,50);
+        lblPassenger.setBounds(50, 20, 80, 50);
         registrationPane.add(lblPassenger);
 
         lblOrigin = new JLabel("Origen");
-        lblOrigin.setBounds(50,60, 80,50);
+        lblOrigin.setBounds(50, 60, 80, 50);
         registrationPane.add(lblOrigin);
 
         lblDestination = new JLabel("Destino");
-        lblDestination.setBounds(50,100,80,50);
+        lblDestination.setBounds(50, 100, 80, 50);
         registrationPane.add(lblDestination);
 
         lblVehicle = new JLabel("Vehiculo");
@@ -114,37 +110,36 @@ public class TicketSales extends JFrame {
         registrationPane.add(lblVehicle);
 
         lblQuantity = new JLabel("Cantidad");
-        lblQuantity.setBounds(50,180, 80, 50);
+        lblQuantity.setBounds(50, 180, 80, 50);
         registrationPane.add(lblQuantity);
 
 
         //inputs
-        tfPassenger= new JTextField();
-        tfPassenger.setBounds(120,35,150,25);
+        tfPassenger = new JTextField();
+        tfPassenger.setBounds(120, 35, 150, 25);
         registrationPane.add(tfPassenger);
 
         tfQuantity = new JTextField();
-        tfQuantity.setBounds(120,193,150,25);
+        tfQuantity.setBounds(120, 193, 150, 25);
         registrationPane.add(tfQuantity);
 
         tfVehicle = new JTextField();
-        tfVehicle.setBounds(120,153,150,25);
+        tfVehicle.setBounds(120, 153, 150, 25);
         registrationPane.add(tfVehicle);
 
         //JcomboBox
         selectOrigin = new JComboBox();
-        selectOrigin.setBounds(120,73,150,25);
+        selectOrigin.setBounds(120, 73, 150, 25);
         registrationPane.add(selectOrigin);
         dcbm = new DefaultComboBoxModel();
         selectOrigin.addItem("--Seleccionar--");
 
 
         selectDestination = new JComboBox();
-        selectDestination.setBounds(120,113,150,25);
+        selectDestination.setBounds(120, 113, 150, 25);
         registrationPane.add(selectDestination);
         dcbmD = new DefaultComboBoxModel();
         selectDestination.addItem("--Seleccionar--");
-
 
 
 //        selectVehicle = new JComboBox();
@@ -156,18 +151,18 @@ public class TicketSales extends JFrame {
 
         //Button
         btnSale = new JButton("Venta");
-        btnSale.setBounds(10,250,120,25);
+        btnSale.setBounds(10, 250, 120, 25);
         registrationPane.add(btnSale);
 
         btnClear = new JButton("Limpiar");
-        btnClear.setBounds(180,250,120,25);
+        btnClear.setBounds(180, 250, 120, 25);
         registrationPane.add(btnClear);
 
         //Tabla
         scroll = new JScrollPane();
-        headBoard = new String[] {"N.Identidad", "Origen", "Destino", "Vehiculo", "Cantidad", "Dia"};
-        dtm = new DefaultTableModel(data,headBoard);
-        scroll.setBounds(346, 20, 600, 230);
+        headBoard = new String[]{"Id", "N.Identidad", "Origen", "Destino", "Vehiculo", "Cantidad", "Dia"};
+        dtm = new DefaultTableModel(data, headBoard);
+        scroll.setBounds(346, 28, 600, 230);
 
         getContentPane().add(scroll);
         table = new JTable(dtm);
@@ -176,15 +171,9 @@ public class TicketSales extends JFrame {
         scroll.setViewportView(table);
         contentPane.add(scroll);
 
-        //bonotes tabla
-        btnUpdate = new JButton("Actualizar");
-        btnUpdate.setBounds(500, 269, 120, 25);
-        contentPane.add(btnUpdate);
-
         btnDelete = new JButton("Eliminar");
-        btnDelete.setBounds(640, 269, 120, 25);
+        btnDelete.setBounds(580, 269, 120, 25);
         contentPane.add(btnDelete);
-
 
     }
 }

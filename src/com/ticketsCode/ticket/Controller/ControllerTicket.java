@@ -11,6 +11,9 @@ import com.ticketsCode.ticket.Views.TicketSales;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 public class ControllerTicket implements ActionListener, Iuseful {
 
@@ -18,12 +21,9 @@ public class ControllerTicket implements ActionListener, Iuseful {
     TicketDAO ticketDAO;
     TicketSales ticketSales;
     QrDAO qrDAO;
-//    PrintEpson printEpson;
+    //    PrintEpson printEpson;
     QrImg qrImg;
     PdfPrint pdfPrint;
-
-
-
 
 
     public ControllerTicket(TicketSales ticketSales, TicketDAO ticketDAO, TicketVO ticketVO, QrDAO qrDAO, PdfPrint pdfPrint, QrImg qrImg) {
@@ -37,9 +37,7 @@ public class ControllerTicket implements ActionListener, Iuseful {
         this.ticketSales.btnSale.addActionListener(this);
         this.ticketSales.btnClear.addActionListener(this);
         this.ticketSales.btnDelete.addActionListener(this);
-        this.ticketSales.btnUpdate.addActionListener(this);
     }
-
 
 
     @Override
@@ -55,7 +53,6 @@ public class ControllerTicket implements ActionListener, Iuseful {
                 JOptionPane.showMessageDialog(null, "Registro Guardado");
                 tfClear();
                 ticketDAO._loadTableSale();
-
                 try {
                     qrImg.qrImagen(qrDAO.QR());
                     qrDAO.dateTickect();
@@ -67,22 +64,45 @@ public class ControllerTicket implements ActionListener, Iuseful {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            }
-
             } else {
                 JOptionPane.showMessageDialog(null, "Registro No Guardado");
                 tfClear();
-            }
 
+            }
+        }
+        if(e.getSource() == ticketSales.btnDelete){
+            JOptionPane.showConfirmDialog(null, "¿Eliminar ticket?", "Si/No", JOptionPane.YES_NO_CANCEL_OPTION);
+            int fila = ticketSales.table.getSelectedRow();
+            int id =Integer.parseInt(ticketSales.table.getValueAt(fila,0).toString());
+            ticketVO.setTicket_id(id);
+            System.out.println("id: " +id);
+            LOGGER.log(Level.INFO,"obteniendo id: " + id);
+            try{
+                if(ticketDAO.delete(ticketVO)){
+                    JOptionPane.showConfirmDialog(null,"Eliminado exitosamente");
+//                    LOGGER.log(Level.INFO,"Eliminando venta");
+                }else {
+                    JOptionPane.showConfirmDialog(null,"Error al Eliminarlo");
+                }
+                ticketDAO._loadTableSale();
+//                LOGGER.log(Level.INFO,"Actulizando table");
+            }catch (Exception e1){
+//                LOGGER.log(Level.SEVERE,"No se elimino");
+                System.out.println("Eliminar venta: " + e1.getMessage());
+            }
+        }
+        if(e.getSource() == ticketSales.btnClear){
+            tfClear();
         }
 
+    }
 
 
     /**
      * Metodo de limpiar los TexField
-     * */
+     */
     @Override
-    public void tfClear(){
+    public void tfClear() {
         this.ticketSales.tfPassenger.setText("");
         this.ticketSales.tfQuantity.setText("");
         this.ticketSales.tfVehicle.setText("");

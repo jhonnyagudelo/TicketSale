@@ -32,21 +32,16 @@ public class ExportExcel extends JFrame {
 
     private JPanel contentPane;
     public JDesktopPane dataPane;
-    private JLabel lblInternal_number, lblTotal, lblDestiny, lblDestinyExport;
-    public JTextField tfDestinyExport;
+    private JLabel lblInternal_number, lblTotal, lblDestiny;
     public JButton btnInternal_number, btnTotal, btnDestiny, btnSave, btnCancel, btnRutaExport;
     private JMenuBar menuBar;
-    public JFileChooser file;
-    public FileNameExtensionFilter filter;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liList1, liDelete, liExport;
-    private FileWriter fichero = null;
-    private PrintWriter pw = null;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liList1, liDelete;
 
     public ExportExcel() {
         setTitle("Exportacion de datos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(450, 100, 500, 380);
+        setBounds(450, 100, 500, 300);
 
         contentPane = new JPanel();
         setContentPane(contentPane);
@@ -72,15 +67,11 @@ public class ExportExcel extends JFrame {
         //item menu venta
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
-        liList = new JMenuItem("Consulta");
-        ulTickets.add(liList);
+
+
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
-
-        liDelete = new JMenuItem("Eliminar");
-        ulVehicles.add(liDelete);
-        ulVehicles.add(liDelete);
 
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
@@ -89,20 +80,16 @@ public class ExportExcel extends JFrame {
         ulHelp.add(liAbout);
 
         dataPane = new JDesktopPane();
-        dataPane.setBounds(20, 35, 250, 160);
+        dataPane.setBounds(120, 35, 250, 160);
         dataPane.setBackground(SystemColor.control);
         dataPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
         dataPane.setBorder(BorderFactory.createTitledBorder("Datos a exportar"));
         contentPane.add(dataPane);
         dataPane.setLayout(null);
 
-        lblDestiny = new JLabel("Destino:");
+        lblDestiny = new JLabel("Porcentaje:");
         lblDestiny.setBounds(10, 40, 100, 14);
         dataPane.add(lblDestiny);
-
-        lblDestinyExport = new JLabel("Ruta de Exportacion: ");
-        lblDestinyExport.setBounds(40, 220, 150, 20);
-        contentPane.add(lblDestinyExport);
 
 
         lblInternal_number = new JLabel("Numero interno:");
@@ -113,9 +100,6 @@ public class ExportExcel extends JFrame {
         lblTotal.setBounds(10, 120, 100, 14);
         dataPane.add(lblTotal);
 
-        tfDestinyExport = new JTextField();
-        tfDestinyExport.setBounds(160, 219, 242, 25);
-        contentPane.add(tfDestinyExport);
 
         btnDestiny = new JButton("Seleccionar");
         btnDestiny.setBounds(120, 35, 100, 20);
@@ -129,53 +113,40 @@ public class ExportExcel extends JFrame {
         btnTotal.setBounds(120, 115, 100, 20);
         dataPane.add(btnTotal);
 
-        btnSave = new JButton("Guardar");
-        btnSave.setBounds(325, 80, 100, 25);
-        contentPane.add(btnSave);
-
-        btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(325, 120, 100, 25);
-        contentPane.add(btnCancel);
-
-        btnRutaExport = new JButton("...");
-        btnRutaExport.setBounds(400, 219, 24, 24);
-        contentPane.add(btnRutaExport);
 
     }
 
-    public boolean saveExcel() {
-        file = new JFileChooser();
-        file.setMultiSelectionEnabled(true);
-        filter = new FileNameExtensionFilter("xlsx");
-        file.setFileFilter(filter);
-        file.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        file.setCurrentDirectory(new File("C:"));
-        int retVal = file.showSaveDialog(null);
 
-        if (retVal == file.APPROVE_OPTION) {
-            try {
-                fichero = new FileWriter(file.getSelectedFile(), false);
-                LOGGER.log(Level.INFO, "Creando Excel");
-            } catch (Exception e1) {
-                LOGGER.log(Level.INFO,"Error" + e1.getMessage());
-                System.out.println("errorExcel: " + e1.getMessage());
-            }
-        }
-        return false;
-    }
-
-
-    public void guardarFichero(ExcelUtil excelUtil){
-        try {
-            fichero = new FileWriter(String.valueOf(excelUtil), true);
-            fichero.close();
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,"Error al guardar el documento", "Error",JOptionPane.ERROR_MESSAGE);
-            System.out.println("ErrorExcelS: " + e.getMessage());;
-            e.printStackTrace();
-        }
-    }
+//
+//
+//    public boolean saveExcel() {
+//        file = new JFileChooser();
+//        file.setMultiSelectionEnabled(true);
+//        file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        int retVal = file.showSaveDialog(this);
+//        if (retVal == file.APPROVE_OPTION) {
+//            try {
+//                file.setSelectedFile(new File("Reporte.xlsx"));
+//                LOGGER.log(Level.INFO, "Creando Excel");
+//            } catch (Exception e1) {
+//                LOGGER.log(Level.INFO,"Error" + e1.getMessage());
+//                System.out.println("errorExcel: " + e1.getMessage());
+//            }
+//        }
+//        return false;
+//    }
+//
+//
+//    public void guardarFichero(File file){
+//        try {
+//
+//
+//        } catch (IOException e) {
+//            JOptionPane.showMessageDialog(null,"Error al guardar el documento", "Error",JOptionPane.ERROR_MESSAGE);
+//            System.out.println("ErrorExcelS: " + e.getMessage());;
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }

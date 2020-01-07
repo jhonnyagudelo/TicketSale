@@ -13,6 +13,11 @@ public class DataExport extends TicketVO {
     }
 
 
+    public DataExport(Date dateStart , Date dateEnd){
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+    }
+
     public DataExport(Integer vehicle, Date dateStart , Date dateEnd) {
         super(vehicle);
         this.vehicle = vehicle;

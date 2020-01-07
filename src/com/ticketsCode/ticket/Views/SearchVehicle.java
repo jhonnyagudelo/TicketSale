@@ -72,10 +72,6 @@ public class SearchVehicle extends  JFrame{
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
 
-        liDelete = new JMenuItem("Eliminar");
-        ulVehicles.add(liDelete);
-        ulVehicles.add(liDelete);
-
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
         //acerca de

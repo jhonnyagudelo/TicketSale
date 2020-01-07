@@ -1,12 +1,10 @@
 package com.ticketsCode.ticket.Util;
 
-
-import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
-//import com.ticketsCode.ticket.Models.Vo.DataExcel;
 import com.ticketsCode.ticket.Models.Vo.DataExport;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.commons.compress.compressors.FileNameUtil;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -15,38 +13,38 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.*;
-
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ExcelUtil extends Component {
-    private SearchDAO searchDAO;
-    private DataExport dataExport;
-//    private DataExcel dataExcel;
+public class ExcelTotal extends Component {
+//    private SearchDAO searchDAO;
+//    private DataExport dataExport;
 
 
     private static final Logger LOGGER = Logger.getLogger("mx.com.hash.newexcel.ExcelOOXML");
+//
+//    public ExcelTotal(SearchDAO searchDAO, DataExport dataExport) {
+//        this.searchDAO = searchDAO;
+//        this.dataExport = dataExport;
+//
+//    }
 
-    public ExcelUtil(SearchDAO searchDAO, DataExport dataExport) {
-        this.searchDAO = searchDAO;
-        this.dataExport = dataExport;
-//        this.dataExcel = dataExcel;
+    public ExcelTotal() {
     }
 
-
-    public File createExcel(DataExport data) {
+    public File excelVehicle(DataExport data) {
         //Crear un Excel
         Date date = new Date();
         DateFormat timeDate = new SimpleDateFormat("dd-MM-yyyy");
-        File archivo = new File("Reporte.xlsx");
+        File archivo = new File("ReporteTotal.xlsx");
         Workbook book = new XSSFWorkbook();
-        Sheet sheet = book.createSheet("Reporte " + timeDate.format(date));
+        Sheet sheet = book.createSheet("Reporte" + timeDate.format(date));
         try {
 
             //traer imagen y convertirla
@@ -127,11 +125,11 @@ public class ExcelUtil extends Component {
             DataBaseConnection conn = new DataBaseConnection();
             CallableStatement cs;
             ResultSet rs;
-            String SQL = "SELECT * FROM travel_history(?,?,?)";
+            String SQL = "SELECT * FROM travel_historyto(?,?,?)";
             cs = conn.getConn().prepareCall(SQL);
             cs.setDate(1, (data.getDateStart()));
             cs.setDate(2, (data.getDateEnd()));
-            cs.setInt(3, data.getVehicle());
+            cs.setInt(3,data.getCompany());
             rs = cs.executeQuery();
             int numCol = rs.getMetaData().getColumnCount();
             while (rs.next()) {
@@ -158,6 +156,7 @@ public class ExcelUtil extends Component {
             }
 
 
+
             JFileChooser chooser = new JFileChooser();
             chooser.setFileFilter(new FileNameExtensionFilter("Excel file ", "xlsx"));
 //            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -167,7 +166,7 @@ public class ExcelUtil extends Component {
                     FileOutputStream fileOut = new FileOutputStream(chooser.getSelectedFile()+ ".xlsx");
                     book.write(fileOut);
                     fileOut.close();
-                    File file = new File("Reporte.xlsx");
+                    File file = new File("ReporteTotal.xlsx");
                     JOptionPane.showMessageDialog(null, "El archivo se guardo Exitosamente", "informacion", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -184,5 +183,30 @@ public class ExcelUtil extends Component {
         }
         return archivo;
     }
+
+//    public void saveIsClick() {
+//        JFileChooser chooser = new JFileChooser();
+//        chooser.setFileFilter(new FileNameExtensionFilter("Excel file ", "xlsx"));
+//        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        String nombre = "";
+//        int id = chooser.showSaveDialog(this);
+//        try {
+//            if (id == JFileChooser.APPROVE_OPTION) {
+//                File file = new File(chooser.getSelectedFile().getName());
+//                JOptionPane.showMessageDialog(null, "El archivo se guardo Exitosamente", "informacion", JOptionPane.INFORMATION_MESSAGE);
+//            }
+//        }catch (Exception e){
+//            System.out.println("export: " + e.getMessage());
+//            JOptionPane.showMessageDialog(null, "EL archivo no se guardo", "Advertencia",JOptionPane.WARNING_MESSAGE);
+//
+//    }
+//
+//}
+
+
 }
+
+
+
+
 

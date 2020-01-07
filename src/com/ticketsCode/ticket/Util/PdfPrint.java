@@ -77,7 +77,6 @@ public class PdfPrint {
         LOGGER.log(Level.INFO, "Mostrando el dialogo de impresion");
         if (job.printDialog() == true) {
             job.setPageable(new PDFPageable(document));
-
             LOGGER.log(Level.INFO, "Imprimiendo documento");
             job.print();
         }

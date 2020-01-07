@@ -1,20 +1,18 @@
 package com.ticketsCode.ticket.Views;
 
-import com.toedter.calendar.IDateEditor;
+import com.ticketsCode.ticket.Models.Vo.CompanyVO;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class TravelHistory extends JFrame {
-
+public class RoutePercentage extends JFrame {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    TravelHistory frame = new TravelHistory();
+                    RoutePercentage frame = new RoutePercentage();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -26,24 +24,20 @@ public class TravelHistory extends JFrame {
 
     private JPanel contentPane;
     private JDesktopPane registrationPane;
-    private JLabel lblVehiculo, lblDateEnd, lblDateStart;
-    public JTextField tfVehicle;
-    public JButton btnSearch;
-    public DefaultTableModel dtm;
-    private JScrollPane scroll;
-    public  Object[][] data;
-    public String[] headBoard;
-    public JTable table;
+    private JLabel lblDateEnd, lblDateStart;
+    public JButton btnExport;
+    public JComboBox selectCompany;
+
     //Menu
     private JMenuBar menuBar;
     public JDateChooser calendarStar, calendarEnd;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1, liDelete;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liList1, liDelete;
 
-    public TravelHistory(){
-        setTitle("historial de ticket");
+    public RoutePercentage() {
+        setTitle("Porcentaje de tiquetes por destino");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(150,100,1100,300);
+        setBounds(480, 200, 480, 300);
 
         contentPane = new JPanel();
         //getContentPane().add(contentPane);
@@ -83,54 +77,34 @@ public class TravelHistory extends JFrame {
         ulHelp.add(liAbout);
 
         registrationPane = new JDesktopPane();
-        registrationPane.setBounds(20,35, 420, 150);
-        registrationPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null ,null));
+        registrationPane.setBounds(20, 35, 420, 150);
+        registrationPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
         registrationPane.setBorder(BorderFactory.createTitledBorder("Datos a exportar"));
         registrationPane.setBackground(SystemColor.control);
         contentPane.add(registrationPane);
 
-        lblVehiculo = new JLabel("Vehiculo:");
-        lblVehiculo.setBounds(130,20,120,25);
-        registrationPane.add(lblVehiculo);
+        selectCompany = new JComboBox();
 
         lblDateStart = new JLabel("Fecha inicial:");
-        lblDateStart.setBounds(10,60,80,25);
+        lblDateStart.setBounds(10, 60, 80, 25);
         registrationPane.add(lblDateStart);
 
         lblDateEnd = new JLabel("Fecha final:");
-        lblDateEnd.setBounds(220,60,80,25);
+        lblDateEnd.setBounds(220, 60, 80, 25);
         registrationPane.add(lblDateEnd);
-//
-        tfVehicle = new JTextField();
-        tfVehicle.setBounds(185,20,120,25);
-        registrationPane.add(tfVehicle);
 
         calendarStar = new JDateChooser();
-        calendarStar.setBounds(90,60,120,25);
+        calendarStar.setBounds(90, 60, 118, 23);
         registrationPane.add(calendarStar);
 
         calendarEnd = new JDateChooser();
-        calendarEnd.setBounds(290,60,120,25);
+        calendarEnd.setBounds(290, 60, 118, 23);
         registrationPane.add(calendarEnd);
 
-        btnSearch = new JButton("Search");
-        btnSearch.setBounds(160,110,120,25);
-        registrationPane.add(btnSearch);
+        btnExport = new JButton("Exportar");
+        btnExport.setBounds(160, 110, 120, 25);
+        registrationPane.add(btnExport);
 
-        //Tabla
-        scroll = new JScrollPane();
-        headBoard = new String[] {"Numero interno", "Name", "Total tiquetes", "fecha compra"};
-        dtm = new DefaultTableModel(data,headBoard);
-        scroll.setBounds(450, 20, 600, 180);
 
-        getContentPane().add(scroll);
-        table = new JTable(dtm);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        scroll.setViewportView(table);
-        contentPane.add(scroll);
     }
-
-
 }
-

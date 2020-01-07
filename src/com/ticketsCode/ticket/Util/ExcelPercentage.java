@@ -1,9 +1,7 @@
 package com.ticketsCode.ticket.Util;
 
-
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Db.DataBaseConnection;
-//import com.ticketsCode.ticket.Models.Vo.DataExcel;
 import com.ticketsCode.ticket.Models.Vo.DataExport;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
@@ -15,38 +13,37 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.*;
-
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ExcelUtil extends Component {
-    private SearchDAO searchDAO;
-    private DataExport dataExport;
-//    private DataExcel dataExcel;
+public class ExcelPercentage extends Component {
+//    private SearchDAO searchDAO;
+//    private DataExport dataExport;
 
 
     private static final Logger LOGGER = Logger.getLogger("mx.com.hash.newexcel.ExcelOOXML");
 
-    public ExcelUtil(SearchDAO searchDAO, DataExport dataExport) {
-        this.searchDAO = searchDAO;
-        this.dataExport = dataExport;
-//        this.dataExcel = dataExcel;
-    }
+//    public ExcelPercentage(SearchDAO searchDAO, DataExport dataExport) {
+//        this.searchDAO = searchDAO;
+//        this.dataExport = dataExport;
+//
+//    }
 
+    public ExcelPercentage(){}
 
-    public File createExcel(DataExport data) {
+    public File excelPorcentaje(DataExport data) {
         //Crear un Excel
         Date date = new Date();
         DateFormat timeDate = new SimpleDateFormat("dd-MM-yyyy");
-        File archivo = new File("Reporte.xlsx");
+        File archivo = new File("PorcentajeDestino.xlsx");
         Workbook book = new XSSFWorkbook();
-        Sheet sheet = book.createSheet("Reporte " + timeDate.format(date));
+        Sheet sheet = book.createSheet("Reporte" + timeDate.format(date));
         try {
 
             //traer imagen y convertirla
@@ -91,7 +88,7 @@ public class ExcelUtil extends Component {
             celTitle.setCellValue("Reporte por vehiculo");
             sheet.addMergedRegion(new CellRangeAddress(6, 7, 0, 3));
 
-            String[] t = {"#interno", "Destino", "Total tiquetes", "Fecha compra"};
+            String[] t = {"Destino", "Total tiquetes", "Porcentaje", "Fecha compra"};
 
             CellStyle headerStyle = book.createCellStyle();
             headerStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
@@ -127,11 +124,11 @@ public class ExcelUtil extends Component {
             DataBaseConnection conn = new DataBaseConnection();
             CallableStatement cs;
             ResultSet rs;
-            String SQL = "SELECT * FROM travel_history(?,?,?)";
+            String SQL = "SELECT * FROM travel_historyp(?,?,?)";
             cs = conn.getConn().prepareCall(SQL);
             cs.setDate(1, (data.getDateStart()));
             cs.setDate(2, (data.getDateEnd()));
-            cs.setInt(3, data.getVehicle());
+            cs.setInt(3, (data.getCompany()));
             rs = cs.executeQuery();
             int numCol = rs.getMetaData().getColumnCount();
             while (rs.next()) {
@@ -140,8 +137,8 @@ public class ExcelUtil extends Component {
                     Cell cellData = fileDates.createCell(a);
                     cellData.setCellStyle(datosEstilo);
 
-                    if (a == 0 || a == 2) {
-                        cellData.setCellValue(rs.getInt(a + 1));
+                    if (a == 1 || a == 2) {
+                        cellData.setCellValue(rs.getDouble(a + 1));
                         System.out.println("int: " + rs.getInt(a + 1));
                         System.out.println("row: " + cellData);
                     } else {
@@ -167,7 +164,7 @@ public class ExcelUtil extends Component {
                     FileOutputStream fileOut = new FileOutputStream(chooser.getSelectedFile()+ ".xlsx");
                     book.write(fileOut);
                     fileOut.close();
-                    File file = new File("Reporte.xlsx");
+                    File file = new File("PorcentajeDestino.xlsx");
                     JOptionPane.showMessageDialog(null, "El archivo se guardo Exitosamente", "informacion", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -185,4 +182,11 @@ public class ExcelUtil extends Component {
         return archivo;
     }
 }
+
+
+
+
+
+
+
 

@@ -84,9 +84,6 @@ public class ListVehicle extends JFrame  {
         liRegistration = new JMenuItem("Registro1");
         ulVehicles.add(liRegistration);
 
-        liDelete = new JMenuItem("Eliminar");
-        ulVehicles.add(liDelete);
-
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
         //acerca de
