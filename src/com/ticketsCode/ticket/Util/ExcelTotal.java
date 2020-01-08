@@ -129,7 +129,7 @@ public class ExcelTotal extends Component {
             cs = conn.getConn().prepareCall(SQL);
             cs.setDate(1, (data.getDateStart()));
             cs.setDate(2, (data.getDateEnd()));
-            cs.setInt(3,data.getCompany());
+            cs.setInt(3, data.getCompany());
             rs = cs.executeQuery();
             int numCol = rs.getMetaData().getColumnCount();
             while (rs.next()) {
@@ -156,14 +156,13 @@ public class ExcelTotal extends Component {
             }
 
 
-
             JFileChooser chooser = new JFileChooser();
             chooser.setFileFilter(new FileNameExtensionFilter("Excel file ", "xlsx"));
 //            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int option  = chooser.showSaveDialog(this);
-            if(option == JFileChooser.APPROVE_OPTION){
-                if(chooser.getSelectedFile()!=null){
-                    FileOutputStream fileOut = new FileOutputStream(chooser.getSelectedFile()+ ".xlsx");
+            int option = chooser.showSaveDialog(this);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                if (chooser.getSelectedFile() != null) {
+                    FileOutputStream fileOut = new FileOutputStream(chooser.getSelectedFile() + ".xlsx");
                     book.write(fileOut);
                     fileOut.close();
                     File file = new File("ReporteTotal.xlsx");
@@ -183,27 +182,6 @@ public class ExcelTotal extends Component {
         }
         return archivo;
     }
-
-//    public void saveIsClick() {
-//        JFileChooser chooser = new JFileChooser();
-//        chooser.setFileFilter(new FileNameExtensionFilter("Excel file ", "xlsx"));
-//        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//        String nombre = "";
-//        int id = chooser.showSaveDialog(this);
-//        try {
-//            if (id == JFileChooser.APPROVE_OPTION) {
-//                File file = new File(chooser.getSelectedFile().getName());
-//                JOptionPane.showMessageDialog(null, "El archivo se guardo Exitosamente", "informacion", JOptionPane.INFORMATION_MESSAGE);
-//            }
-//        }catch (Exception e){
-//            System.out.println("export: " + e.getMessage());
-//            JOptionPane.showMessageDialog(null, "EL archivo no se guardo", "Advertencia",JOptionPane.WARNING_MESSAGE);
-//
-//    }
-//
-//}
-
-
 }
 
 

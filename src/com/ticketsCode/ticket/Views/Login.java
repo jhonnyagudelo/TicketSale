@@ -20,8 +20,8 @@ public class Login extends JFrame {
 
     private JPanel contentPane;
     private JLabel lblUser,lblPassword;
-    private JTextField tfUser;
-    private JPasswordField tfPassword;
+    public JTextField tfUser;
+    public JPasswordField tfPassword;
     public JButton btnLogin;
 
     public Login(){

@@ -74,9 +74,6 @@ public class ListVehicle extends JFrame  {
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
 
-        liList = new JMenuItem("Consulta");
-        ulTickets.add(liList);
-
         liExport = new JMenuItem("Historial vehicular");
         ulTickets.add(liExport);
 

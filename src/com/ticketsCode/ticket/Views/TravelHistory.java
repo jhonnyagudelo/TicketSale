@@ -38,12 +38,12 @@ public class TravelHistory extends JFrame {
     private JMenuBar menuBar;
     public JDateChooser calendarStar, calendarEnd;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1, liDelete;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liExport, liDelete;
 
     public TravelHistory(){
         setTitle("historial de ticket");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(150,100,1100,300);
+        setBounds(480,200,480,300);
 
         contentPane = new JPanel();
         //getContentPane().add(contentPane);
@@ -75,9 +75,8 @@ public class TravelHistory extends JFrame {
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
-
-        liList1 = new JMenuItem("Consulta");
-        ulVehicles.add(liList1);
+        liExport = new JMenuItem("Historial vehicular");
+        ulTickets.add(liExport);
         //acerca de
         liAbout = new JMenuItem("Acerca de.");
         ulHelp.add(liAbout);
@@ -117,18 +116,18 @@ public class TravelHistory extends JFrame {
         btnSearch.setBounds(160,110,120,25);
         registrationPane.add(btnSearch);
 
-        //Tabla
-        scroll = new JScrollPane();
-        headBoard = new String[] {"Numero interno", "Name", "Total tiquetes", "fecha compra"};
-        dtm = new DefaultTableModel(data,headBoard);
-        scroll.setBounds(450, 20, 600, 180);
-
-        getContentPane().add(scroll);
-        table = new JTable(dtm);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        scroll.setViewportView(table);
-        contentPane.add(scroll);
+//        //Tabla
+//        scroll = new JScrollPane();
+//        headBoard = new String[] {"Numero interno", "Name", "Total tiquetes", "fecha compra"};
+//        dtm = new DefaultTableModel(data,headBoard);
+//        scroll.setBounds(450, 20, 600, 180);
+//
+//        getContentPane().add(scroll);
+//        table = new JTable(dtm);
+//        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//        table.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+//        scroll.setViewportView(table);
+//        contentPane.add(scroll);
     }
 
 

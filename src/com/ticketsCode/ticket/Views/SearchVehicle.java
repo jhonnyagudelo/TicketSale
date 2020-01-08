@@ -34,7 +34,7 @@ public class SearchVehicle extends  JFrame{
     //Menu
     private JMenuBar menuBar;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1, liDelete;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1, liExport;
 
     public SearchVehicle(){
         setTitle("Venta de tiquetes");
@@ -66,8 +66,8 @@ public class SearchVehicle extends  JFrame{
         //item menu venta
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
-        liList = new JMenuItem("Consulta");
-        ulTickets.add(liList);
+        liExport = new JMenuItem("Historial vehicular");
+        ulTickets.add(liExport);
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);

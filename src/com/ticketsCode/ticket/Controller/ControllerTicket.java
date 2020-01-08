@@ -11,9 +11,7 @@ import com.ticketsCode.ticket.Views.TicketSales;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 public class ControllerTicket implements ActionListener, Iuseful {
 
@@ -43,55 +41,56 @@ public class ControllerTicket implements ActionListener, Iuseful {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == ticketSales.btnSale) {
-            ticketVO.setPassenger(Integer.parseInt(ticketSales.tfPassenger.getText()));
-            ticketVO.setOrigin(ticketSales.selectOrigin.getSelectedIndex());
-            ticketVO.setDestination(ticketSales.selectDestination.getSelectedIndex());
-            ticketVO.setVehicle(Integer.parseInt(ticketSales.tfVehicle.getText()));
-            ticketVO.setQuantity(Integer.parseInt(ticketSales.tfQuantity.getText()));
-
-            if (ticketDAO.save(ticketVO)) {
-                JOptionPane.showMessageDialog(null, "Registro Guardado");
-                tfClear();
-                ticketDAO._loadTableSale();
-                try {
-                    qrImg.qrImagen(qrDAO.QR());
-                    qrDAO.dateTickect();
-                    if (ticketVO.getQuantity() > 0) {
-                        for (int i = 0; i < ticketVO.getQuantity(); i++) {
-                            pdfPrint.printTicket();
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+            if (ticketSales.tfPassenger.getText().isEmpty() || ticketSales.tfVehicle.getText().isEmpty() || ticketSales.tfQuantity.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Hay campos vacios, debes llenarlos");
             } else {
-                JOptionPane.showMessageDialog(null, "Registro No Guardado");
-                tfClear();
+                ticketVO.setPassenger(Integer.parseInt(ticketSales.tfPassenger.getText()));
+                ticketVO.setOrigin(ticketSales.selectOrigin.getSelectedIndex());
+                ticketVO.setDestination(ticketSales.selectDestination.getSelectedIndex());
+                ticketVO.setVehicle(Integer.parseInt(ticketSales.tfVehicle.getText()));
+                ticketVO.setQuantity(Integer.parseInt(ticketSales.tfQuantity.getText()));
 
+                if (ticketDAO.save(ticketVO)) {
+                    JOptionPane.showMessageDialog(null, "Registro Guardado");
+                    tfClear();
+                    ticketDAO._loadTableSale();
+                    try {
+                        qrImg.qrImagen(qrDAO.QR());
+                        qrDAO.dateTickect();
+                        if (ticketVO.getQuantity() > 0) {
+                            for (int i = 0; i < ticketVO.getQuantity(); i++) {
+                                pdfPrint.printTicket();
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Registro No Guardado");
+                    tfClear();
+
+                }
             }
         }
-        if(e.getSource() == ticketSales.btnDelete){
+        if (e.getSource() == ticketSales.btnDelete) {
             JOptionPane.showConfirmDialog(null, "¿Eliminar ticket?", "Si/No", JOptionPane.YES_NO_CANCEL_OPTION);
             int fila = ticketSales.table.getSelectedRow();
-            int id =Integer.parseInt(ticketSales.table.getValueAt(fila,0).toString());
+            int id = Integer.parseInt(ticketSales.table.getValueAt(fila, 0).toString());
             ticketVO.setTicket_id(id);
-            System.out.println("id: " +id);
-            LOGGER.log(Level.INFO,"obteniendo id: " + id);
-            try{
-                if(ticketDAO.delete(ticketVO)){
-                    JOptionPane.showConfirmDialog(null,"Eliminado exitosamente");
-//                    LOGGER.log(Level.INFO,"Eliminando venta");
-                }else {
-                    JOptionPane.showConfirmDialog(null,"Error al Eliminarlo");
+            System.out.println("id: " + id);
+            try {
+                if (ticketDAO.delete(ticketVO)) {
+                    JOptionPane.showConfirmDialog(null, "Eliminado exitosamente");
+                } else {
+                    JOptionPane.showConfirmDialog(null, "Error al Eliminarlo");
                 }
                 ticketDAO._loadTableSale();
-//                LOGGER.log(Level.INFO,"Actulizando table");
-            }catch (Exception e1){
-//                LOGGER.log(Level.SEVERE,"No se elimino");
+            } catch (Exception e1) {
+
                 System.out.println("Eliminar venta: " + e1.getMessage());
             }
         }
-        if(e.getSource() == ticketSales.btnClear){
+        if (e.getSource() == ticketSales.btnClear) {
             tfClear();
         }
 

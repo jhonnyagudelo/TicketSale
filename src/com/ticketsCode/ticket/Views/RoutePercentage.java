@@ -32,7 +32,7 @@ public class RoutePercentage extends JFrame {
     private JMenuBar menuBar;
     public JDateChooser calendarStar, calendarEnd;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liList1, liDelete;
+    public JMenuItem liClose, liExport, liRegistration, liSale, liAbout, liList1, liDelete;
 
     public RoutePercentage() {
         setTitle("Porcentaje de tiquetes por destino");
@@ -64,8 +64,8 @@ public class RoutePercentage extends JFrame {
         //item menu venta
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
-        liList = new JMenuItem("Consulta");
-        ulTickets.add(liList);
+        liExport = new JMenuItem("Historial vehicular");
+        ulTickets.add(liExport);
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);

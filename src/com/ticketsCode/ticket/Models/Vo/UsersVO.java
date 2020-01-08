@@ -12,6 +12,8 @@ public class UsersVO {
     private Integer company;
     private boolean status;
     private String username;
+    private String logout;
+    private String type_category;
 
     public  UsersVO(){
 
@@ -92,4 +94,38 @@ public class UsersVO {
         this.username = username;
     }
 
+    public String getLogout() {
+        return logout;
+    }
+
+    public void setLogout(String logout) {
+        this.logout = logout;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public String getType_category() {
+        return type_category;
+    }
+
+    public void setType_category(String type_category) {
+        this.type_category = type_category;
+    }
+
+    @Override
+    public String toString() {
+        return "UsersVO{" +
+                "user_id=" + user_id +
+                ", names='" + names + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", password='" + password + '\'' +
+                ", company=" + company +
+                ", status=" + status +
+                ", username='" + username + '\'' +
+                ", logout='" + logout + '\'' +
+                ", type_category='" + type_category + '\'' +
+                '}';
+    }
 }

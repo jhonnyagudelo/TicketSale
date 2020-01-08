@@ -31,12 +31,12 @@ public class ControllerMenu implements ActionListener {
         this.sale.liList1.addActionListener(this);
         this.search.liList1.addActionListener(this);
         //consulta vehiculos
-        this.autoBus.liList.addActionListener(this);
-        this.sale.liList.addActionListener(this);
-        this.search.liList.addActionListener(this);
 
         //Exportar
         this.sale.liExport.addActionListener(this);
+        this.search.liExport.addActionListener(this);
+        this.autoBus.liExport.addActionListener(this);
+
 //        this.exportExcel
         //cerrar
         this.autoBus.liClose.addActionListener(this);
@@ -77,7 +77,7 @@ public class ControllerMenu implements ActionListener {
                 System.out.printf("Color: " + e1.getMessage());
             }
         }
-        if (e.getSource() == sale.liExport){
+        if (e.getSource() == sale.liExport || e.getSource() == autoBus.liExport || e.getSource() == search.liExport){
             try {
                 exportExcel.setVisible(true);
             }catch (Exception e1){

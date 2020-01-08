@@ -33,7 +33,7 @@ public class ControllerSearch implements ActionListener, Iuseful {
 
     DateFormat timeDate = new SimpleDateFormat("yyyy-MM-dd");
 
-    public ControllerSearch(SearchDAO searchDAO, SearchVehicle search, VehicleVO autoBusVO, DataExport data, TravelHistory travelHistory, ExcelUtil excelUtil,ExportExcel exportExcel,TotalTravel totalTravel, ExcelTotal excelTotal,ExcelPercentage percentage,RoutePercentage route) {
+    public ControllerSearch(SearchDAO searchDAO, SearchVehicle search, VehicleVO autoBusVO, DataExport data, TravelHistory travelHistory, ExcelUtil excelUtil, ExportExcel exportExcel, TotalTravel totalTravel, ExcelTotal excelTotal, ExcelPercentage percentage, RoutePercentage route) {
         this.search = search;
         this.searchDAO = searchDAO;
         this.autoBusVO = autoBusVO;
@@ -51,7 +51,6 @@ public class ControllerSearch implements ActionListener, Iuseful {
         this.route.btnExport.addActionListener(this);
         this.travelHistory.btnSearch.addActionListener(this);
         this.search.btnSearch.addActionListener(this);
-        this.exportExcel.btnDestiny.addActionListener(this);
         this.exportExcel.btnTotal.addActionListener(this);
         this.exportExcel.btnInternal_number.addActionListener(this);
         this.totalTravel.btnExport.addActionListener(this);
@@ -60,11 +59,10 @@ public class ControllerSearch implements ActionListener, Iuseful {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        try {
-            if (e.getSource() == search.btnSearch) {
-                if (search.tfVehicle.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Ingrese un vehiculo", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        if (e.getSource() == search.btnSearch) {
+            if (search.tfVehicle.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Ingrese un vehiculo", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
                 autoBusVO.setInternal_number(Integer.parseInt(search.tfVehicle.getText()));
                 if (!searchDAO.search(autoBusVO)) {
                     tfClear();
@@ -74,61 +72,56 @@ public class ControllerSearch implements ActionListener, Iuseful {
                     tfClear();
                 }
             }
+        }
+
+        if (e.getSource() == exportExcel.btnInternal_number) {
+            JOptionPane.showMessageDialog(null, "Registro por vehiculo");
+            travelHistory.setVisible(true);
+        }
+
+        if (e.getSource() == exportExcel.btnTotal) {
+            JOptionPane.showMessageDialog(null, "Registro por total");
+            totalTravel.setVisible(true);
+        }
+
+        if (e.getSource() == exportExcel.btnDestiny) {
+            JOptionPane.showMessageDialog(null, "Porcentaje por destino");
+            route.setVisible(true);
+        }
 
 
-            if(e.getSource() == exportExcel.btnInternal_number){
-                JOptionPane.showMessageDialog(null,"Registro por vehiculo");
-                travelHistory.setVisible(true);
-            }
-
-            if(e.getSource() == exportExcel.btnTotal){
-                JOptionPane.showMessageDialog(null,"Registro por total");
-                totalTravel.setVisible(true);
-            }
-
-            if(e.getSource() == exportExcel.btnDestiny){
-                JOptionPane.showMessageDialog(null,"Porcentaje por destino");
-                route.setVisible(true);
-            }
-
-
-
-            if (e.getSource() == travelHistory.btnSearch) {
-                if (travelHistory.tfVehicle.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Ingresar un dato", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        if (e.getSource() == travelHistory.btnSearch) {
+            if (travelHistory.tfVehicle.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Ingresar un dato", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
                 data.setVehicle(Integer.parseInt(travelHistory.tfVehicle.getText()));
                 data.setDateStart(Date.valueOf(timeDate.format(travelHistory.calendarStar.getDate())));
                 data.setDateEnd(Date.valueOf(timeDate.format(travelHistory.calendarEnd.getDate())));
-                searchDAO.travel_history(data);
-                excelUtil.createExcel(data);
-                tfClear();
-                JOptionPane.showMessageDialog(null, "Datos exportados");
-//                } else {
-//                    tfClear();
-//                    JOptionPane.showMessageDialog(null, "No hay datos", "Error", JOptionPane.ERROR_MESSAGE);
-//                }
+                if (!searchDAO.travel_history(data)) {
+                    excelUtil.createExcel(data);
+                    tfClear();
+                    JOptionPane.showMessageDialog(null, "Datos exportados");
+                } else {
+                    tfClear();
+                    JOptionPane.showMessageDialog(null, "No hay datos", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-
-            if(e.getSource() == totalTravel.btnExport){
-                data.setCompany(totalTravel.selectCompany.getSelectedIndex());
-                data.setDateStart(Date.valueOf(timeDate.format(totalTravel.calendarStar.getDate())));
-                data.setDateEnd(Date.valueOf(timeDate.format(totalTravel.calendarEnd.getDate())));
-                excelTotal.excelVehicle(data);
-//                excelTotal.saveIsClick();
-            }
-
-            if(e.getSource() == route.btnExport){
-                data.setDateStart(Date.valueOf(timeDate.format(route.calendarStar.getDate())));
-                data.setDateEnd(Date.valueOf(timeDate.format(route.calendarEnd.getDate())));
-                percentage.excelPorcentaje(data);
-            }
-
-        } catch (Exception e1) {
-            System.out.println("travel erro: " + e1.getMessage());
         }
-    }
 
+        if (e.getSource() == totalTravel.btnExport) {
+            data.setCompany(totalTravel.selectCompany.getSelectedIndex());
+            data.setDateStart(Date.valueOf(timeDate.format(totalTravel.calendarStar.getDate())));
+            data.setDateEnd(Date.valueOf(timeDate.format(totalTravel.calendarEnd.getDate())));
+            excelTotal.excelVehicle(data);
+        }
+
+        if (e.getSource() == route.btnExport) {
+            data.setDateStart(Date.valueOf(timeDate.format(route.calendarStar.getDate())));
+            data.setDateEnd(Date.valueOf(timeDate.format(route.calendarEnd.getDate())));
+            percentage.excelPorcentaje(data);
+        }
+
+    }
 
     @Override
     public void tfClear() {

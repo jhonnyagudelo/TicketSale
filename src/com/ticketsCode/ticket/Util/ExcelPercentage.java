@@ -124,11 +124,10 @@ public class ExcelPercentage extends Component {
             DataBaseConnection conn = new DataBaseConnection();
             CallableStatement cs;
             ResultSet rs;
-            String SQL = "SELECT * FROM travel_historyp(?,?,?)";
+            String SQL = "SELECT * FROM travel_historyp(?,?)";
             cs = conn.getConn().prepareCall(SQL);
             cs.setDate(1, (data.getDateStart()));
             cs.setDate(2, (data.getDateEnd()));
-            cs.setInt(3, (data.getCompany()));
             rs = cs.executeQuery();
             int numCol = rs.getMetaData().getColumnCount();
             while (rs.next()) {

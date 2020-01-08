@@ -36,7 +36,7 @@ public class TotalTravel extends JFrame {
     private JMenuBar menuBar;
     public JDateChooser calendarStar, calendarEnd;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liList1, liDelete;
+    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liExport, liDelete;
 
     public TotalTravel() {
         setTitle("historial de total");
@@ -44,7 +44,6 @@ public class TotalTravel extends JFrame {
         setBounds(480, 200, 480, 300);
 
         contentPane = new JPanel();
-        //getContentPane().add(contentPane);
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
@@ -74,8 +73,8 @@ public class TotalTravel extends JFrame {
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
 
-        liList1 = new JMenuItem("Consulta");
-        ulVehicles.add(liList1);
+        liExport = new JMenuItem("Historial vehicular");
+        ulTickets.add(liExport);
         //acerca de
         liAbout = new JMenuItem("Acerca de.");
         ulHelp.add(liAbout);

@@ -15,7 +15,7 @@ public class ControllerPrincipal {
         //Login
         Login login = new Login();
         UsersVO usersVO = new UsersVO();
-//        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO = new UserDAO();
 
         // Vehiculos
         ListVehicle autoBus = new ListVehicle();
@@ -29,7 +29,7 @@ public class ControllerPrincipal {
         TicketSales ticketSales = new TicketSales();
         TicketDAO ticketDAO = new TicketDAO(ticketSales);
         TicketVO ticketVO = new TicketVO();
-        ticketSales.setVisible(true);
+//        ticketSales.setVisible(true);
 
 
 
@@ -59,14 +59,9 @@ public class ControllerPrincipal {
         ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel);
         ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, excelUtil, exportExcel,totalTravel, excelTotal, percentage,route);
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
+        ControllerUser csr = new ControllerUser(userDAO,login,usersVO,ticketSales);
 
 
     }
 
-
-
-    private void iniciar(String fileName){
-
-
-    }
 }
