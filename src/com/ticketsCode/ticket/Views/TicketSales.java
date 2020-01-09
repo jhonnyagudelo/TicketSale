@@ -37,8 +37,8 @@ public class TicketSales extends JFrame {
     public JTable table;
     //Menu
     private JMenuBar menuBar;
-    public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liList1, liDelete, liExport;
+    public JMenu ulFile, ulTickets, ulVehicles, ulHelp,ulConfig;
+    public JMenuItem liClose, liUsers, liRegistration, liSale, liAbout, liList1, liDelete, liExport;
 
     public TicketSales() {
         setTitle("Venta de tiquetes");
@@ -56,10 +56,16 @@ public class TicketSales extends JFrame {
 
         ulFile = new JMenu("Archivo");
         menuBar.add(ulFile);
+
         ulTickets = new JMenu("Tiquetes");
         menuBar.add(ulTickets);
+
         ulVehicles = new JMenu("Vehiculos");
         menuBar.add(ulVehicles);
+
+        ulConfig = new JMenu("Configuracion");
+        menuBar.add(ulConfig);
+
         ulHelp = new JMenu("Ayuda");
         menuBar.add(ulHelp);
 
@@ -75,6 +81,9 @@ public class TicketSales extends JFrame {
         liExport = new JMenuItem("Historial vehicular");
         ulTickets.add(liExport);
 
+        //Config
+        liUsers = new JMenuItem("Usuarios");
+        ulConfig.add(liUsers);
 
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");

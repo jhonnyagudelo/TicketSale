@@ -1,8 +1,6 @@
 package com.ticketsCode.ticket.Models.Vo;
 
-import sun.security.util.Password;
-
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class UsersVO {
     private Integer user_id;
@@ -12,14 +10,14 @@ public class UsersVO {
     private Integer company;
     private boolean status;
     private String username;
-    private String logout;
-    private String type_category;
+    private Date logout;
+    private Category type;
 
     public  UsersVO(){
 
     }
 
-    public UsersVO(Integer user_id, String names, String last_name, String password, Integer company, boolean status, String username){
+    public UsersVO(Integer user_id, String names, String last_name, String password, Integer company, boolean status, String username, Date logout, Category type){
         super();
         this.user_id = user_id;
         this.names = names;
@@ -28,6 +26,8 @@ public class UsersVO {
         this.company = company;
         this.status = status;
         this.username = username;
+        this.type = type;
+        this.logout = logout;
     }
 
     public UsersVO(String username, String password, boolean status) {
@@ -36,6 +36,14 @@ public class UsersVO {
         this.password = password;
         this. status = status;
 
+    }
+
+    public UsersVO(String name, String username, String password, boolean status) {
+        super();
+        this.names = name;
+        this.username = username;
+        this.password = password;
+        this.status = status;
     }
 
     public Integer getCompany() {
@@ -94,11 +102,11 @@ public class UsersVO {
         this.username = username;
     }
 
-    public String getLogout() {
+    public Date getLogout() {
         return logout;
     }
 
-    public void setLogout(String logout) {
+    public void setLogout(Date logout) {
         this.logout = logout;
     }
 
@@ -106,18 +114,17 @@ public class UsersVO {
         return status;
     }
 
-    public String getType_category() {
-        return type_category;
+    public Category getType() {
+        return type;
     }
 
-    public void setType_category(String type_category) {
-        this.type_category = type_category;
+    public void setType(Category type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
-        return "UsersVO{" +
-                "user_id=" + user_id +
+        return "user_id=" + user_id +
                 ", names='" + names + '\'' +
                 ", last_name='" + last_name + '\'' +
                 ", password='" + password + '\'' +
@@ -125,7 +132,6 @@ public class UsersVO {
                 ", status=" + status +
                 ", username='" + username + '\'' +
                 ", logout='" + logout + '\'' +
-                ", type_category='" + type_category + '\'' +
-                '}';
+                ", type=" + type ;
     }
 }

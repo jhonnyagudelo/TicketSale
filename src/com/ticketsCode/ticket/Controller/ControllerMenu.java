@@ -1,7 +1,9 @@
 package com.ticketsCode.ticket.Controller;
 
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
+import com.ticketsCode.ticket.Models.Vo.UsersVO;
 import com.ticketsCode.ticket.Views.*;
+import org.apache.commons.math3.analysis.function.Add;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +16,20 @@ public class ControllerMenu implements ActionListener {
     TicketSales sale;
     TravelHistory travelHistory;
     ExportExcel exportExcel;
+    AddUsers add;
+    UsersVO user;
 
 
-    public ControllerMenu(ListVehicle autoBus, SearchVehicle search, TicketSales sale, TravelHistory travelHistory,ExportExcel exportExcel) {
+    public ControllerMenu(ListVehicle autoBus, SearchVehicle search, TicketSales sale, TravelHistory travelHistory,ExportExcel exportExcel,AddUsers add, UsersVO user) {
         this.autoBus = autoBus;
         this.search = search;
         this.sale = sale;
         this.travelHistory = travelHistory;
         this.exportExcel = exportExcel;
+        this.add = add;
+        this.user = user;
+
+
         //registro vehiculo
         this.autoBus.liRegistration.addActionListener(this);
         this.sale.liRegistration.addActionListener(this);
@@ -37,7 +45,9 @@ public class ControllerMenu implements ActionListener {
         this.search.liExport.addActionListener(this);
         this.autoBus.liExport.addActionListener(this);
 
-//        this.exportExcel
+        //Usuarios
+        this.sale.liUsers.addActionListener(this);
+
         //cerrar
         this.autoBus.liClose.addActionListener(this);
         this.sale.liClose.addActionListener(this);
@@ -51,6 +61,7 @@ public class ControllerMenu implements ActionListener {
         this.sale.liAbout.addActionListener(this);
         this.search.liAbout.addActionListener(this);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -80,6 +91,13 @@ public class ControllerMenu implements ActionListener {
         if (e.getSource() == sale.liExport || e.getSource() == autoBus.liExport || e.getSource() == search.liExport){
             try {
                 exportExcel.setVisible(true);
+            }catch (Exception e1){
+                System.out.println("history panel: " + e1.getMessage());
+            }
+        }
+        if(e.getSource() == sale.liUsers){
+            try{
+                add.setVisible(true);
             }catch (Exception e1){
                 System.out.println("history panel: " + e1.getMessage());
             }

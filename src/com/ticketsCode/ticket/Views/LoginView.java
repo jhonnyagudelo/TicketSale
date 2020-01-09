@@ -3,12 +3,12 @@ package com.ticketsCode.ticket.Views;
 import javax.swing.*;
 import java.awt.*;
 
-public class Login extends JFrame {
+public class LoginView extends JFrame {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    Login frame = new Login();
+                    LoginView frame = new LoginView();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -24,9 +24,9 @@ public class Login extends JFrame {
     public JPasswordField tfPassword;
     public JButton btnLogin;
 
-    public Login(){
+    public LoginView(){
         setTitle("Login");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setBounds(500,250,400,250);
 
         contentPane = new JPanel();

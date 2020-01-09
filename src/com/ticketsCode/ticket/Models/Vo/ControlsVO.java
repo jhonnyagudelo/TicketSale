@@ -12,6 +12,13 @@ public class ControlsVO {
         this.name = name;
     }
 
+    public ControlsVO(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+
+
     public Integer getControl_id() {
         return control_id;
     }

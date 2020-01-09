@@ -97,9 +97,6 @@ public class SearchDAO {
         CallableStatement cs;
         ResultSet rs;
         Vector<Object> list;
-        for (int i = this.travelHistory.dtm.getRowCount(); i > 0; i--) {
-            this.travelHistory.dtm.removeRow(i - 1);
-        }
         try {
             String SQL = "SELECT * FROM travel_history(?,?,?)";
             cs = conn.getConn().prepareCall(SQL);
@@ -114,7 +111,6 @@ public class SearchDAO {
                 list.add((rs.getInt("total_tickets")));
                 list.add(rs.getDate("buy"));
                 System.out.println("Vector historia: " + list);
-                this.travelHistory.dtm.addRow(list);
             }
         } catch (SQLException e1) {
             System.out.println("travel rs: " + e1.getMessage());

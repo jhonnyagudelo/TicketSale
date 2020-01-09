@@ -15,7 +15,11 @@ public class ControllerPrincipal {
         //Login
         Login login = new Login();
         UsersVO usersVO = new UsersVO();
-        UserDAO userDAO = new UserDAO();
+        LoginView loginView = new LoginView();
+        AuthorizationDAO authorizationDAO = new AuthorizationDAO();
+
+        AddUsers add = new AddUsers();
+        UserDAO userDAO = new UserDAO(add);
 
         // Vehiculos
         ListVehicle autoBus = new ListVehicle();
@@ -35,7 +39,7 @@ public class ControllerPrincipal {
 
 //        PrintEpson printEpson = new PrintEpson();
 
-        PdfPrint pdfPrint = new PdfPrint(qrDAO);
+        PdfPrint pdfPrint = new PdfPrint(qrDAO,usersVO);
         TravelHistory travelHistory = new TravelHistory();
         DataExport dataExport = new DataExport();
 //        DataExcel dataExcel = new DataExcel();
@@ -56,10 +60,11 @@ public class ControllerPrincipal {
         ExcelUtil excelUtil = new ExcelUtil( searchDAO,  dataExport);
 
         ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO, qrDAO,pdfPrint , qrImg);
-        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel);
+        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel,add,usersVO);
         ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, excelUtil, exportExcel,totalTravel, excelTotal, percentage,route);
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
-        ControllerUser csr = new ControllerUser(userDAO,login,usersVO,ticketSales);
+        ControllerAuth csr = new ControllerAuth(authorizationDAO,loginView,login,ticketSales);
+        ControllerUsers cus = new ControllerUsers(add,userDAO,usersVO);
 
 
     }

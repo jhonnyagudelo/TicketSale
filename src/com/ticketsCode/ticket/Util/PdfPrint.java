@@ -1,7 +1,7 @@
 package com.ticketsCode.ticket.Util;
 
 import com.ticketsCode.ticket.Models.Dao.QrDAO;
-import com.ticketsCode.ticket.Models.Vo.DataQr;
+import com.ticketsCode.ticket.Models.Vo.UsersVO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,10 +23,12 @@ import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 public class PdfPrint {
 
     private QrDAO qrDAO;
+    private UsersVO user;
 
 
-    public PdfPrint(QrDAO qrDAO) {
+    public PdfPrint(QrDAO qrDAO, UsersVO user) {
         this.qrDAO = qrDAO;
+        this.user = user;
     }
 
     public void printTicket() throws IOException, PrinterException {
@@ -58,16 +60,18 @@ public class PdfPrint {
             contentStream.newLine();
             contentStream.showText("Destino: " + qrDAO.dateTickect().getDestiny());
             contentStream.newLine();
-            contentStream.showText(timeDate.format(date));
+            contentStream.showText("Taquilla: " + user.getNames());
             contentStream.newLine();
             contentStream.showText(footer);
+            contentStream.newLine();
+            contentStream.showText("                                     " + timeDate.format(date));
             contentStream.newLine();
 
             contentStream.endText();
 
             // Image
             PDImageXObject image = PDImageXObject.createFromFile("Qr.png", document);
-            contentStream.drawImage(image, 50, page.getMediaBox().getHeight() - 210, image.getWidth() / 5, image.getHeight() / 5);
+            contentStream.drawImage(image, 50, page.getMediaBox().getHeight() - 230, image.getWidth() / 5, image.getHeight() / 5);
 
             contentStream.close();
             document.save("document.pdf");
