@@ -30,21 +30,21 @@ public class ListVehicle extends JFrame  {
     public JComboBox selectCompany;
     public JButton btnSave, btnClear,btnDelete,btnUpdate, bntSearch;
     private JMenuBar menuBar;
-    public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout,liList1,liDelete,liExport;
+    public JMenu ulFile, ulTickets, ulVehicles, ulHelp,ulConfig;
+    public JMenuItem liClose, liUsers, liRegistration, liSale, liAbout, liList1, liExport;
     private JScrollPane scroll;
     public  Object[][] data;
     public String[] headBoard;
     public DefaultTableModel dtm;
-    public DefaultComboBoxModel dcbm;
     public JTable table;
+    public DefaultComboBoxModel dcbm;
 
 
 
     public ListVehicle(){
         setTitle("Registro de vehiculos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(200,100,700,600);
+        setBounds(380,100,700,600);
 
         contentPane = new JPanel();
         //getContentPane().add(contentPane);
@@ -55,13 +55,18 @@ public class ListVehicle extends JFrame  {
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
-        //Menu
         ulFile = new JMenu("Archivo");
         menuBar.add(ulFile);
+
         ulTickets = new JMenu("Tiquetes");
         menuBar.add(ulTickets);
+
         ulVehicles = new JMenu("Vehiculos");
         menuBar.add(ulVehicles);
+
+        ulConfig = new JMenu("Configuracion");
+        menuBar.add(ulConfig);
+
         ulHelp = new JMenu("Ayuda");
         menuBar.add(ulHelp);
 
@@ -69,16 +74,20 @@ public class ListVehicle extends JFrame  {
         //item Menu Archivo
         liClose = new JMenuItem("Cerrar");
         ulFile.add(liClose);
-
         //item menu venta
+
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
 
         liExport = new JMenuItem("Historial vehicular");
         ulTickets.add(liExport);
 
+        //Config
+        liUsers = new JMenuItem("Usuarios");
+        ulConfig.add(liUsers);
+
         //item menu vehiculos
-        liRegistration = new JMenuItem("Registro1");
+        liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
 
         liList1 = new JMenuItem("Consulta");
@@ -134,8 +143,7 @@ public class ListVehicle extends JFrame  {
         dcbm = new DefaultComboBoxModel();
         registrationPane.add(selectCompany);
         selectCompany.addItem("Elige una opción");
-//        selectCompany.addItem("Coodetrans");
-//        selectCompany.addItem("TransUnidos");
+
 
         //Botones
         btnSave = new JButton("Guardar");

@@ -21,10 +21,10 @@ public class AuthorizationDAO {
     public AuthorizationDAO() {
     }
 
-    java.util.Date date = new java.util.Date();
-    DateFormat timeDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
 
     public boolean authUser(Login login) {
+
         PreparedStatement st;
         DataBaseConnection conn = new DataBaseConnection();
         Connection connect = conn.getConn();
@@ -36,11 +36,10 @@ public class AuthorizationDAO {
                 "        ,u.password\n" +
                 "        ,u.status\n" +
                 "        ,c.name\n" +
+                "       ,u.user_id" +
                 "    FROM users u\n" +
-                "        LEFT JOIN user_control u_c\n" +
-                "            ON u_c.user_id = u.user_id\n" +
                 "        LEFT JOIN controls c\n" +
-                "        ON c.control_id = u_c.control_id\n" +
+                "        ON c.control_id = u.control\n" +
                 "    WHERE TRUE \n" +
                 "        AND u.username = ?\n" +
                 "        AND u.password = ?\n" +
@@ -53,11 +52,18 @@ public class AuthorizationDAO {
             rs = st.executeQuery();
             if (rs.next()) {
                 if (login.getPassword().equals(rs.getString(4))) {
+
+                    // Actuializar inicio de session
+                    String updateSesion = "UPDATE users SET last_session = ? WHERE user_id = ?";
+                    st = connect.prepareStatement(updateSesion);
+                    st.setString(1, login.getlast_session());
+                    st.setInt(2,rs.getInt(7));
+                    st.execute();
+                    //----------------------------------------
                     login.setUsername(rs.getString(1));
                     login.setStatus(rs.getBoolean(5));
                     login.setTypeCategoty(rs.getString(3));
                     login.setNames(rs.getString(2));
-//                    System.out.println("user: " + st);
                     LOGGER.log(Level.INFO, "Buscando usuario");
                     return true;
                 } else {

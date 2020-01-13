@@ -32,11 +32,11 @@ public class ExportExcel extends JFrame {
 
     private JPanel contentPane;
     public JDesktopPane dataPane;
-    private JLabel lblInternal_number, lblTotal, lblDestiny;
-    public JButton btnInternal_number, btnTotal, btnDestiny, btnSave, btnCancel, btnRutaExport;
+    private JLabel lblInternal_number, lblTotal;
+    public JButton btnInternal_number, btnTotal, btnDestiny;
     private JMenuBar menuBar;
-    public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liExport, liRegistration, liSale, liAbout,liList1;
+    public JMenu ulFile, ulTickets, ulVehicles, ulHelp,ulConfig;
+    public JMenuItem liClose, liUsers, liRegistration, liSale, liAbout, liList1, liExport;
 
     public ExportExcel() {
         setTitle("Exportacion de datos");
@@ -53,10 +53,16 @@ public class ExportExcel extends JFrame {
 
         ulFile = new JMenu("Archivo");
         menuBar.add(ulFile);
+
         ulTickets = new JMenu("Tiquetes");
         menuBar.add(ulTickets);
+
         ulVehicles = new JMenu("Vehiculos");
         menuBar.add(ulVehicles);
+
+        ulConfig = new JMenu("Configuracion");
+        menuBar.add(ulConfig);
+
         ulHelp = new JMenu("Ayuda");
         menuBar.add(ulHelp);
 
@@ -65,19 +71,23 @@ public class ExportExcel extends JFrame {
         liClose = new JMenuItem("Cerrar");
         ulFile.add(liClose);
         //item menu venta
+
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
 
         liExport = new JMenuItem("Historial vehicular");
         ulTickets.add(liExport);
+
+        //Config
+        liUsers = new JMenuItem("Usuarios");
+        ulConfig.add(liUsers);
+
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
 
         liList1 = new JMenuItem("Consulta");
         ulVehicles.add(liList1);
-
-
         //acerca de
         liAbout = new JMenuItem("Acerca de.");
         ulHelp.add(liAbout);

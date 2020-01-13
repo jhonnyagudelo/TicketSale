@@ -18,8 +18,10 @@ public class ControllerPrincipal {
         LoginView loginView = new LoginView();
         AuthorizationDAO authorizationDAO = new AuthorizationDAO();
 
+
         AddUsers add = new AddUsers();
-        UserDAO userDAO = new UserDAO(add);
+        UsersTotal usersTotal = new UsersTotal();
+        UserDAO userDAO = new UserDAO(add, usersTotal);
 
         // Vehiculos
         ListVehicle autoBus = new ListVehicle();
@@ -33,20 +35,17 @@ public class ControllerPrincipal {
         TicketSales ticketSales = new TicketSales();
         TicketDAO ticketDAO = new TicketDAO(ticketSales);
         TicketVO ticketVO = new TicketVO();
-//        ticketSales.setVisible(true);
 
 
-
-//        PrintEpson printEpson = new PrintEpson();
-
-        PdfPrint pdfPrint = new PdfPrint(qrDAO,usersVO);
+        PdfPrint pdfPrint = new PdfPrint(qrDAO,login);
         TravelHistory travelHistory = new TravelHistory();
         DataExport dataExport = new DataExport();
-//        DataExcel dataExcel = new DataExcel();
+
 
         ExportExcel exportExcel = new ExportExcel();
         TotalTravel totalTravel = new TotalTravel();
-        RoutePercentage route = new RoutePercentage();
+        RoutePercentage route = new RoutePercentage();;
+
 
 //
         //Busqueda vehicular
@@ -60,11 +59,11 @@ public class ControllerPrincipal {
         ExcelUtil excelUtil = new ExcelUtil( searchDAO,  dataExport);
 
         ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO, qrDAO,pdfPrint , qrImg);
-        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel,add,usersVO);
+        ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel,add,usersVO,usersTotal,login);
         ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, excelUtil, exportExcel,totalTravel, excelTotal, percentage,route);
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
         ControllerAuth csr = new ControllerAuth(authorizationDAO,loginView,login,ticketSales);
-        ControllerUsers cus = new ControllerUsers(add,userDAO,usersVO);
+        ControllerUsers cus = new ControllerUsers(add,userDAO,usersVO,usersTotal);
 
 
     }

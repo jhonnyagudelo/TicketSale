@@ -5,18 +5,21 @@ public class ControlsVO {
     private String code;
     private String name;
 
+
+    public ControlsVO() {
+
+    }
+
     public ControlsVO(Integer control_id, String code, String name){
-        super();
         this.control_id = control_id;
         this.code = code;
         this.name = name;
     }
 
-    public ControlsVO(String code, String name) {
-        this.code = code;
-        this.name = name;
-    }
 
+    public ControlsVO(Integer control_id) {
+        this.control_id = control_id;
+    }
 
 
     public Integer getControl_id() {
@@ -41,5 +44,11 @@ public class ControlsVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    @Override
+    public String toString() {
+        return  code + " - " + name ;
     }
 }

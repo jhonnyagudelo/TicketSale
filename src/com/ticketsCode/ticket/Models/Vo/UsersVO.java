@@ -2,7 +2,7 @@ package com.ticketsCode.ticket.Models.Vo;
 
 import java.util.Date;
 
-public class UsersVO {
+public class UsersVO extends ControlsVO {
     private Integer user_id;
     private String names;
     private String last_name;
@@ -10,15 +10,16 @@ public class UsersVO {
     private Integer company;
     private boolean status;
     private String username;
-    private Date logout;
+    private String last_session;
     private Category type;
 
     public  UsersVO(){
+        super();
 
     }
 
-    public UsersVO(Integer user_id, String names, String last_name, String password, Integer company, boolean status, String username, Date logout, Category type){
-        super();
+    public UsersVO(Integer user_id, String names, String last_name, String password, Integer company, boolean status, String username, String last_session, Category type, Integer control_id){
+        super(control_id);
         this.user_id = user_id;
         this.names = names;
         this.last_name = last_name;
@@ -27,7 +28,7 @@ public class UsersVO {
         this.status = status;
         this.username = username;
         this.type = type;
-        this.logout = logout;
+        this.last_session = last_session;
     }
 
     public UsersVO(String username, String password, boolean status) {
@@ -102,12 +103,12 @@ public class UsersVO {
         this.username = username;
     }
 
-    public Date getLogout() {
-        return logout;
+    public String getlast_session() {
+        return last_session;
     }
 
-    public void setLogout(Date logout) {
-        this.logout = logout;
+    public void setlast_session(String logout) {
+        this.last_session = logout;
     }
 
     public boolean isStatus() {
@@ -131,7 +132,7 @@ public class UsersVO {
                 ", company=" + company +
                 ", status=" + status +
                 ", username='" + username + '\'' +
-                ", logout='" + logout + '\'' +
+                ", logout='" + last_session + '\'' +
                 ", type=" + type ;
     }
 }

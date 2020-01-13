@@ -35,8 +35,8 @@ public class TotalTravel extends JFrame {
     //Menu
     private JMenuBar menuBar;
     public JDateChooser calendarStar, calendarEnd;
-    public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liList, liRegistration, liSale, liAbout, liExport, liDelete;
+    public JMenu ulFile, ulTickets, ulVehicles, ulHelp,ulConfig;
+    public JMenuItem liClose, liUsers, liRegistration, liSale, liAbout, liList1, liExport;
 
     public TotalTravel() {
         setTitle("historial de total");
@@ -47,16 +47,23 @@ public class TotalTravel extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
+
         //Barra Menu
         menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
         ulFile = new JMenu("Archivo");
         menuBar.add(ulFile);
+
         ulTickets = new JMenu("Tiquetes");
         menuBar.add(ulTickets);
+
         ulVehicles = new JMenu("Vehiculos");
         menuBar.add(ulVehicles);
+
+        ulConfig = new JMenu("Configuracion");
+        menuBar.add(ulConfig);
+
         ulHelp = new JMenu("Ayuda");
         menuBar.add(ulHelp);
 
@@ -65,19 +72,27 @@ public class TotalTravel extends JFrame {
         liClose = new JMenuItem("Cerrar");
         ulFile.add(liClose);
         //item menu venta
+
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
-        liList = new JMenuItem("Consulta");
-        ulTickets.add(liList);
+
+        liExport = new JMenuItem("Historial vehicular");
+        ulTickets.add(liExport);
+
+        //Config
+        liUsers = new JMenuItem("Usuarios");
+        ulConfig.add(liUsers);
+
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);
 
-        liExport = new JMenuItem("Historial vehicular");
-        ulTickets.add(liExport);
+        liList1 = new JMenuItem("Consulta");
+        ulVehicles.add(liList1);
         //acerca de
         liAbout = new JMenuItem("Acerca de.");
         ulHelp.add(liAbout);
+
 
         registrationPane = new JDesktopPane();
         registrationPane.setBounds(20, 28, 420, 180);

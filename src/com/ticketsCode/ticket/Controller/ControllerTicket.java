@@ -109,7 +109,7 @@ public class ControllerTicket implements ActionListener, Iuseful {
     }
 
     @Override
-    public boolean isStringUpperCase() {
+    public boolean isStringUpperCase(String str) {
         return false;
     }
 }

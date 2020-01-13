@@ -1,5 +1,7 @@
 package com.ticketsCode.ticket.Views;
 
+import com.ticketsCode.ticket.Models.Vo.Login;
+
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -38,7 +40,7 @@ public class TicketSales extends JFrame {
     //Menu
     private JMenuBar menuBar;
     public JMenu ulFile, ulTickets, ulVehicles, ulHelp,ulConfig;
-    public JMenuItem liClose, liUsers, liRegistration, liSale, liAbout, liList1, liDelete, liExport;
+    public JMenuItem liClose, liUsers, liRegistration, liSale, liAbout, liList1, liExport;
 
     public TicketSales() {
         setTitle("Venta de tiquetes");

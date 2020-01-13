@@ -31,8 +31,8 @@ public class RoutePercentage extends JFrame {
     //Menu
     private JMenuBar menuBar;
     public JDateChooser calendarStar, calendarEnd;
-    public JMenu ulFile, ulTickets, ulVehicles, ulHelp;
-    public JMenuItem liClose, liExport, liRegistration, liSale, liAbout, liList1, liDelete;
+    public JMenu ulFile, ulTickets, ulVehicles, ulHelp,ulConfig;
+    public JMenuItem liClose, liUsers, liRegistration, liSale, liAbout, liList1, liExport;
 
     public RoutePercentage() {
         setTitle("Porcentaje de tiquetes por destino");
@@ -50,10 +50,16 @@ public class RoutePercentage extends JFrame {
 
         ulFile = new JMenu("Archivo");
         menuBar.add(ulFile);
+
         ulTickets = new JMenu("Tiquetes");
         menuBar.add(ulTickets);
+
         ulVehicles = new JMenu("Vehiculos");
         menuBar.add(ulVehicles);
+
+        ulConfig = new JMenu("Configuracion");
+        menuBar.add(ulConfig);
+
         ulHelp = new JMenu("Ayuda");
         menuBar.add(ulHelp);
 
@@ -62,10 +68,17 @@ public class RoutePercentage extends JFrame {
         liClose = new JMenuItem("Cerrar");
         ulFile.add(liClose);
         //item menu venta
+
         liSale = new JMenuItem("Venta tiquetes");
         ulTickets.add(liSale);
+
         liExport = new JMenuItem("Historial vehicular");
         ulTickets.add(liExport);
+
+        //Config
+        liUsers = new JMenuItem("Usuarios");
+        ulConfig.add(liUsers);
+
         //item menu vehiculos
         liRegistration = new JMenuItem("Registro vehicular");
         ulVehicles.add(liRegistration);

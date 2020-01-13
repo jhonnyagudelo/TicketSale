@@ -6,16 +6,17 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 
-public class AddUsers extends JFrame {
+public class EditUser extends JFrame {
+
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 try{
-                    AddUsers frame = new AddUsers();
+                    EditUser frame = new EditUser();
                     frame.setVisible(true);
                 }catch (Exception e){
-                   e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         });
@@ -35,7 +36,7 @@ public class AddUsers extends JFrame {
     public JLabel lblUsername, lblPassword, lblConfiPassword, lblName, lblLastName, lblType, lblControl, lblCompany;
 
 
-    public AddUsers(){
+    public EditUser(){
         setTitle("Agregar usuarios");
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setBounds(500,250,540,450);
@@ -134,12 +135,12 @@ public class AddUsers extends JFrame {
         selectControl.addItem("Elige una opción");
         generalData.add(selectControl);
 
-        btnAdd = new JButton("Guardar");
-        btnAdd.setBounds(22,340,80,30);
+        btnAdd = new JButton("Actualizar");
+        btnAdd.setBounds(22,340,100,30);
         contentPane.add(btnAdd);
 
         btnCancel = new JButton("Cancel");
-        btnCancel.setBounds(108,340,80,30);
+        btnCancel.setBounds(128,340,100,30);
         contentPane.add(btnCancel);
 
     }

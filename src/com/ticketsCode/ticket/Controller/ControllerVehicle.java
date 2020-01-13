@@ -43,14 +43,12 @@ public class ControllerVehicle extends Component implements ActionListener, Iuse
              * esta funcion es para guardar lo vehiculos
              * @Param btnSave guarda la informacion
              * */
-
-
             if (e.getSource() == autoBus.btnSave) {
                 autoBusVO.setInternal_number(Integer.parseInt(autoBus.tfInternalNumber.getText()));
                 autoBusVO.setLicense(autoBus.tfLicense.getText());
                 autoBusVO.setCapacity(Integer.parseInt(autoBus.tfCapacity.getText()));
                 autoBusVO.setCompany(autoBus.selectCompany.getSelectedIndex());
-                 if (autoBusDAO.vehiculeRecorder(autoBusVO)) {
+                if (autoBusDAO.vehiculeRecorder(autoBusVO)) {
                     JOptionPane.showMessageDialog(null, "Registro Guardado");
                     tfClear();
                     autoBusDAO._loadTable();
@@ -59,39 +57,31 @@ public class ControllerVehicle extends Component implements ActionListener, Iuse
                     tfClear();
                 }
             }
-        } catch (Exception e1) {
-            System.out.println("Error Save: " + e1.getMessage());
-        }
-        //Bonton de limpiar
-        if (e.getSource() == autoBus.btnClear) {
-            tfClear();
-        }
-
-        if (e.getSource() == autoBus.btnDelete) {
-
-            JOptionPane.showConfirmDialog(null, "¿Eliminar producto?", "Si/No", JOptionPane.YES_NO_CANCEL_OPTION);
-            int fila = autoBus.table.getSelectedRow();
-            int id = Integer.parseInt(autoBus.table.getValueAt(fila, 0).toString());
-            autoBusVO.setInternal_number(id);
-            try {
+            if (e.getSource() == autoBus.btnDelete) {
+                JOptionPane.showConfirmDialog(null, "¿Eliminar producto?", "Si/No", JOptionPane.YES_NO_CANCEL_OPTION);
+                int fila = autoBus.table.getSelectedRow();
+                int id = Integer.parseInt(autoBus.table.getValueAt(fila, 0).toString());
+                autoBusVO.setInternal_number(id);
                 if (autoBusDAO.delete(autoBusVO)) {
                     JOptionPane.showMessageDialog(null, "Eliminado exitosamente");
+                    autoBusDAO._loadTable();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error");
                 }
-                autoBusDAO._loadTable();
-            } catch (Exception ex) {
-                System.out.printf("error delete" + ex.getMessage());
             }
-        }
-
-        if (e.getSource() == autoBus.btnUpdate) {
-            int fila = autoBus.table.getSelectedRow();
-            int id = Integer.parseInt(autoBus.table.getValueAt(fila, 0).toString());
-            autoBusVO.setInternal_number(id);
+            if (e.getSource() == autoBus.btnUpdate) {
+                int fila = autoBus.table.getSelectedRow();
+                int id = Integer.parseInt(autoBus.table.getValueAt(fila, 0).toString());
+                autoBusVO.setInternal_number(id);
+            }
+            //Bonton de limpiar
+            if (e.getSource() == autoBus.btnClear) {
+                tfClear();
+            }
+        } catch (Exception e1) {
+            System.out.println("Error Save: " + e1.getMessage());
         }
     }
-
 
     /**
      * Metodo de limpiar los TexField
@@ -104,10 +94,6 @@ public class ControllerVehicle extends Component implements ActionListener, Iuse
     }
 
     @Override
-    public boolean isStringUpperCase() {
-        return false;
-    }
-
     public boolean isStringUpperCase(String str) {
         //Convertir String to char Array
         char[] charArray = str.toCharArray();
@@ -118,5 +104,4 @@ public class ControllerVehicle extends Component implements ActionListener, Iuse
         }
         return true;
     }
-
 }

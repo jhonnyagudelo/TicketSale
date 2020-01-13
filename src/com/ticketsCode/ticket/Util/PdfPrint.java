@@ -1,6 +1,7 @@
 package com.ticketsCode.ticket.Util;
 
 import com.ticketsCode.ticket.Models.Dao.QrDAO;
+import com.ticketsCode.ticket.Models.Vo.Login;
 import com.ticketsCode.ticket.Models.Vo.UsersVO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -24,11 +25,13 @@ public class PdfPrint {
 
     private QrDAO qrDAO;
     private UsersVO user;
+    private Login login;
 
 
-    public PdfPrint(QrDAO qrDAO, UsersVO user) {
+    public PdfPrint(QrDAO qrDAO, Login login) {
         this.qrDAO = qrDAO;
-        this.user = user;
+//        this.user = user;
+        this.login = login;
     }
 
     public void printTicket() throws IOException, PrinterException {
@@ -60,7 +63,7 @@ public class PdfPrint {
             contentStream.newLine();
             contentStream.showText("Destino: " + qrDAO.dateTickect().getDestiny());
             contentStream.newLine();
-            contentStream.showText("Taquilla: " + user.getNames());
+            contentStream.showText("Taquilla: " + login.getNames());
             contentStream.newLine();
             contentStream.showText(footer);
             contentStream.newLine();

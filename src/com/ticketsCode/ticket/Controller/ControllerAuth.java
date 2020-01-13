@@ -2,12 +2,16 @@ package com.ticketsCode.ticket.Controller;
 
 import com.ticketsCode.ticket.Models.Dao.AuthorizationDAO;
 import com.ticketsCode.ticket.Models.Vo.Login;
+import com.ticketsCode.ticket.Util.Hash;
 import com.ticketsCode.ticket.Views.LoginView;
 import com.ticketsCode.ticket.Views.TicketSales;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 
 import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
@@ -18,6 +22,8 @@ public class ControllerAuth implements ActionListener {
      LoginView loginView;
      TicketSales ticketSales;
 
+    java.util.Date date = new Date();
+    DateFormat timeDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public ControllerAuth(AuthorizationDAO authorizationDAO, LoginView loginView, Login login, TicketSales ticketSales){
         this.loginView = loginView;
@@ -36,12 +42,14 @@ public class ControllerAuth implements ActionListener {
                     JOptionPane.showMessageDialog(null,"Por favor ingresar datos","Informacion",JOptionPane.ERROR_MESSAGE);
                 }else{
                    String pass =new String(loginView.tfPassword.getPassword());
+                    String newPass = Hash.sha1(pass);
                     login.setUsername(loginView.tfUser.getText());
-                    login.setPassword(pass);
+                    login.setPassword(newPass);
+                    login.setlast_session(timeDate.format(date));
                     if(authorizationDAO.authUser(login)) {
                         ticketSales.setVisible(true);
                         loginView.setVisible(false);
-                        JOptionPane.showMessageDialog(null, login.getNames() + " ha Iniciado sesión","Informacion",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, login.getNames() + " ha Iniciado sesión como: " + login.getTypeCategoty(),"Informacion",JOptionPane.INFORMATION_MESSAGE);
                         LOGGER.log(Level.INFO, "Inicio de sesion");
                     } else {
                         JOptionPane.showMessageDialog(null,  "Usuario o contraseña incorrectos","Informacion",JOptionPane.ERROR_MESSAGE);

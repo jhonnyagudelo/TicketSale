@@ -12,6 +12,6 @@ public interface Iuseful {
     /**
      * este metodo es para colocar las placas en MATUSCULA
      * */
-    boolean isStringUpperCase();
+    boolean isStringUpperCase(String str);
 
 }
