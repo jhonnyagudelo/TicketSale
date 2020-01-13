@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_ticketscoodetrans" default="compile.module.ticketscoodetrans">
+  <dirname property="module.ticketscoodetrans.basedir" file="${ant.file.module_ticketscoodetrans}"/>
+  
+  <property name="module.jdk.home.ticketscoodetrans" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.ticketscoodetrans" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.ticketscoodetrans" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.ticketscoodetrans" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="ticketscoodetrans.output.dir" value="${module.ticketscoodetrans.basedir}/out/production/TicketsCoodetrans"/>
+  <property name="ticketscoodetrans.testoutput.dir" value="${module.ticketscoodetrans.basedir}/out/test/TicketsCoodetrans"/>
+  
+  <path id="ticketscoodetrans.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ticketscoodetrans.module.production.classpath">
+    <path refid="${module.jdk.classpath.ticketscoodetrans}"/>
+    <path refid="library.postgresql-42.2.8.classpath"/>
+    <path refid="library.core-3.3.0.classpath"/>
+    <path refid="library.autocompleter.classpath"/>
+    <path refid="library.util.classpath"/>
+    <path refid="library.pdfbox-app-2.0.17.classpath"/>
+    <fileset dir="${basedir}/../jcalendar-1.4/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/ooxml-lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <path id="ticketscoodetrans.runtime.production.module.classpath">
+    <pathelement location="${ticketscoodetrans.output.dir}"/>
+    <path refid="library.postgresql-42.2.8.classpath"/>
+    <path refid="library.core-3.3.0.classpath"/>
+    <path refid="library.autocompleter.classpath"/>
+    <path refid="library.util.classpath"/>
+    <path refid="library.pdfbox-app-2.0.17.classpath"/>
+    <fileset dir="${basedir}/../jcalendar-1.4/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/ooxml-lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <path id="ticketscoodetrans.module.classpath">
+    <pathelement location="${ticketscoodetrans.output.dir}"/>
+    <path refid="${module.jdk.classpath.ticketscoodetrans}"/>
+    <path refid="library.postgresql-42.2.8.classpath"/>
+    <path refid="library.core-3.3.0.classpath"/>
+    <path refid="library.autocompleter.classpath"/>
+    <path refid="library.util.classpath"/>
+    <path refid="library.pdfbox-app-2.0.17.classpath"/>
+    <fileset dir="${basedir}/../jcalendar-1.4/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/ooxml-lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <path id="ticketscoodetrans.runtime.module.classpath">
+    <pathelement location="${ticketscoodetrans.testoutput.dir}"/>
+    <pathelement location="${ticketscoodetrans.output.dir}"/>
+    <path refid="library.postgresql-42.2.8.classpath"/>
+    <path refid="library.core-3.3.0.classpath"/>
+    <path refid="library.autocompleter.classpath"/>
+    <path refid="library.util.classpath"/>
+    <path refid="library.pdfbox-app-2.0.17.classpath"/>
+    <fileset dir="${basedir}/../jcalendar-1.4/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/ooxml-lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../poi-bin-4.1.1-20191023/poi-4.1.1/lib">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ticketscoodetrans">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ticketscoodetrans">
+    <patternset refid="excluded.from.module.ticketscoodetrans"/>
+  </patternset>
+  
+  <path id="ticketscoodetrans.module.sourcepath">
+    <dirset dir="${module.ticketscoodetrans.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ticketscoodetrans" depends="compile.module.ticketscoodetrans.production,compile.module.ticketscoodetrans.tests" description="Compile module TicketsCoodetrans"/>
+  
+  <target name="compile.module.ticketscoodetrans.production" depends="register.custom.compilers" description="Compile module TicketsCoodetrans; production classes">
+    <mkdir dir="${ticketscoodetrans.output.dir}"/>
+    <javac2 destdir="${ticketscoodetrans.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.ticketscoodetrans}/javac">
+      <compilerarg line="${compiler.args.ticketscoodetrans}"/>
+      <bootclasspath refid="ticketscoodetrans.module.bootclasspath"/>
+      <classpath refid="ticketscoodetrans.module.production.classpath"/>
+      <src refid="ticketscoodetrans.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ticketscoodetrans"/>
+    </javac2>
+    
+    <copy todir="${ticketscoodetrans.output.dir}">
+      <fileset dir="${module.ticketscoodetrans.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.ticketscoodetrans.tests" depends="register.custom.compilers,compile.module.ticketscoodetrans.production" description="compile module TicketsCoodetrans; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.ticketscoodetrans" description="cleanup module">
+    <delete dir="${ticketscoodetrans.output.dir}"/>
+    <delete dir="${ticketscoodetrans.testoutput.dir}"/>
+  </target>
+</project>

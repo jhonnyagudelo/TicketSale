@@ -49,7 +49,7 @@ public class ControllerAuth implements ActionListener {
                     if(authorizationDAO.authUser(login)) {
                         ticketSales.setVisible(true);
                         loginView.setVisible(false);
-                        JOptionPane.showMessageDialog(null, login.getNames() + " ha Iniciado sesión como: " + login.getTypeCategoty(),"Informacion",JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, login.getNames() + " ha Iniciado sesión","Informacion",JOptionPane.INFORMATION_MESSAGE);
                         LOGGER.log(Level.INFO, "Inicio de sesion");
                     } else {
                         JOptionPane.showMessageDialog(null,  "Usuario o contraseña incorrectos","Informacion",JOptionPane.ERROR_MESSAGE);

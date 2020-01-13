@@ -34,7 +34,7 @@ public class ControllerPrincipal {
         //venta
         TicketSales ticketSales = new TicketSales();
         TicketDAO ticketDAO = new TicketDAO(ticketSales);
-        TicketVO ticketVO = new TicketVO();
+        TicketVO ticketVO = new TicketVO();git
 
 
         PdfPrint pdfPrint = new PdfPrint(qrDAO,login);
@@ -56,7 +56,7 @@ public class ControllerPrincipal {
 
         ExcelPercentage percentage = new ExcelPercentage();
         ExcelTotal excelTotal = new ExcelTotal();
-        ExcelUtil excelUtil = new ExcelUtil( searchDAO,  dataExport);
+        ExcelUtil excelUtil = new ExcelUtil(searchDAO,dataExport);
 
         ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO, qrDAO,pdfPrint , qrImg);
         ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel,add,usersVO,usersTotal,login);
