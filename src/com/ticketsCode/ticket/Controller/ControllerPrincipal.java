@@ -34,7 +34,7 @@ public class ControllerPrincipal {
         //venta
         TicketSales ticketSales = new TicketSales();
         TicketDAO ticketDAO = new TicketDAO(ticketSales);
-        TicketVO ticketVO = new TicketVO();git
+        TicketVO ticketVO = new TicketVO();
 
 
         PdfPrint pdfPrint = new PdfPrint(qrDAO,login);
