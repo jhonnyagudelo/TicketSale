@@ -29,11 +29,7 @@ public class TravelHistory extends JFrame {
     private JLabel lblVehiculo, lblDateEnd, lblDateStart;
     public JTextField tfVehicle;
     public JButton btnSearch;
-    public DefaultTableModel dtm;
-    private JScrollPane scroll;
     public  Object[][] data;
-    public String[] headBoard;
-    public JTable table;
     //Menu
     private JMenuBar menuBar;
     public JDateChooser calendarStar, calendarEnd;
@@ -128,22 +124,10 @@ public class TravelHistory extends JFrame {
         calendarEnd.setBounds(290,60,120,25);
         registrationPane.add(calendarEnd);
 
-        btnSearch = new JButton("Search");
+        btnSearch = new JButton("Exportar");
         btnSearch.setBounds(160,110,120,25);
         registrationPane.add(btnSearch);
 
-//        //Tabla
-//        scroll = new JScrollPane();
-//        headBoard = new String[] {"Numero interno", "Name", "Total tiquetes", "fecha compra"};
-//        dtm = new DefaultTableModel(data,headBoard);
-//        scroll.setBounds(450, 20, 600, 180);
-//
-//        getContentPane().add(scroll);
-//        table = new JTable(dtm);
-//        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        table.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-//        scroll.setViewportView(table);
-//        contentPane.add(scroll);
     }
 
 

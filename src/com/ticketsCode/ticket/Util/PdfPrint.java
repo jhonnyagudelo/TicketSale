@@ -63,7 +63,7 @@ public class PdfPrint {
             contentStream.newLine();
             contentStream.showText("Destino: " + qrDAO.dateTickect().getDestiny());
             contentStream.newLine();
-            contentStream.showText("Taquilla: " + login.getNames());
+            contentStream.showText("Taquilla: " + login.getNames() + login.getLast_name());
             contentStream.newLine();
             contentStream.showText(footer);
             contentStream.newLine();

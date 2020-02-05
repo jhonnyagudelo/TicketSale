@@ -54,13 +54,12 @@ public class ControllerPrincipal {
 
         QrImg qrImg = new QrImg();
 
-        ExcelPercentage percentage = new ExcelPercentage();
         ExcelTotal excelTotal = new ExcelTotal();
         ExcelUtil excelUtil = new ExcelUtil(searchDAO,dataExport);
 
         ControllerTicket ct = new ControllerTicket(ticketSales,ticketDAO,ticketVO, qrDAO,pdfPrint , qrImg);
         ControllerMenu cm = new ControllerMenu(autoBus,search,ticketSales,travelHistory,exportExcel,add,usersVO,usersTotal,login);
-        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, excelUtil, exportExcel,totalTravel, excelTotal, percentage,route);
+        ControllerSearch cs = new ControllerSearch(searchDAO,search,autoBusVO, dataExport, travelHistory, excelUtil, exportExcel,totalTravel, excelTotal,route);
         ControllerVehicle cv = new ControllerVehicle(autoBus,autoBusDAO,autoBusVO,search,searchDAO);
         ControllerAuth csr = new ControllerAuth(authorizationDAO,loginView,login,ticketSales);
         ControllerUsers cus = new ControllerUsers(add,userDAO,usersVO,usersTotal);

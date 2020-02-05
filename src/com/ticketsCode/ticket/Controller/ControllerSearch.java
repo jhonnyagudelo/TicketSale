@@ -3,7 +3,6 @@ package com.ticketsCode.ticket.Controller;
 import com.ticketsCode.ticket.Models.Dao.SearchDAO;
 import com.ticketsCode.ticket.Models.Vo.DataExport;
 import com.ticketsCode.ticket.Models.Vo.VehicleVO;
-import com.ticketsCode.ticket.Util.ExcelPercentage;
 import com.ticketsCode.ticket.Util.ExcelUtil;
 import com.ticketsCode.ticket.Util.ExcelTotal;
 import com.ticketsCode.ticket.Views.*;
@@ -27,13 +26,12 @@ public class ControllerSearch implements ActionListener, Iuseful {
     ExportExcel exportExcel;
     ExcelTotal excelTotal;
     TotalTravel totalTravel;
-    ExcelPercentage percentage;
     RoutePercentage route;
 
 
     DateFormat timeDate = new SimpleDateFormat("yyyy-MM-dd");
 
-    public ControllerSearch(SearchDAO searchDAO, SearchVehicle search, VehicleVO autoBusVO, DataExport data, TravelHistory travelHistory, ExcelUtil excelUtil, ExportExcel exportExcel, TotalTravel totalTravel, ExcelTotal excelTotal, ExcelPercentage percentage, RoutePercentage route) {
+    public ControllerSearch(SearchDAO searchDAO, SearchVehicle search, VehicleVO autoBusVO, DataExport data, TravelHistory travelHistory, ExcelUtil excelUtil, ExportExcel exportExcel, TotalTravel totalTravel, ExcelTotal excelTotal, RoutePercentage route) {
         this.search = search;
         this.searchDAO = searchDAO;
         this.autoBusVO = autoBusVO;
@@ -43,7 +41,6 @@ public class ControllerSearch implements ActionListener, Iuseful {
         this.exportExcel = exportExcel;
         this.totalTravel = totalTravel;
         this.excelTotal = excelTotal;
-        this.percentage = percentage;
         this.route = route;
 
 //        this.dataExcel = dataExcel;
@@ -114,13 +111,6 @@ public class ControllerSearch implements ActionListener, Iuseful {
             data.setDateEnd(Date.valueOf(timeDate.format(totalTravel.calendarEnd.getDate())));
             excelTotal.excelVehicle(data);
         }
-
-        if (e.getSource() == route.btnExport) {
-            data.setDateStart(Date.valueOf(timeDate.format(route.calendarStar.getDate())));
-            data.setDateEnd(Date.valueOf(timeDate.format(route.calendarEnd.getDate())));
-            percentage.excelPorcentaje(data);
-        }
-
     }
 
     @Override

@@ -11,6 +11,8 @@ import com.ticketsCode.ticket.Views.TicketSales;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterException;
+import java.io.IOException;
 
 
 public class ControllerTicket implements ActionListener, Iuseful {
@@ -49,26 +51,26 @@ public class ControllerTicket implements ActionListener, Iuseful {
                 ticketVO.setDestination(ticketSales.selectDestination.getSelectedIndex());
                 ticketVO.setVehicle(Integer.parseInt(ticketSales.tfVehicle.getText()));
                 ticketVO.setQuantity(Integer.parseInt(ticketSales.tfQuantity.getText()));
-
                 if (ticketDAO.save(ticketVO)) {
                     JOptionPane.showMessageDialog(null, "Registro Guardado");
                     tfClear();
                     ticketDAO._loadTableSale();
-                    try {
                         qrImg.qrImagen(qrDAO.QR());
                         qrDAO.dateTickect();
                         if (ticketVO.getQuantity() > 0) {
                             for (int i = 0; i < ticketVO.getQuantity(); i++) {
-                                pdfPrint.printTicket();
+                                try {
+                                    pdfPrint.printTicket();
+                                } catch (IOException ex) {
+                                    System.out.println("Venta: " + ex.getMessage());
+                                } catch (PrinterException ex) {
+                                    System.out.println("Venta1: " + ex.getMessage());
+                                }
                             }
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Registro No Guardado");
                     tfClear();
-
                 }
             }
         }
@@ -93,6 +95,10 @@ public class ControllerTicket implements ActionListener, Iuseful {
         if (e.getSource() == ticketSales.btnClear) {
             tfClear();
         }
+
+    }
+
+    public void validacionCedlua(){
 
     }
 

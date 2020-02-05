@@ -171,7 +171,7 @@ public class TicketSales extends JFrame {
 
         //Tabla
         scroll = new JScrollPane();
-        headBoard = new String[]{"Id", "N.Identidad", "Origen", "Destino", "Vehiculo", "Cantidad", "Dia"};
+        headBoard = new String[]{"Id", "C.C Cliente", "Origen", "Destino", "Vehiculo", "Cantidad", "Dia"};
         dtm = new DefaultTableModel(data, headBoard);
         scroll.setBounds(346, 28, 600, 230);
 
