@@ -161,7 +161,7 @@ public class ExcelUtil extends Component {
             JFileChooser chooser = new JFileChooser();
             chooser.setFileFilter(new FileNameExtensionFilter("Excel file ", "xlsx"));
 //            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int option  = chooser.showSaveDialog(this);
+            int option  = chooser.showSaveDialog(null);
             if(option == JFileChooser.APPROVE_OPTION){
                 if(chooser.getSelectedFile()!=null){
                     FileOutputStream fileOut = new FileOutputStream(chooser.getSelectedFile()+ ".xlsx");

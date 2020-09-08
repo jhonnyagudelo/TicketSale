@@ -9,6 +9,7 @@ public class TicketVO {
     private Integer passenger;
     private Integer origin;
     private Integer destination;
+    private Integer conduce;
     private Date date;
     private Timer hour;
     private Integer vehicle;
@@ -19,13 +20,14 @@ public class TicketVO {
 
     }
 
-    public TicketVO(Integer passenger,Integer origin, Integer destination, Integer vehicle,Integer quantity){
+    public TicketVO(Integer passenger,Integer origin, Integer destination, Integer vehicle,Integer quantity, Integer conduce){
             super();
             this.passenger = passenger;
             this.origin = origin;
             this.vehicle = vehicle;
             this.quantity = quantity;
             this.destination = destination;
+            this.conduce = conduce;
     }
 
     public TicketVO(Integer vehicle) {
@@ -85,6 +87,14 @@ public class TicketVO {
         return vehicle;
     }
 
+    public Integer getConduce() {
+        return conduce;
+    }
+
+    public void setConduce(Integer conduce) {
+        this.conduce = conduce;
+    }
+
     public Integer getDestination() {
         return destination;
     }
@@ -114,7 +124,8 @@ public class TicketVO {
                 "," + date +
                 "," + hour +
                 "," + vehicle +
-                "," + origin;
+                "," + origin +
+                "," + conduce;
 
     }
 

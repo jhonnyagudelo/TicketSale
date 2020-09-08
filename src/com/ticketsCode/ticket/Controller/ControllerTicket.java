@@ -43,7 +43,7 @@ public class ControllerTicket implements ActionListener, Iuseful {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == ticketSales.btnSale) {
-            if (ticketSales.tfPassenger.getText().isEmpty() || ticketSales.tfVehicle.getText().isEmpty() || ticketSales.tfQuantity.getText().isEmpty()) {
+            if (ticketSales.tfPassenger.getText().isEmpty() || ticketSales.tfVehicle.getText().isEmpty() || ticketSales.tfQuantity.getText().isEmpty() || ticketSales.tfTasaUso.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Hay campos vacios, debes llenarlos");
             } else {
                 ticketVO.setPassenger(Integer.parseInt(ticketSales.tfPassenger.getText()));
@@ -51,6 +51,7 @@ public class ControllerTicket implements ActionListener, Iuseful {
                 ticketVO.setDestination(ticketSales.selectDestination.getSelectedIndex());
                 ticketVO.setVehicle(Integer.parseInt(ticketSales.tfVehicle.getText()));
                 ticketVO.setQuantity(Integer.parseInt(ticketSales.tfQuantity.getText()));
+                ticketVO.setConduce(Integer.parseInt(ticketSales.tfTasaUso.getText()));
                 if (ticketDAO.save(ticketVO)) {
                     JOptionPane.showMessageDialog(null, "Registro Guardado");
                     tfClear();
@@ -111,6 +112,7 @@ public class ControllerTicket implements ActionListener, Iuseful {
         this.ticketSales.tfPassenger.setText("");
         this.ticketSales.tfQuantity.setText("");
         this.ticketSales.tfVehicle.setText("");
+        this.ticketSales.tfTasaUso.setText("");
         this.ticketSales.selectDestination.setSelectedItem("");
     }
 

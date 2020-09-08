@@ -109,7 +109,7 @@ public class TicketDAO {
         DataBaseConnection conn = new DataBaseConnection();
         Connection connect = conn.getConn();
         PreparedStatement pstmt;
-        String SQL = "SELECT ticket(?, ?, ?, ?, ?)";
+        String SQL = "SELECT ticket(?, ?, ?, ?, ?, ?)";
         ResultSet rs;
         try{
             pstmt = connect.prepareStatement(SQL);
@@ -118,6 +118,7 @@ public class TicketDAO {
             pstmt.setInt(3,ticketVO.getOrigin());
             pstmt.setInt(4,ticketVO.getQuantity());
             pstmt.setInt(5,ticketVO.getDestination());
+            pstmt.setInt(6,ticketVO.getConduce());
             rs = pstmt.executeQuery();
             System.out.println("el resultado es: " + pstmt);
             return  true;

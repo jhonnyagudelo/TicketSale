@@ -27,12 +27,13 @@ public class QrDAO {
 
             while (rs.next()) {
                 row = new Vector<String>();
-                row.add(String.valueOf(rs.getInt("passenger")));
-                row.add(String.valueOf(rs.getInt("company")));
-                row.add(String.valueOf(rs.getInt("destination_code")));
-                row.add(rs.getString("license"));
                 row.add(rs.getString("buy"));
                 row.add(String.valueOf(rs.getTime("hour")));
+                row.add(String.valueOf(rs.getInt("company")));
+                row.add(rs.getString("license"));
+                row.add(rs.getString("name"));
+                row.add(String.valueOf(rs.getInt("ticket_id")));
+                row.add(String.valueOf(rs.getInt("conduce")));
                 System.out.println("QR: " + row);
 
             }

@@ -27,9 +27,9 @@ public class TicketSales extends JFrame {
 
     private JPanel contentPane;
     private JDesktopPane registrationPane;
-    private JLabel  lblPassenger, lblOrigin, lblDestination, lblQuantity, lblVehicle;
+    private JLabel  lblPassenger, lblOrigin, lblDestination, lblQuantity, lblVehicle,lblTasaUso;
     public JComboBox selectDestination, selectOrigin;
-    public JTextField tfVehicle, tfPassenger, tfQuantity;
+    public JTextField tfVehicle, tfPassenger, tfQuantity, tfTasaUso;
     public JButton btnSale, btnUpdate, btnDelete, btnClear;
     public DefaultComboBoxModel dcbm, dcbmD;
     public DefaultTableModel dtm;
@@ -45,7 +45,7 @@ public class TicketSales extends JFrame {
     public TicketSales() {
         setTitle("Venta de tiquetes");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(200, 100, 1000, 400);
+        setBounds(200, 100, 1000, 450);
 
         contentPane = new JPanel();
         //getContentPane().add(contentPane);
@@ -98,7 +98,7 @@ public class TicketSales extends JFrame {
         ulHelp.add(liAbout);
 
         registrationPane = new JDesktopPane();
-        registrationPane.setBounds(20, 20, 320, 300);
+        registrationPane.setBounds(20, 20, 320, 350);
         registrationPane.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
         registrationPane.setBorder(BorderFactory.createTitledBorder("Venta de tiquetes"));
         registrationPane.setBackground(SystemColor.control);
@@ -124,6 +124,10 @@ public class TicketSales extends JFrame {
         lblQuantity.setBounds(50, 180, 80, 50);
         registrationPane.add(lblQuantity);
 
+        lblTasaUso = new JLabel("Conduce");
+        lblTasaUso.setBounds(50,220,80,50);
+        registrationPane.add(lblTasaUso);
+
 
         //inputs
         tfPassenger = new JTextField();
@@ -137,6 +141,10 @@ public class TicketSales extends JFrame {
         tfVehicle = new JTextField();
         tfVehicle.setBounds(120, 153, 150, 25);
         registrationPane.add(tfVehicle);
+
+        tfTasaUso = new JTextField();
+        tfTasaUso.setBounds(120,235,150,25);
+        registrationPane.add(tfTasaUso);
 
         //JcomboBox
         selectOrigin = new JComboBox();
@@ -162,11 +170,11 @@ public class TicketSales extends JFrame {
 
         //Button
         btnSale = new JButton("Venta");
-        btnSale.setBounds(10, 250, 120, 25);
+        btnSale.setBounds(10, 280, 120, 25);
         registrationPane.add(btnSale);
 
         btnClear = new JButton("Limpiar");
-        btnClear.setBounds(180, 250, 120, 25);
+        btnClear.setBounds(180, 280, 120, 25);
         registrationPane.add(btnClear);
 
         //Tabla

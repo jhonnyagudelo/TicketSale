@@ -4,33 +4,36 @@ import java.sql.Time;
 import java.util.Date;
 
 public class QrVO {
-    private Integer passenger;
-    private Integer company;
-    private Integer destination_code;
-    private String license;
     private Date buy;
     private Time hour;
+    private Integer company;
+    private String license;
+    private String name;
+    private Integer conduce;
+    private Integer ticket_id;
 
-    public QrVO( Integer passenger, Integer company, Integer destination_code, String license, Date buy, Time hour){
+
+    public QrVO( Integer company, String destination, String license, Date buy, Time hour, Integer conduce, Integer ticket_id, String name){
         super();
-        this.passenger = passenger;
+        this.conduce = conduce;
         this.company = company;
-        this.destination_code = destination_code;
+        this.name = name;
         this.license = license;
         this.buy = buy;
         this.hour = hour;
+        this.ticket_id = ticket_id ;
     }
 
     public QrVO() {
 
     }
 
-    public Integer getPassenger(int passenger) {
-        return this.passenger;
+    public Integer getConduce(int conduce) {
+        return this.conduce;
     }
 
-    public void setPassenger(Integer passenger) {
-        this.passenger = passenger;
+    public void setConduce(Integer conduce) {
+        this.conduce = conduce;
     }
 
     public Integer getCompany(int company) {
@@ -41,12 +44,12 @@ public class QrVO {
         this.company = company;
     }
 
-    public Integer getDestination_code(int destination_code) {
-        return this.destination_code;
+    public String getDestination(String destination) {
+        return this.name;
     }
 
-    public void setDestination_code(Integer destination_code) {
-        this.destination_code = destination_code;
+    public void setDestination(String destination) {
+        this.name = name;
     }
 
     public String getLicense(String license) {
@@ -73,15 +76,24 @@ public class QrVO {
         this.hour = hour;
     }
 
+    public Integer getTicket_id() {
+        return ticket_id;
+    }
+
+    public void setTicket_id(Integer ticket_id) {
+        this.ticket_id = ticket_id;
+    }
+
     @Override
     public String toString() {
         return "QrVO{" +
-                "passenger=" + passenger +
-                ", company=" + company +
-                ", destination_code=" + destination_code +
-                ", license='" + license + '\'' +
-                ", buy=" + buy +
+                "buy=" + buy +
                 ", hour=" + hour +
+                ", company=" + company +
+                ", license='" + license +
+                ", destination=" + name +
+                ", Identification=" + ticket_id +
+                ", conduce=" + conduce +
                 '}';
     }
 }

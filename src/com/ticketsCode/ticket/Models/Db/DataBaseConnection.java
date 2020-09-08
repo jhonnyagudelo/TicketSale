@@ -9,7 +9,7 @@ public class DataBaseConnection {
     
     private final String USER = "postgres";
     private final String LOCALHOST = "localhost:5432";
-    private final String PASSWORD = "git ";
+    private final String PASSWORD = "1113645020";
     private  String SERVER = "";
     private final String URL = "jdbc:postgresql://localhost:5432/tiquetes";
     private static Connection conn = null;
