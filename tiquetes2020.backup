@@ -1,0 +1,1424 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.5
+-- Dumped by pg_dump version 12.3
+
+-- Started on 2020-09-08 16:17:57
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 648 (class 1247 OID 77389)
+-- Name: category; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public.category AS ENUM (
+    'Control',
+    'Administrador'
+);
+
+
+ALTER TYPE public.category OWNER TO postgres;
+
+--
+-- TOC entry 212 (class 1255 OID 76453)
+-- Name: _print(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public._print(id integer, OUT passenger integer, OUT company character varying, OUT name character varying, OUT license character varying, OUT buy date, OUT hour time without time zone) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+            SELECT 
+            t_k.passenger
+            ,t_k.company
+            ,d_t.name AS DESTINATION
+            ,v.license
+            ,t_k.buy
+            ,t_k.hour
+                FROM tickets t_k
+                    INNER JOIN ticket_details t_d
+                        ON t_k.ticket_id = t_d.ticket
+                    INNER JOIN vehicles v
+                        ON v.vehicle_id = t_k.vehicle
+                    INNER JOIN destinations d_t
+                        ON d_t.destination_id = t_d.destination
+                WHERE TRUE
+                    AND v.internal_number = id
+                    -- AND CURRENT_TIMESTAMP::TIMESTAMP <= t_k.created_at
+                    ORDER BY t_k.ticket_id LIMIT 1;
+        $$;
+
+
+ALTER FUNCTION public._print(id integer, OUT passenger integer, OUT company character varying, OUT name character varying, OUT license character varying, OUT buy date, OUT hour time without time zone) OWNER TO postgres;
+
+--
+-- TOC entry 236 (class 1255 OID 228141)
+-- Name: _ticket(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public._ticket(OUT buy character varying, OUT hour time without time zone, OUT company integer, OUT license character varying, OUT name character varying, OUT ticket_id integer, OUT conduce integer) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+SELECT  
+        to_char(t_k.buy, 'dd/mm/yyyy'),
+        t_k.hour,
+        c.nit,
+        v_h.license,
+        d_t.name,
+        t_k.ticket_id,
+        t_k.conduce
+FROM tickets t_k
+    INNER JOIN vehicles v_h ON v_h.vehicle_id = t_k.vehicle
+    INNER JOIN companies c ON v_h.company = c.company_id
+    INNER JOIN destinations d_t ON t_k.destination = d_t.destination_id
+WHERE TRUE
+    AND CURRENT_DATE::TIMESTAMP <= t_k.created_at
+ORDER BY t_k.ticket_id DESC
+LIMIT 1;
+$$;
+
+
+ALTER FUNCTION public._ticket(OUT buy character varying, OUT hour time without time zone, OUT company integer, OUT license character varying, OUT name character varying, OUT ticket_id integer, OUT conduce integer) OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1255 OID 77396)
+-- Name: dateticket(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.dateticket(OUT company character varying, OUT destiny character varying) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+            SELECT
+                c.name
+                ,d_t.name
+                    FROM tickets t_k
+                        INNER JOIN vehicles v_h
+                            ON v_h.vehicle_id = t_k.vehicle
+                        INNER JOIN companies c
+                            ON v_h.company = c.company_id
+                        INNER JOIN destinations d_t
+                            ON t_k.destination = d_t.destination_id
+                    WHERE TRUE
+                        AND CURRENT_DATE::TIMESTAMP <= t_k.created_at
+                        ORDER BY t_k.ticket_id DESC LIMIT 1;
+        $$;
+
+
+ALTER FUNCTION public.dateticket(OUT company character varying, OUT destiny character varying) OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1255 OID 77490)
+-- Name: function_auditoria(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.function_auditoria() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+            DECLARE
+               v_old_data TEXT;
+               v_new_data TEXT;
+            BEGIN
+                IF(TG_OP = 'DELETE') THEN
+                 v_old_data := ROW(OLD.*);
+                    INSERT INTO auditoria_tickets(name_table, operation, old_data, new_data)
+                        VALUES (TG_TABLE_NAME, TG_OP, v_old_data, NULL );
+                    RETURN OLD;
+                ELSEIF (TG_OP = 'UPDATE') THEN
+                v_old_data = ROW(OLD.*);
+                v_new_data = ROW(NEW.*);
+                    INSERT INTO auditoria_tickets(name_table, operation, old_data, new_data)
+                        VALUES (TG_TABLE_NAME, TG_OP, v_old_data, v_new_data );
+                    RETURN NEW;
+                ELSEIF (TG_OP = 'INSERT') THEN
+                v_new_data = ROW(NEW.*);
+                   INSERT INTO  auditoria_tickets(name_table, operation, old_data, new_data)
+                        VALUES (TG_TABLE_NAME, TG_OP, NULL, v_new_data );
+                    RETURN NEW;
+                END IF;
+                RETURN NULL;
+            END;
+        $$;
+
+
+ALTER FUNCTION public.function_auditoria() OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1255 OID 76455)
+-- Name: getinfo(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getinfo(id integer, OUT internal_number integer, OUT license character varying, OUT capacity integer, OUT company character varying, OUT active boolean) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+            SELECT 
+                v_h.internal_number
+                ,v_h.license
+                ,v_h.capacity
+                ,cp.name
+                ,v_h.active
+            FROM vehicles v_h
+                INNER JOIN companies cp
+                    ON v_h.company = cp.company_id
+                WHERE TRUE 
+                    AND v_h.internal_number = id
+                    ORDER BY v_h.vehicle_id;
+        $$;
+
+
+ALTER FUNCTION public.getinfo(id integer, OUT internal_number integer, OUT license character varying, OUT capacity integer, OUT company character varying, OUT active boolean) OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1255 OID 76456)
+-- Name: getinfot(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getinfot(OUT internal_number integer, OUT license character varying, OUT capacity integer, OUT company character varying, OUT active boolean) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+            SELECT 
+                v_h.internal_number
+                ,v_h.license
+                ,v_h.capacity
+                ,cp.name
+                ,v_h.active
+            FROM vehicles v_h
+                INNER JOIN companies cp
+                    ON v_h.company = cp.company_id
+                WHERE TRUE 		ORDER BY cp.company_id,v_h.vehicle_id;
+        $$;
+
+
+ALTER FUNCTION public.getinfot(OUT internal_number integer, OUT license character varying, OUT capacity integer, OUT company character varying, OUT active boolean) OWNER TO postgres;
+
+--
+-- TOC entry 238 (class 1255 OID 77587)
+-- Name: sale(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.sale(OUT id integer, OUT passenger integer, OUT origin character varying, OUT destiny character varying, OUT license character varying, OUT quantity integer, OUT buy date) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+            SELECT
+            t_k.ticket_id
+            ,t_k.passenger
+            ,o_g.name
+            ,d_t.name
+            ,v.license
+            ,t_k.quantity
+            ,t_k.buy
+                FROM tickets t_k
+                    INNER JOIN vehicles v
+                        ON v.vehicle_id = t_k.vehicle
+                    INNER JOIN destinations d_t
+                        ON d_t.destination_id = t_k.destination
+                    INNER JOIN origins o_g
+                        ON t_k.origin = o_g.origin_id
+                WHERE TRUE
+                AND CURRENT_DATE::TIMESTAMP <= t_k.created_at
+                    ORDER BY t_k.ticket_id;
+        $$;
+
+
+ALTER FUNCTION public.sale(OUT id integer, OUT passenger integer, OUT origin character varying, OUT destiny character varying, OUT license character varying, OUT quantity integer, OUT buy date) OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1255 OID 228142)
+-- Name: ticket(integer, integer, integer, integer, integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.ticket(identification_card integer, bus integer, origen integer, amount integer, destiny integer, conduce integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$ BEGIN
+INSERT INTO tickets(
+        company,
+        passenger,
+        origin,
+        vehicle,
+        quantity,
+        destination,
+        conduce
+    )
+SELECT c_p.name,
+    identification_card,
+    origen,
+    v_c.vehicle_id,
+    amount,
+    destiny,
+    conduce
+FROM vehicles v_c
+    INNER JOIN companies c_p ON v_c.company = c_p.company_id
+WHERE TRUE
+    AND v_c.internal_number = bus;
+END;
+$$;
+
+
+ALTER FUNCTION public.ticket(identification_card integer, bus integer, origen integer, amount integer, destiny integer, conduce integer) OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1255 OID 77419)
+-- Name: ticket_registration(date, date, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.ticket_registration(date, date, integer, OUT internal_number integer, OUT name character varying, OUT identification_card integer, OUT total_tickets integer, OUT buy date) RETURNS SETOF record
+    LANGUAGE sql
+    AS $_$
+            WITH _data(data_start, data_end, data_bus) AS (
+                VALUES ($1, $2, $3)
+            )
+            , data_dia AS (
+                SELECT 
+                    v_h.internal_number
+                    ,d_t.name
+                    ,t_k.passenger
+                    ,t_k.quantity
+                    ,t_k.buy
+                FROM _data d
+                    INNER JOIN vehicles v_h
+                        ON d.data_bus = v_h.internal_number
+                    INNER JOIN tickets t_k
+                        ON t_k.vehicle = v_h.vehicle_id
+                    INNER JOIN destinations d_t
+                        ON d_t.destination_id = t_k.destination
+                WHERE TRUE
+                    AND t_k.created_at::DATE BETWEEN d.data_start::DATE AND d.data_end::DATE
+                    AND v_h.internal_number = d.data_bus
+                    ORDER BY t_k.buy, d_t.name
+                    
+            )
+                SELECT 
+                    d_b.internal_number
+                    ,d_b.name
+                    ,d_b.passenger
+                    ,d_b.quantity
+                    ,d_b.buy
+                FROM data_dia d_b
+        $_$;
+
+
+ALTER FUNCTION public.ticket_registration(date, date, integer, OUT internal_number integer, OUT name character varying, OUT identification_card integer, OUT total_tickets integer, OUT buy date) OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1255 OID 77552)
+-- Name: totalsale(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.totalsale(OUT passenger integer, OUT origin character varying, OUT destiny character varying, OUT license character varying, OUT quantity integer, OUT buy date) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+            SELECT
+            t_k.passenger
+            ,o_g.name
+            ,d_t.name
+            ,v.license
+            ,t_k.quantity
+            ,t_k.buy
+                FROM tickets t_k
+                    INNER JOIN vehicles v
+                        ON v.vehicle_id = t_k.vehicle
+                    INNER JOIN destinations d_t
+                        ON d_t.destination_id = t_k.destination
+                    INNER JOIN origins o_g
+                        ON t_k.origin = o_g.origin_id
+                WHERE TRUE
+                    ORDER BY t_k.ticket_id;
+        $$;
+
+
+ALTER FUNCTION public.totalsale(OUT passenger integer, OUT origin character varying, OUT destiny character varying, OUT license character varying, OUT quantity integer, OUT buy date) OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1255 OID 77430)
+-- Name: travel_history(date, date, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.travel_history(date, date, integer, OUT internal_number integer, OUT name character varying, OUT total_tickets bigint, OUT buy date) RETURNS SETOF record
+    LANGUAGE sql
+    AS $_$
+            WITH _data(data_start, data_end, data_bus) AS (
+                VALUES ($1, $2, $3)
+            )
+            , data_dia AS (
+                SELECT
+                    v_h.internal_number
+                    ,d_t.name
+                    ,t_k.quantity
+                    ,t_k.buy
+                FROM _data d
+                    INNER JOIN vehicles v_h
+                        ON d.data_bus = v_h.internal_number
+                    INNER JOIN tickets t_k
+                        ON t_k.vehicle = v_h.vehicle_id
+                    INNER JOIN destinations d_t
+                        ON d_t.destination_id = t_k.destination
+                WHERE TRUE
+                    AND t_k.created_at::DATE BETWEEN d.data_start AND d.data_end
+                    AND v_h.internal_number = d.data_bus
+                    ORDER BY d_t.name, t_k.buy
+            )
+                SELECT
+                    d_b.internal_number
+                    ,d_b.name
+                    ,SUM(d_b.quantity) total_tickets
+                    ,d_b.buy
+                FROM data_dia d_b
+                GROUP BY d_b.name, d_b.internal_number,d_b.buy
+                ORDER BY d_b.buy, d_b.name;
+        $_$;
+
+
+ALTER FUNCTION public.travel_history(date, date, integer, OUT internal_number integer, OUT name character varying, OUT total_tickets bigint, OUT buy date) OWNER TO postgres;
+
+--
+-- TOC entry 239 (class 1255 OID 77585)
+-- Name: travel_historyto(date, date, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.travel_historyto(date, date, integer, OUT internal_number integer, OUT name character varying, OUT total_tickets bigint, OUT buy date) RETURNS SETOF record
+    LANGUAGE sql
+    AS $_$
+            WITH _data(data_start, data_end, company) AS (
+                VALUES ($1, $2, $3)
+            )
+           , data_dia AS (
+                SELECT
+                    v_h.internal_number
+                    ,d_t.name
+                    ,t_k.quantity
+                    ,t_k.buy
+                FROM _data d
+                    INNER JOIN companies c
+                        ON c.company_id = $3
+                    LEFT JOIN vehicles v_h
+                        ON c.company_id = v_h.company
+                    INNER JOIN tickets t_k
+                        ON  t_k.vehicle = v_h.vehicle_id
+                    INNER JOIN destinations d_t
+                        ON d_t.destination_id = t_k.destination
+                WHERE TRUE
+                    AND t_k.created_at::DATE BETWEEN d.data_start::DATE AND d.data_end::DATE
+                    ORDER BY d_t.name, t_k.buy
+            )
+                SELECT
+                    d_b.internal_number
+                    ,d_b.name
+                    ,SUM(d_b.quantity)as total_tickets
+                    ,d_b.buy
+                FROM data_dia d_b
+                GROUP BY  d_b.name, d_b.internal_number, d_b.buy  
+                ORDER BY d_b.buy, d_b.name;
+        $_$;
+
+
+ALTER FUNCTION public.travel_historyto(date, date, integer, OUT internal_number integer, OUT name character varying, OUT total_tickets bigint, OUT buy date) OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1255 OID 77439)
+-- Name: update_at_modified(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.update_at_modified() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+            BEGIN
+                IF(TG_OP = "UPDATE") THEN 
+                    NEW.updated_at = now();
+                END IF;
+                RETURN NEW;
+            END;
+        $$;
+
+
+ALTER FUNCTION public.update_at_modified() OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1255 OID 76459)
+-- Name: update_details(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.update_details(destiny integer, pasajero integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+            /*  
+            * Author: Jhonny Stiven Agudelo Tenorio
+            * Purpose: trigger tiempo
+            * statement in PostgreSQL.
+            */
+            BEGIN 
+            UPDATE ticket_details
+                SET destination = destiny,
+                    quantity = pasajero
+                FROM tickets t_k 
+                WHERE TRUE
+                    AND CURRENT_DATE::TIMESTAMP <= t_k.created_at;
+            END;
+        $$;
+
+
+ALTER FUNCTION public.update_details(destiny integer, pasajero integer) OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1255 OID 76460)
+-- Name: vehicle_d(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.vehicle_d(integer, OUT company character varying, OUT quantity integer, OUT license character varying, OUT internal_number integer, OUT destiny character varying, OUT _date date, OUT hour time without time zone) RETURNS SETOF record
+    LANGUAGE sql
+    AS $_$
+            /* empresa, pasajeros,placa,vehiculo,dia,hora*/
+                SELECT 
+                    c_n.name
+                    ,t_d.quantity
+                    ,v_c.license
+                    ,v_c.internal_number
+                    ,d_t.name
+                    ,t_k.buy
+                    ,t_k.hour
+                    FROM destinations d_t
+                        INNER JOIN ticket_details t_d
+                            ON d_t.destination_id = t_d.destination
+                        INNER JOIN tickets t_k
+                            ON t_k.ticket_id = t_d.ticket
+                        INNER JOIN vehicles v_c
+                            ON t_k.vehicle = v_c.vehicle_id
+                        INNER JOIN companies c_n
+                            ON c_n.company_id = v_c.company
+                    WHERE TRUE
+                        AND v_c.internal_number = $1
+                    ORDER BY t_k.ticket_id;
+        $_$;
+
+
+ALTER FUNCTION public.vehicle_d(integer, OUT company character varying, OUT quantity integer, OUT license character varying, OUT internal_number integer, OUT destiny character varying, OUT _date date, OUT hour time without time zone) OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1255 OID 76461)
+-- Name: vehicle_date(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.vehicle_date(OUT company character varying, OUT quantity integer, OUT license character varying, OUT internal_number integer, OUT destiny character varying, OUT _date date, OUT hour time without time zone) RETURNS SETOF record
+    LANGUAGE sql
+    AS $$
+            /* empresa, pasajeros,placa,vehiculo,dia,hora*/
+                SELECT 
+                    c_n.name
+                    ,t_d.quantity
+                    ,v_c.license
+                    ,v_c.internal_number
+                    ,d_t.name
+                    ,t_k.buy
+                    ,t_k.hour
+                    FROM destinations d_t
+                        INNER JOIN ticket_details t_d
+                            ON d_t.destination_id = t_d.destination
+                        INNER JOIN tickets t_k
+                            ON t_k.ticket_id = t_d.ticket
+                        INNER JOIN vehicles v_c
+                            ON t_k.vehicle = v_c.vehicle_id
+                        INNER JOIN companies c_n
+                            ON c_n.company_id = v_c.company
+                    WHERE TRUE
+                    ORDER BY t_k.ticket_id;
+        $$;
+
+
+ALTER FUNCTION public.vehicle_date(OUT company character varying, OUT quantity integer, OUT license character varying, OUT internal_number integer, OUT destiny character varying, OUT _date date, OUT hour time without time zone) OWNER TO postgres;
+
+SET default_tablespace = '';
+
+--
+-- TOC entry 211 (class 1259 OID 77540)
+-- Name: auditoria_tickets; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auditoria_tickets (
+    auditoria_id integer NOT NULL,
+    name_table character varying(100) NOT NULL,
+    operation character varying(100) NOT NULL,
+    old_data text,
+    new_data text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.auditoria_tickets OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 77538)
+-- Name: auditoria_tickets_auditoria_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auditoria_tickets_auditoria_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auditoria_tickets_auditoria_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2958 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: auditoria_tickets_auditoria_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auditoria_tickets_auditoria_id_seq OWNED BY public.auditoria_tickets.auditoria_id;
+
+
+--
+-- TOC entry 196 (class 1259 OID 76462)
+-- Name: companies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.companies (
+    company_id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    nit integer NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT companies_nit_check CHECK (((nit >= 7) OR (nit <= 12)))
+);
+
+
+ALTER TABLE public.companies OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 76469)
+-- Name: companies_company_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.companies_company_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.companies_company_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2959 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: companies_company_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.companies_company_id_seq OWNED BY public.companies.company_id;
+
+
+--
+-- TOC entry 198 (class 1259 OID 76471)
+-- Name: controls; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.controls (
+    control_id integer NOT NULL,
+    code character varying(10) NOT NULL,
+    name character varying(50) NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.controls OWNER TO postgres;
+
+--
+-- TOC entry 199 (class 1259 OID 76477)
+-- Name: controls_control_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.controls_control_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.controls_control_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2960 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: controls_control_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.controls_control_id_seq OWNED BY public.controls.control_id;
+
+
+--
+-- TOC entry 200 (class 1259 OID 76479)
+-- Name: destinations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.destinations (
+    destination_id integer NOT NULL,
+    name character varying(80) NOT NULL,
+    destination_code integer NOT NULL,
+    active boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.destinations OWNER TO postgres;
+
+--
+-- TOC entry 201 (class 1259 OID 76485)
+-- Name: destinations_destination_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.destinations_destination_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.destinations_destination_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2961 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: destinations_destination_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.destinations_destination_id_seq OWNED BY public.destinations.destination_id;
+
+
+--
+-- TOC entry 202 (class 1259 OID 76487)
+-- Name: origins; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.origins (
+    origin_id integer NOT NULL,
+    name character varying(80) NOT NULL,
+    active boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.origins OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 76493)
+-- Name: origins_origin_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.origins_origin_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.origins_origin_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2962 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: origins_origin_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.origins_origin_id_seq OWNED BY public.origins.origin_id;
+
+
+--
+-- TOC entry 204 (class 1259 OID 76503)
+-- Name: tickets; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tickets (
+    ticket_id integer NOT NULL,
+    company character varying(50),
+    passenger integer NOT NULL,
+    origin integer NOT NULL,
+    buy date DEFAULT CURRENT_DATE NOT NULL,
+    hour time without time zone DEFAULT CURRENT_TIME NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    vehicle integer,
+    quantity integer,
+    destination integer NOT NULL,
+    conduce integer NOT NULL
+);
+
+
+ALTER TABLE public.tickets OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 76511)
+-- Name: tickets_ticket_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tickets_ticket_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tickets_ticket_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2963 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: tickets_ticket_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tickets_ticket_id_seq OWNED BY public.tickets.ticket_id;
+
+
+--
+-- TOC entry 206 (class 1259 OID 76520)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    names character varying(50) NOT NULL,
+    last_name character varying(50) NOT NULL,
+    password character varying NOT NULL,
+    company integer NOT NULL,
+    status boolean DEFAULT true,
+    last_session character varying DEFAULT CURRENT_TIMESTAMP,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    deleted_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    username character varying(50) NOT NULL,
+    type_category public.category NOT NULL,
+    control integer
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 76531)
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_user_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2964 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- TOC entry 208 (class 1259 OID 76533)
+-- Name: vehicles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.vehicles (
+    vehicle_id integer NOT NULL,
+    internal_number integer NOT NULL,
+    license character varying(6) NOT NULL,
+    capacity integer NOT NULL,
+    company integer NOT NULL,
+    active boolean DEFAULT true,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.vehicles OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 76539)
+-- Name: vehicles_vehicle_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.vehicles_vehicle_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.vehicles_vehicle_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2965 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: vehicles_vehicle_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.vehicles_vehicle_id_seq OWNED BY public.vehicles.vehicle_id;
+
+
+--
+-- TOC entry 2781 (class 2604 OID 77543)
+-- Name: auditoria_tickets auditoria_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auditoria_tickets ALTER COLUMN auditoria_id SET DEFAULT nextval('public.auditoria_tickets_auditoria_id_seq'::regclass);
+
+
+--
+-- TOC entry 2751 (class 2604 OID 76541)
+-- Name: companies company_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.companies ALTER COLUMN company_id SET DEFAULT nextval('public.companies_company_id_seq'::regclass);
+
+
+--
+-- TOC entry 2756 (class 2604 OID 76542)
+-- Name: controls control_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.controls ALTER COLUMN control_id SET DEFAULT nextval('public.controls_control_id_seq'::regclass);
+
+
+--
+-- TOC entry 2760 (class 2604 OID 76543)
+-- Name: destinations destination_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.destinations ALTER COLUMN destination_id SET DEFAULT nextval('public.destinations_destination_id_seq'::regclass);
+
+
+--
+-- TOC entry 2764 (class 2604 OID 76544)
+-- Name: origins origin_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.origins ALTER COLUMN origin_id SET DEFAULT nextval('public.origins_origin_id_seq'::regclass);
+
+
+--
+-- TOC entry 2770 (class 2604 OID 76546)
+-- Name: tickets ticket_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tickets ALTER COLUMN ticket_id SET DEFAULT nextval('public.tickets_ticket_id_seq'::regclass);
+
+
+--
+-- TOC entry 2775 (class 2604 OID 76548)
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- TOC entry 2780 (class 2604 OID 76549)
+-- Name: vehicles vehicle_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicles ALTER COLUMN vehicle_id SET DEFAULT nextval('public.vehicles_vehicle_id_seq'::regclass);
+
+
+--
+-- TOC entry 2952 (class 0 OID 77540)
+-- Dependencies: 211
+-- Data for Name: auditoria_tickets; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auditoria_tickets (auditoria_id, name_table, operation, old_data, new_data, created_at) FROM stdin;
+1	tickets	DELETE	(5,"Coodetrans Palmira",1113645020,1,2019-12-24,09:41:08.505917,"2019-12-24 09:41:08.505917","2019-12-24 09:41:08.505917","2019-12-24 09:41:08.505917",8,1,1)	\N	2019-12-26 09:07:16.699458
+2	tickets	INSERT	\N	(11,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:00.394197,"2019-12-26 14:23:00.394197","2019-12-26 14:23:00.394197","2019-12-26 14:23:00.394197",8,1,2)	2019-12-26 14:23:00.394197
+3	tickets	INSERT	\N	(12,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:16.40692,"2019-12-26 14:23:16.40692","2019-12-26 14:23:16.40692","2019-12-26 14:23:16.40692",8,1,3)	2019-12-26 14:23:16.40692
+4	tickets	INSERT	\N	(13,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:33.51671,"2019-12-26 14:23:33.51671","2019-12-26 14:23:33.51671","2019-12-26 14:23:33.51671",8,1,1)	2019-12-26 14:23:33.51671
+5	tickets	INSERT	\N	(14,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:49.613721,"2019-12-26 14:23:49.613721","2019-12-26 14:23:49.613721","2019-12-26 14:23:49.613721",8,1,1)	2019-12-26 14:23:49.613721
+6	tickets	INSERT	\N	(15,"Coodetrans Palmira",1113645020,1,2019-12-26,16:04:37.727976,"2019-12-26 16:04:37.727976","2019-12-26 16:04:37.727976","2019-12-26 16:04:37.727976",8,2,2)	2019-12-26 16:04:37.727976
+7	tickets	INSERT	\N	(16,"Coodetrans Palmira",1113645020,1,2019-12-26,16:05:07.812553,"2019-12-26 16:05:07.812553","2019-12-26 16:05:07.812553","2019-12-26 16:05:07.812553",8,2,2)	2019-12-26 16:05:07.812553
+8	tickets	INSERT	\N	(17,"Transunidos Buga S.A",1113645020,1,2019-12-26,16:06:52.847474,"2019-12-26 16:06:52.847474","2019-12-26 16:06:52.847474","2019-12-26 16:06:52.847474",43,2,2)	2019-12-26 16:06:52.847474
+9	tickets	INSERT	\N	(18,"Coodetrans Palmira",98145605,1,2019-12-27,10:17:38.521222,"2019-12-27 10:17:38.521222","2019-12-27 10:17:38.521222","2019-12-27 10:17:38.521222",8,3,1)	2019-12-27 10:17:38.521222
+10	tickets	INSERT	\N	(19,"Transunidos Buga S.A",12345,1,2019-12-27,10:20:48.893627,"2019-12-27 10:20:48.893627","2019-12-27 10:20:48.893627","2019-12-27 10:20:48.893627",43,1,1)	2019-12-27 10:20:48.893627
+11	tickets	INSERT	\N	(20,"Coodetrans Palmira",1113645020,1,2020-01-02,16:14:37.845281,"2020-01-02 16:14:37.845281","2020-01-02 16:14:37.845281","2020-01-02 16:14:37.845281",8,41,3)	2020-01-02 16:14:37.845281
+12	tickets	INSERT	\N	(21,"Transunidos Buga S.A",1113645020,1,2020-01-03,15:34:22.200121,"2020-01-03 15:34:22.200121","2020-01-03 15:34:22.200121","2020-01-03 15:34:22.200121",43,1,3)	2020-01-03 15:34:22.200121
+13	tickets	DELETE	(1,"Coodetrans Palmira",1113645020,1,2019-12-23,11:10:06.587973,"2019-12-23 11:10:06.587973","2019-12-23 11:10:06.587973","2019-12-23 11:10:06.587973",8,1,1)	\N	2020-01-03 16:21:38.903213
+14	tickets	DELETE	(4,"Coodetrans Palmira",1113645020,1,2019-12-24,09:40:37.848637,"2019-12-24 09:40:37.848637","2019-12-24 09:40:37.848637","2019-12-24 09:40:37.848637",8,1,1)	\N	2020-01-03 16:21:38.903213
+15	tickets	DELETE	(8,"Coodetrans Palmira",1113645020,2,2019-12-24,10:02:45.130453,"2019-12-24 10:02:45.130453","2019-12-24 10:02:45.130453","2019-12-24 10:02:45.130453",8,1,1)	\N	2020-01-03 16:21:38.903213
+16	tickets	DELETE	(9,"Coodetrans Palmira",1113645020,2,2019-12-24,10:03:06.255216,"2019-12-24 10:03:06.255216","2019-12-24 10:03:06.255216","2019-12-24 10:03:06.255216",8,1,1)	\N	2020-01-03 16:21:38.903213
+17	tickets	DELETE	(10,"Coodetrans Palmira",1113645020,2,2019-12-24,10:16:52.512009,"2019-12-24 10:16:52.512009","2019-12-24 10:16:52.512009","2019-12-24 10:16:52.512009",8,4,1)	\N	2020-01-03 16:21:38.903213
+18	tickets	DELETE	(11,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:00.394197,"2019-12-26 14:23:00.394197","2019-12-26 14:23:00.394197","2019-12-26 14:23:00.394197",8,1,2)	\N	2020-01-03 16:21:38.903213
+19	tickets	DELETE	(12,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:16.40692,"2019-12-26 14:23:16.40692","2019-12-26 14:23:16.40692","2019-12-26 14:23:16.40692",8,1,3)	\N	2020-01-03 16:21:38.903213
+20	tickets	DELETE	(13,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:33.51671,"2019-12-26 14:23:33.51671","2019-12-26 14:23:33.51671","2019-12-26 14:23:33.51671",8,1,1)	\N	2020-01-03 16:21:38.903213
+21	tickets	DELETE	(14,"Coodetrans Palmira",1113645020,1,2019-12-26,14:23:49.613721,"2019-12-26 14:23:49.613721","2019-12-26 14:23:49.613721","2019-12-26 14:23:49.613721",8,1,1)	\N	2020-01-03 16:21:38.903213
+22	tickets	DELETE	(15,"Coodetrans Palmira",1113645020,1,2019-12-26,16:04:37.727976,"2019-12-26 16:04:37.727976","2019-12-26 16:04:37.727976","2019-12-26 16:04:37.727976",8,2,2)	\N	2020-01-03 16:21:38.903213
+23	tickets	DELETE	(16,"Coodetrans Palmira",1113645020,1,2019-12-26,16:05:07.812553,"2019-12-26 16:05:07.812553","2019-12-26 16:05:07.812553","2019-12-26 16:05:07.812553",8,2,2)	\N	2020-01-03 16:21:38.903213
+24	tickets	DELETE	(17,"Transunidos Buga S.A",1113645020,1,2019-12-26,16:06:52.847474,"2019-12-26 16:06:52.847474","2019-12-26 16:06:52.847474","2019-12-26 16:06:52.847474",43,2,2)	\N	2020-01-03 16:21:38.903213
+25	tickets	DELETE	(20,"Coodetrans Palmira",1113645020,1,2020-01-02,16:14:37.845281,"2020-01-02 16:14:37.845281","2020-01-02 16:14:37.845281","2020-01-02 16:14:37.845281",8,41,3)	\N	2020-01-03 16:21:38.903213
+26	tickets	DELETE	(21,"Transunidos Buga S.A",1113645020,1,2020-01-03,15:34:22.200121,"2020-01-03 15:34:22.200121","2020-01-03 15:34:22.200121","2020-01-03 15:34:22.200121",43,1,3)	\N	2020-01-03 16:21:38.903213
+27	tickets	INSERT	\N	(22,"Coodetrans Palmira",1113645020,2,2020-01-03,16:22:58.687659,"2020-01-03 16:22:58.687659","2020-01-03 16:22:58.687659","2020-01-03 16:22:58.687659",8,1,2)	2020-01-03 16:22:58.687659
+28	tickets	INSERT	\N	(23,"Coodetrans Palmira",1113645020,1,2020-01-03,16:24:18.7513,"2020-01-03 16:24:18.7513","2020-01-03 16:24:18.7513","2020-01-03 16:24:18.7513",8,1,1)	2020-01-03 16:24:18.7513
+29	tickets	DELETE	(23,"Coodetrans Palmira",1113645020,1,2020-01-03,16:24:18.7513,"2020-01-03 16:24:18.7513","2020-01-03 16:24:18.7513","2020-01-03 16:24:18.7513",8,1,1)	\N	2020-01-03 16:55:08.121509
+30	tickets	INSERT	\N	(24,"Coodetrans Palmira",1113645020,1,2020-01-03,18:59:33.020701,"2020-01-03 18:59:33.020701","2020-01-03 18:59:33.020701","2020-01-03 18:59:33.020701",8,2,2)	2020-01-03 18:59:33.020701
+31	tickets	DELETE	(24,"Coodetrans Palmira",1113645020,1,2020-01-03,18:59:33.020701,"2020-01-03 18:59:33.020701","2020-01-03 18:59:33.020701","2020-01-03 18:59:33.020701",8,2,2)	\N	2020-01-03 18:59:45.684439
+32	tickets	INSERT	\N	(25,"Coodetrans Palmira",1113645020,1,2020-01-07,09:15:50.597539,"2020-01-07 09:15:50.597539","2020-01-07 09:15:50.597539","2020-01-07 09:15:50.597539",8,1,3)	2020-01-07 09:15:50.597539
+33	tickets	INSERT	\N	(26,"Coodetrans Palmira",1113645020,2,2020-01-07,13:28:43.017798,"2020-01-07 13:28:43.017798","2020-01-07 13:28:43.017798","2020-01-07 13:28:43.017798",8,1,2)	2020-01-07 13:28:43.017798
+34	tickets	INSERT	\N	(27,"Transunidos Buga S.A",1113645020,2,2020-01-08,08:29:21.69942,"2020-01-08 08:29:21.69942","2020-01-08 08:29:21.69942","2020-01-08 08:29:21.69942",43,1,3)	2020-01-08 08:29:21.69942
+35	tickets	INSERT	\N	(28,"Transunidos Buga S.A",1113645020,2,2020-01-08,08:41:02.546479,"2020-01-08 08:41:02.546479","2020-01-08 08:41:02.546479","2020-01-08 08:41:02.546479",43,1,2)	2020-01-08 08:41:02.546479
+36	tickets	INSERT	\N	(29,"Transunidos Buga S.A",1113645020,2,2020-01-08,08:42:58.901496,"2020-01-08 08:42:58.901496","2020-01-08 08:42:58.901496","2020-01-08 08:42:58.901496",43,1,2)	2020-01-08 08:42:58.901496
+37	tickets	INSERT	\N	(30,"Transunidos Buga S.A",1113645020,2,2020-01-08,08:43:17.564645,"2020-01-08 08:43:17.564645","2020-01-08 08:43:17.564645","2020-01-08 08:43:17.564645",43,1,2)	2020-01-08 08:43:17.564645
+38	tickets	INSERT	\N	(31,"Transunidos Buga S.A",1113645020,2,2020-01-08,08:50:51.000499,"2020-01-08 08:50:51.000499","2020-01-08 08:50:51.000499","2020-01-08 08:50:51.000499",43,1,2)	2020-01-08 08:50:51.000499
+39	tickets	INSERT	\N	(32,"Transunidos Buga S.A",1113645020,1,2020-01-08,08:53:22.144923,"2020-01-08 08:53:22.144923","2020-01-08 08:53:22.144923","2020-01-08 08:53:22.144923",43,1,2)	2020-01-08 08:53:22.144923
+40	tickets	INSERT	\N	(33,"Transunidos Buga S.A",1113645020,2,2020-01-08,08:56:59.672801,"2020-01-08 08:56:59.672801","2020-01-08 08:56:59.672801","2020-01-08 08:56:59.672801",43,1,2)	2020-01-08 08:56:59.672801
+41	tickets	INSERT	\N	(34,"Transunidos Buga S.A",1113645020,2,2020-01-08,09:05:15.872575,"2020-01-08 09:05:15.872575","2020-01-08 09:05:15.872575","2020-01-08 09:05:15.872575",43,1,2)	2020-01-08 09:05:15.872575
+42	tickets	INSERT	\N	(35,"Transunidos Buga S.A",1113645020,1,2020-01-08,09:07:56.671668,"2020-01-08 09:07:56.671668","2020-01-08 09:07:56.671668","2020-01-08 09:07:56.671668",43,1,2)	2020-01-08 09:07:56.671668
+43	tickets	INSERT	\N	(36,"Transunidos Buga S.A",1113645020,1,2020-01-11,10:20:36.158291,"2020-01-11 10:20:36.158291","2020-01-11 10:20:36.158291","2020-01-11 10:20:36.158291",43,1,2)	2020-01-11 10:20:36.158291
+44	tickets	INSERT	\N	(37,"Transunidos Buga S.A",1113645020,2,2020-01-13,14:02:17.204738,"2020-01-13 14:02:17.204738","2020-01-13 14:02:17.204738","2020-01-13 14:02:17.204738",43,1,2)	2020-01-13 14:02:17.204738
+45	tickets	INSERT	\N	(38,"Transunidos Buga S.A",1113645020,2,2020-01-13,14:04:00.239612,"2020-01-13 14:04:00.239612","2020-01-13 14:04:00.239612","2020-01-13 14:04:00.239612",43,1,2)	2020-01-13 14:04:00.239612
+46	tickets	INSERT	\N	(39,"Transunidos Buga S.A",85203,3,2020-01-13,14:11:57.168811,"2020-01-13 14:11:57.168811","2020-01-13 14:11:57.168811","2020-01-13 14:11:57.168811",43,1,3)	2020-01-13 14:11:57.168811
+47	tickets	INSERT	\N	(40,"Transunidos Buga S.A",1113645020,1,2020-01-13,16:01:14.334594,"2020-01-13 16:01:14.334594","2020-01-13 16:01:14.334594","2020-01-13 16:01:14.334594",43,1,1)	2020-01-13 16:01:14.334594
+48	tickets	INSERT	\N	(41,"Transunidos Buga S.A",1113645020,2,2020-01-20,16:05:18.621754,"2020-01-20 16:05:18.621754","2020-01-20 16:05:18.621754","2020-01-20 16:05:18.621754",43,1,2)	2020-01-20 16:05:18.621754
+49	tickets	INSERT	\N	(42,"Transunidos Buga S.A",1113645020,2,2020-01-20,16:06:40.627928,"2020-01-20 16:06:40.627928","2020-01-20 16:06:40.627928","2020-01-20 16:06:40.627928",43,1,2)	2020-01-20 16:06:40.627928
+50	tickets	INSERT	\N	(43,"Coodetrans Palmira",1113645020,1,2020-02-01,11:48:03.455792,"2020-02-01 11:48:03.455792","2020-02-01 11:48:03.455792","2020-02-01 11:48:03.455792",3,1,1)	2020-02-01 11:48:03.455792
+51	tickets	INSERT	\N	(44,"Transunidos Buga S.A",1113645020,1,2020-02-05,13:36:57.736909,"2020-02-05 13:36:57.736909","2020-02-05 13:36:57.736909","2020-02-05 13:36:57.736909",43,1,2)	2020-02-05 13:36:57.736909
+52	tickets	INSERT	\N	(45,"Transunidos Buga S.A",1113645020,2,2020-02-05,13:48:33.549192,"2020-02-05 13:48:33.549192","2020-02-05 13:48:33.549192","2020-02-05 13:48:33.549192",43,1,6)	2020-02-05 13:48:33.549192
+53	tickets	INSERT	\N	(46,"Coodetrans Palmira",1113645020,2,2020-08-11,16:17:46.858039,"2020-08-11 16:17:46.858039","2020-08-11 16:17:46.858039","2020-08-11 16:17:46.858039",1,1,1,1234567)	2020-08-11 16:17:46.858039
+54	tickets	INSERT	\N	(47,"Coodetrans Palmira",1113645020,1,2020-08-11,16:31:23.862575,"2020-08-11 16:31:23.862575","2020-08-11 16:31:23.862575","2020-08-11 16:31:23.862575",1,1,2,123458)	2020-08-11 16:31:23.862575
+55	tickets	INSERT	\N	(48,"Coodetrans Palmira",1113645020,2,2020-09-08,14:44:09.565596,"2020-09-08 14:44:09.565596","2020-09-08 14:44:09.565596","2020-09-08 14:44:09.565596",1,2,2,7854523)	2020-09-08 14:44:09.565596
+56	tickets	INSERT	\N	(49,"Coodetrans Palmira",1113645020,2,2020-09-08,15:13:54.676995,"2020-09-08 15:13:54.676995","2020-09-08 15:13:54.676995","2020-09-08 15:13:54.676995",1,1,2,12345678)	2020-09-08 15:13:54.676995
+57	tickets	INSERT	\N	(50,"Coodetrans Palmira",1118564,1,2020-09-08,15:39:06.016204,"2020-09-08 15:39:06.016204","2020-09-08 15:39:06.016204","2020-09-08 15:39:06.016204",1,1,1,1234567)	2020-09-08 15:39:06.016204
+58	tickets	INSERT	\N	(51,"Transunidos Buga S.A",1113645020,2,2020-09-08,15:44:37.376142,"2020-09-08 15:44:37.376142","2020-09-08 15:44:37.376142","2020-09-08 15:44:37.376142",29,1,4,1234567)	2020-09-08 15:44:37.376142
+\.
+
+
+--
+-- TOC entry 2937 (class 0 OID 76462)
+-- Dependencies: 196
+-- Data for Name: companies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.companies (company_id, name, nit, created_at, updated_at, deleted_at) FROM stdin;
+2	Transunidos Buga S.A	891903709	2019-10-31 14:36:48.849859	2019-10-31 14:36:48.849859	2019-10-31 14:36:48.849859
+1	Coodetrans Palmira	89130859	2019-10-31 14:36:48.849859	2019-10-31 14:36:48.849859	2019-10-31 14:36:48.849859
+\.
+
+
+--
+-- TOC entry 2939 (class 0 OID 76471)
+-- Dependencies: 198
+-- Data for Name: controls; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.controls (control_id, code, name, created_at, updated_at, deleted_at) FROM stdin;
+1	1	Segundo piso	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605
+2	2	Primer piso	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605
+3	3	Versalles	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605
+4	4	Estacion maria	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605
+5	6	Buga	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605
+6	7	Tulua	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605
+7	8	Rozo	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605	2019-10-31 14:14:19.646605
+8	204	Control tulua	2019-10-31 14:25:16.207601	2019-10-31 14:25:16.207601	2019-10-31 14:25:16.207601
+\.
+
+
+--
+-- TOC entry 2941 (class 0 OID 76479)
+-- Dependencies: 200
+-- Data for Name: destinations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.destinations (destination_id, name, destination_code, active, created_at, updated_at) FROM stdin;
+1	CALI	76001	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+2	PALMIRA	76520	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+3	BUGA	76111	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+4	CERRITO	762248	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+5	GUACARI	76318	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+6	AMAIME	76520	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+7	CARTAGO	76174	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+8	OBANDO	76174	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+9	ZARZAL	76895	t	2019-10-31 14:13:27.850759	2019-10-31 14:13:27.850759
+\.
+
+
+--
+-- TOC entry 2943 (class 0 OID 76487)
+-- Dependencies: 202
+-- Data for Name: origins; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.origins (origin_id, name, active, created_at, updated_at) FROM stdin;
+1	TULUA	t	2019-10-31 14:12:10.637668	2019-10-31 14:12:10.637668
+2	BUGA	t	2019-10-31 14:12:10.637668	2019-10-31 14:12:10.637668
+3	CALI	t	2019-10-31 14:12:10.637668	2019-10-31 14:12:10.637668
+\.
+
+
+--
+-- TOC entry 2945 (class 0 OID 76503)
+-- Dependencies: 204
+-- Data for Name: tickets; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tickets (ticket_id, company, passenger, origin, buy, hour, created_at, updated_at, deleted_at, vehicle, quantity, destination, conduce) FROM stdin;
+46	Coodetrans Palmira	1113645020	2	2020-08-11	16:17:46.858039	2020-08-11 16:17:46.858039	2020-08-11 16:17:46.858039	2020-08-11 16:17:46.858039	1	1	1	1234567
+47	Coodetrans Palmira	1113645020	1	2020-08-11	16:31:23.862575	2020-08-11 16:31:23.862575	2020-08-11 16:31:23.862575	2020-08-11 16:31:23.862575	1	1	2	123458
+48	Coodetrans Palmira	1113645020	2	2020-09-08	14:44:09.565596	2020-09-08 14:44:09.565596	2020-09-08 14:44:09.565596	2020-09-08 14:44:09.565596	1	2	2	7854523
+49	Coodetrans Palmira	1113645020	2	2020-09-08	15:13:54.676995	2020-09-08 15:13:54.676995	2020-09-08 15:13:54.676995	2020-09-08 15:13:54.676995	1	1	2	12345678
+50	Coodetrans Palmira	1118564	1	2020-09-08	15:39:06.016204	2020-09-08 15:39:06.016204	2020-09-08 15:39:06.016204	2020-09-08 15:39:06.016204	1	1	1	1234567
+51	Transunidos Buga S.A	1113645020	2	2020-09-08	15:44:37.376142	2020-09-08 15:44:37.376142	2020-09-08 15:44:37.376142	2020-09-08 15:44:37.376142	29	1	4	1234567
+\.
+
+
+--
+-- TOC entry 2947 (class 0 OID 76520)
+-- Dependencies: 206
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, names, last_name, password, company, status, last_session, created_at, updated_at, deleted_at, username, type_category, control) FROM stdin;
+36	Jhonny	Agudelo	8cb2237d0679ca88db6464eac60da96345513964	1	t	2020-09-08 15:44:10	2020-01-13 11:06:46.814043	2020-01-13 11:06:46.814043	2020-01-13 11:06:46.814043	admin	Administrador	\N
+38	Gerardo	Medina	8cb2237d0679ca88db6464eac60da96345513964	1	t	2020-01-20 16:04:27	2020-01-13 13:38:56.140416	2020-01-13 13:38:56.140416	2020-01-13 13:38:56.140416	control1	Control	8
+40	ddd	dddd	123456	1	t	2020-01-13 16:12:15.046473-05	2020-01-13 16:12:15.046473	2020-01-13 16:12:15.046473	2020-01-13 16:12:15.046473	admin2	Administrador	\N
+\.
+
+
+--
+-- TOC entry 2949 (class 0 OID 76533)
+-- Dependencies: 208
+-- Data for Name: vehicles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.vehicles (vehicle_id, internal_number, license, capacity, company, active, created_at, updated_at) FROM stdin;
+1	2026	ZNK677	30	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+2	2040	ZNK310	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+4	2065	ZNK646	30	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+5	2066	ZNK644	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+6	2087	ZNK592	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+7	2091	ZNK397	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+8	2099	ZNK394	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+9	9010	ZNK400	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+10	9011	ZAP502	30	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+11	9020	WHV366	19	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+12	9024	KUL477	30	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+13	9028	WHW347	29	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+14	9031	SSK922	25	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+15	9035	SPY083	24	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+16	9038	ZNK654	38	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+17	9045	ZAP752	35	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+18	9048	SMA215	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+19	9049	KUK329	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+20	9080	SPX412	25	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+21	9084	ZNK643	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+22	9086	WHW346	29	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+23	9098	ZNK352	28	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+26	72	WMA972	21	2	t	2019-10-31 14:53:25.848891	2019-10-31 14:53:25.848891
+27	71	WMA892	21	2	t	2019-10-31 14:53:25.848891	2019-10-31 14:53:25.848891
+29	47	TZR533	16	2	t	2019-10-31 14:53:25.848891	2019-10-31 14:53:25.848891
+3	2044	NZK587	30	1	t	2019-10-31 14:39:20.532277	2019-10-31 14:39:20.532277
+33	2050	SZO967	28	1	t	2019-11-26 10:03:40.091292	2019-11-26 10:03:40.091292
+34	2054	SZO243	30	1	t	2019-11-26 10:15:31.091702	2019-11-26 10:15:31.091702
+43	41	ZDA533	19	2	t	2019-12-05 08:21:08.504734	2019-12-05 08:21:08.504734
+\.
+
+
+--
+-- TOC entry 2966 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: auditoria_tickets_auditoria_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auditoria_tickets_auditoria_id_seq', 58, true);
+
+
+--
+-- TOC entry 2967 (class 0 OID 0)
+-- Dependencies: 197
+-- Name: companies_company_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.companies_company_id_seq', 2, true);
+
+
+--
+-- TOC entry 2968 (class 0 OID 0)
+-- Dependencies: 199
+-- Name: controls_control_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.controls_control_id_seq', 8, true);
+
+
+--
+-- TOC entry 2969 (class 0 OID 0)
+-- Dependencies: 201
+-- Name: destinations_destination_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.destinations_destination_id_seq', 9, true);
+
+
+--
+-- TOC entry 2970 (class 0 OID 0)
+-- Dependencies: 203
+-- Name: origins_origin_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.origins_origin_id_seq', 3, true);
+
+
+--
+-- TOC entry 2971 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: tickets_ticket_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tickets_ticket_id_seq', 51, true);
+
+
+--
+-- TOC entry 2972 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 40, true);
+
+
+--
+-- TOC entry 2973 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: vehicles_vehicle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.vehicles_vehicle_id_seq', 63, true);
+
+
+--
+-- TOC entry 2805 (class 2606 OID 77549)
+-- Name: auditoria_tickets auditoria_tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auditoria_tickets
+    ADD CONSTRAINT auditoria_tickets_pkey PRIMARY KEY (auditoria_id);
+
+
+--
+-- TOC entry 2784 (class 2606 OID 76551)
+-- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.companies
+    ADD CONSTRAINT companies_pkey PRIMARY KEY (company_id);
+
+
+--
+-- TOC entry 2786 (class 2606 OID 76553)
+-- Name: controls controls_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.controls
+    ADD CONSTRAINT controls_code_key UNIQUE (code);
+
+
+--
+-- TOC entry 2788 (class 2606 OID 76555)
+-- Name: controls controls_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.controls
+    ADD CONSTRAINT controls_pkey PRIMARY KEY (control_id);
+
+
+--
+-- TOC entry 2790 (class 2606 OID 76557)
+-- Name: destinations destinations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.destinations
+    ADD CONSTRAINT destinations_pkey PRIMARY KEY (destination_id);
+
+
+--
+-- TOC entry 2792 (class 2606 OID 76559)
+-- Name: origins origins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.origins
+    ADD CONSTRAINT origins_pkey PRIMARY KEY (origin_id);
+
+
+--
+-- TOC entry 2794 (class 2606 OID 76563)
+-- Name: tickets tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT tickets_pkey PRIMARY KEY (ticket_id);
+
+
+--
+-- TOC entry 2797 (class 2606 OID 84890)
+-- Name: users unique_username; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT unique_username UNIQUE (username);
+
+
+--
+-- TOC entry 2799 (class 2606 OID 76567)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 2801 (class 2606 OID 77432)
+-- Name: vehicles vehicles_license_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicles
+    ADD CONSTRAINT vehicles_license_key UNIQUE (license);
+
+
+--
+-- TOC entry 2803 (class 2606 OID 76571)
+-- Name: vehicles vehicles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicles
+    ADD CONSTRAINT vehicles_pkey PRIMARY KEY (vehicle_id);
+
+
+--
+-- TOC entry 2795 (class 1259 OID 84888)
+-- Name: u_username; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX u_username ON public.users USING btree (username);
+
+
+--
+-- TOC entry 2812 (class 2620 OID 77491)
+-- Name: tickets tbl_categorical_attributes; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER tbl_categorical_attributes AFTER INSERT OR DELETE OR UPDATE ON public.tickets FOR EACH ROW EXECUTE PROCEDURE public.function_auditoria();
+
+
+--
+-- TOC entry 2815 (class 2620 OID 77440)
+-- Name: vehicles update_bus; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER update_bus BEFORE UPDATE ON public.vehicles FOR EACH ROW WHEN ((old.updated_at IS DISTINCT FROM new.updated_at)) EXECUTE PROCEDURE public.update_at_modified();
+
+
+--
+-- TOC entry 2813 (class 2620 OID 77591)
+-- Name: tickets update_tickets; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER update_tickets BEFORE UPDATE ON public.tickets FOR EACH ROW WHEN ((old.updated_at IS DISTINCT FROM new.updated_at)) EXECUTE PROCEDURE public.update_at_modified();
+
+
+--
+-- TOC entry 2814 (class 2620 OID 77592)
+-- Name: users update_tickets; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER update_tickets BEFORE UPDATE ON public.users FOR EACH ROW WHEN ((old.updated_at IS DISTINCT FROM new.updated_at)) EXECUTE PROCEDURE public.update_at_modified();
+
+
+--
+-- TOC entry 2808 (class 2606 OID 76613)
+-- Name: tickets destiny_ticket; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT destiny_ticket FOREIGN KEY (destination) REFERENCES public.destinations(destination_id);
+
+
+--
+-- TOC entry 2810 (class 2606 OID 84883)
+-- Name: users fk_control_user; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT fk_control_user FOREIGN KEY (control) REFERENCES public.controls(control_id);
+
+
+--
+-- TOC entry 2806 (class 2606 OID 76583)
+-- Name: tickets tickets_origin_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT tickets_origin_fkey FOREIGN KEY (origin) REFERENCES public.origins(origin_id);
+
+
+--
+-- TOC entry 2807 (class 2606 OID 76588)
+-- Name: tickets tickets_vehicle_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT tickets_vehicle_fkey FOREIGN KEY (vehicle) REFERENCES public.vehicles(vehicle_id);
+
+
+--
+-- TOC entry 2809 (class 2606 OID 76603)
+-- Name: users users_company_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_company_fkey FOREIGN KEY (company) REFERENCES public.companies(company_id);
+
+
+--
+-- TOC entry 2811 (class 2606 OID 76608)
+-- Name: vehicles vehicles_company_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicles
+    ADD CONSTRAINT vehicles_company_fkey FOREIGN KEY (company) REFERENCES public.companies(company_id);
+
+
+-- Completed on 2020-09-08 16:17:57
+
+--
+-- PostgreSQL database dump complete
+--
+
